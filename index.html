@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- SEO Meta Tags -->
+    <title>The Elegant Company | Bespoke Solid Wood Furniture</title>
+    <meta name="description" content="The Elegant Company specializes in handcrafted, bespoke solid wood furniture in Cape Town. Explore our collection or design your own piece with our AI Studio.">
+    <meta name="keywords" content="custom furniture, solid wood furniture, bespoke woodworking, Cape Town furniture, premium furniture, AI furniture design, artisan joinery, walnut, oak, cherry wood">
+    <meta name="author" content="The Elegant Company">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://theelegantcompany.com/">
+    <meta property="og:title" content="The Elegant Company | Bespoke Solid Wood Furniture">
+    <meta property="og:description" content="Crafting legacies through solid timber. Use our AI Design Studio to visualize your custom furniture before we build it.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://theelegantcompany.com/">
+    <meta property="twitter:title" content="The Elegant Company | Bespoke Solid Wood Furniture">
+    <meta property="twitter:description" content="Crafting legacies through solid timber. Use our AI Design Studio to visualize your custom furniture before we build it.">
+    <meta property="twitter:image" content="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop">
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FurnitureStore",
+      "name": "The Elegant Company",
+      "image": [
+        "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6"
+      ],
+      "description": "Bespoke furniture design and manufacturing. Experience premium craftsmanship tailored to your space.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Whitehall Close",
+        "addressLocality": "Portland",
+        "addressRegion": "Cape Town",
+        "addressCountry": "ZA"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "-34.0", 
+        "longitude": "18.6"
+      },
+      "telephone": "0734851573",
+      "email": "elegantcompanythe@gmail.com",
+      "url": "https://theelegantcompany.com",
+      "priceRange": "$$$",
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday"
+        ],
+        "opens": "09:00",
+        "closes": "17:00"
+      }
+    }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              serif: ['"Playfair Display"', 'serif'],
+              sans: ['"Lato"', 'sans-serif'],
+            },
+            colors: {
+              'elegant-gold': '#c5a059',
+              'elegant-dark': '#1a1a1a',
+              'elegant-gray': '#f4f4f4',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        scroll-behavior: auto !important; /* Lenis handles smooth scrolling, so we override css smooth behavior */
+      }
+      html.lenis, html.lenis body {
+        height: auto;
+      }
+      .lenis-smooth {
+        scroll-behavior: auto !important;
+      }
+      .lenis-smooth [data-lenis-prevent] {
+        overscroll-behavior: contain;
+      }
+      .lenis-stopped {
+        overflow: hidden;
+      }
+      .lenis-scrolling iframe {
+        pointer-events: none;
+      }
+      body {
+        font-family: 'Lato', sans-serif;
+        color: #1a1a1a;
+        overflow-x: hidden;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Playfair Display', serif;
+      }
+      /* Custom Premium Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #1a1a1a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #c5a059;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #b48f48;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "@google/genai": "https://esm.sh/@google/genai@^1.39.0",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
+  }
+}
+</script>
+</head>
+  <body class="bg-white">
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
