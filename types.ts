@@ -1,7 +1,6 @@
 export enum View {
   HOME = 'HOME',
   PORTFOLIO = 'PORTFOLIO',
-  DESIGN_STUDIO = 'DESIGN_STUDIO',
   CONTACT = 'CONTACT'
 }
 

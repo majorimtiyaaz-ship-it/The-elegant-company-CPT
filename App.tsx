@@ -3,11 +3,9 @@ import { View } from './types';
 import { Navigation } from './components/Navigation';
 import { Hero } from './components/Hero';
 import { Portfolio } from './components/Portfolio';
-import { DesignStudio } from './components/DesignStudio';
 import { Process } from './components/Process';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
-import { Chatbot } from './components/Chatbot';
 import { CustomCursor } from './components/CustomCursor';
 
 function App() {
@@ -18,9 +16,6 @@ function App() {
   // SEO: Dynamically update the document title based on the current view
   useEffect(() => {
     switch (currentView) {
-      case View.DESIGN_STUDIO:
-        document.title = "AI Design Studio | The Elegant Company";
-        break;
       case View.PORTFOLIO:
          document.title = "Collection | The Elegant Company";
          break;
@@ -177,8 +172,6 @@ function App() {
 
   const renderView = () => {
     switch (currentView) {
-      case View.DESIGN_STUDIO:
-        return <DesignStudio />;
       case View.HOME:
       default:
         return (
@@ -188,23 +181,6 @@ function App() {
             </div>
             <div id="portfolio" className="scroll-mt-20">
               <Portfolio onNavigate={handleNavigate} />
-            </div>
-            {/* Teaser for AI Studio */}
-            <div id="about" className="bg-elegant-dark text-white py-24 px-6 text-center scroll-mt-20 relative overflow-hidden reveal-on-scroll">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(197,160,89,0.15),transparent_70%)]"></div>
-              <div className="relative z-10 max-w-4xl mx-auto">
-                <h2 className="text-3xl md:text-5xl font-serif mb-6 leading-tight">Imagine the Impossible</h2>
-                <p className="text-gray-300 max-w-2xl mx-auto mb-10 text-lg leading-relaxed font-light">
-                  Use our state-of-the-art AI Design Studio to visualize custom furniture tailored to your exact specifications before our master craftsmen build it.
-                </p>
-                <button 
-                  onClick={() => handleNavigate(View.DESIGN_STUDIO)}
-                  className="relative group overflow-hidden px-12 py-5 border border-elegant-gold bg-transparent text-elegant-gold hover:text-white uppercase tracking-widest font-bold transition-all duration-300 cursor-pointer text-sm"
-                >
-                  <span className="absolute inset-0 w-full h-full bg-elegant-gold origin-left transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out z-0"></span>
-                  <span className="relative z-10">Try Design Studio</span>
-                </button>
-              </div>
             </div>
             <div id="process" className="scroll-mt-20">
               <Process />
@@ -225,7 +201,6 @@ function App() {
         {renderView()}
       </main>
       <Footer />
-      <Chatbot />
     </div>
   );
 }

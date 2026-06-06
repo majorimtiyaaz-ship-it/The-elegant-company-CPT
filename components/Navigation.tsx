@@ -52,7 +52,6 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
         }`}>
           <span className={`${linkBaseClass} ${getTextClass(View.HOME)}`} onClick={() => handleNavClick(View.HOME, 'home')}>Home</span>
           <span className={`${linkBaseClass} ${isScrolled ? 'text-elegant-dark' : 'text-elegant-dark md:text-white'}`} onClick={() => handleNavClick(View.HOME, 'portfolio')}>Collection</span>
-          <span className={`${linkBaseClass} ${getTextClass(View.DESIGN_STUDIO)}`} onClick={() => handleNavClick(View.DESIGN_STUDIO)}>AI Design Studio</span>
           <span className={`${linkBaseClass} ${isScrolled ? 'text-elegant-dark' : 'text-elegant-dark md:text-white'}`} onClick={() => handleNavClick(View.HOME, 'contact')}>Contact</span>
         </div>
 
@@ -71,7 +70,6 @@ export const Navigation: React.FC<NavigationProps> = ({ currentView, onNavigate 
         <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-lg py-6 flex flex-col items-center gap-6 animate-fade-in">
           <span className="text-elegant-dark font-semibold tracking-widest uppercase" onClick={() => handleNavClick(View.HOME, 'home')}>Home</span>
           <span className="text-elegant-dark font-semibold tracking-widest uppercase" onClick={() => handleNavClick(View.HOME, 'portfolio')}>Collection</span>
-          <span className="text-elegant-dark font-semibold tracking-widest uppercase" onClick={() => handleNavClick(View.DESIGN_STUDIO)}>AI Design Studio</span>
           <span className="text-elegant-dark font-semibold tracking-widest uppercase" onClick={() => handleNavClick(View.HOME, 'contact')}>Contact</span>
         </div>
       )}

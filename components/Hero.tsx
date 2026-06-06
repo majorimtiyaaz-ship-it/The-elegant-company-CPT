@@ -119,17 +119,6 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
           <span className="hero-animate-menu-item text-stone-700 select-none" style={{ opacity: 0 }}>/</span>
           
           <button 
-            onClick={() => onNavigate(View.DESIGN_STUDIO)}
-            className="hero-animate-menu-item relative group text-white hover:text-elegant-gold transition-colors duration-300 cursor-pointer py-1 font-bold"
-            style={{ opacity: 0 }}
-          >
-            AI Design Studio
-            <span className="absolute left-1/2 -translate-x-1/2 bottom-[-4px] w-0 h-[1.5px] bg-elegant-gold group-hover:w-3/4 transition-all duration-300 ease-out"></span>
-          </button>
-          
-          <span className="hero-animate-menu-item text-stone-700 select-none" style={{ opacity: 0 }}>/</span>
-          
-          <button 
             onClick={() => onNavigate(View.HOME, 'contact')}
             className="hero-animate-menu-item relative group text-stone-300 hover:text-elegant-gold transition-colors duration-300 cursor-pointer py-1"
             style={{ opacity: 0 }}

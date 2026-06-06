@@ -38,9 +38,9 @@ const CUSTOM_FURNITURE_STEPS: ProcessStep[] = [
   {
     id: 2,
     num: "02",
-    title: "Visual AI Prototyping",
+    title: "Bespoke Design & Rendering",
     subtitle: "See Your Future Masterpiece",
-    description: "We use our AI Design Studio's modeling technology to render detailed concepts. Choose your favorite wood grains and profiles, and obtain an itemized workshop quotation.",
+    description: "Our design team produces beautiful realistic renderings and detailed concepts of your bespoke piece. Choose your favorite wood grains and profiles, and obtain an itemized workshop quotation.",
     icon: <Sparkles size={24} className="text-elegant-gold" />
   },
   {
