@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 
 export const CustomCursor: React.FC = () => {
   const dotRef = useRef<HTMLDivElement>(null);
@@ -11,9 +12,8 @@ export const CustomCursor: React.FC = () => {
 
     const dot = dotRef.current;
     const ring = ringRef.current;
-    const gsap = (window as any).gsap;
 
-    if (!dot || !ring || !gsap) return;
+    if (!dot || !ring) return;
 
     // Set initial position out of view
     gsap.set([dot, ring], { xPercent: -50, yPercent: -50, x: -100, y: -100 });

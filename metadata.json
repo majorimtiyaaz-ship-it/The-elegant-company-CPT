@@ -1,6 +1,6 @@
 {
   "name": "The Elegant Company",
   "description": "Bespoke furniture design and manufacturing. Experience premium craftsmanship tailored to your space.",
-  "requestFramePermissions": [],
+  "requestFramePermissions": ["microphone"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

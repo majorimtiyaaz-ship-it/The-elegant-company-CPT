@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { PortfolioItem, View } from '../types';
+import { gsap } from 'gsap';
+import { TextReveal } from './TextReveal';
+import { ScrollZoomImage } from './ScrollZoomImage';
+import { RevealOnScroll } from './RevealOnScroll';
+import { useLanguage } from './LanguageContext';
 
 const PORTFOLIO_ITEMS: PortfolioItem[] = [
   { 
@@ -110,7 +115,20 @@ interface PortfolioProps {
 }
 
 export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
+  const { language, t } = useLanguage();
   const [activeCategory, setActiveCategory] = useState("All");
+
+  const getCategoryName = (cat: string) => {
+    switch (cat) {
+      case 'All': return t.portfolioFilterAll;
+      case 'Living Room': return language === 'en' ? 'LIVING ROOM' : 'LEEFKAMER';
+      case 'Dining': return language === 'en' ? 'DINING' : 'EETKAMER';
+      case 'Office': return language === 'en' ? 'OFFICE' : 'KANTOOR';
+      case 'Storage': return language === 'en' ? 'STORAGE' : 'BERGPLEK';
+      case 'Restoration': return language === 'en' ? 'RESTORATION' : 'RESTORASIE';
+      default: return cat.toUpperCase();
+    }
+  };
 
   const filteredItems = PORTFOLIO_ITEMS.filter(item => {
     return activeCategory === "All" || item.category === activeCategory;
@@ -121,19 +139,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
     onNavigate(View.HOME, 'contact', { details });
   };
 
-  // Premium staggered animation on mount or filter change using a robust IntersectionObserver + GSAP fallback
+  // Premium staggered animation on mount or filter change using a robust native GSAP setup
   useEffect(() => {
-    const gsap = (window as any).gsap;
-    if (!gsap) {
-      // Basic fallback if GSAP is missing
-      const cards = document.querySelectorAll(".portfolio-card");
-      cards.forEach((card: any) => {
-        card.style.opacity = "1";
-        card.style.transform = "none";
-      });
-      return;
-    }
-
     // Reset card states to prepare for a clean, staggered fade-in entrance
     gsap.killTweensOf(".portfolio-card");
     gsap.set(".portfolio-card", { 
@@ -204,36 +211,49 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-[radial-gradient(circle_at_bottom_left,rgba(197,160,89,0.03),transparent_60%)] pointer-events-none"></div>
 
       <div className="container mx-auto">
-        <div className="text-center mb-16 reveal-on-scroll">
-          <h2 className="text-elegant-gold font-bold tracking-[0.25em] uppercase mb-3 text-xs md:text-sm">Our Work</h2>
-          <h3 className="text-4xl md:text-5xl font-serif text-elegant-dark mb-10 leading-tight">Mastery in Wood</h3>
+        <div className="text-center mb-16">
+          <RevealOnScroll duration={0.8}>
+            <h2 className="text-elegant-gold font-bold tracking-[0.25em] uppercase mb-3 text-xs md:text-sm">
+              {t.portfolioTitle}
+            </h2>
+            <h3 className="text-4xl md:text-5xl font-serif text-elegant-dark mb-6 leading-tight">
+              <TextReveal text={language === 'en' ? "Mastery in Wood" : "Meesterskap in Hout"} />
+            </h3>
+            <p className="text-gray-500 max-w-2xl mx-auto font-sans font-light text-xs sm:text-sm leading-relaxed mb-8">
+              {t.portfolioSub}
+            </p>
+          </RevealOnScroll>
           
-          <div className="flex flex-col items-center gap-6">
-            {/* Category Filter */}
-            <div className="flex flex-wrap justify-center items-center gap-2 md:gap-4 font-sans max-w-3xl">
-              <span className="text-xs font-serif italic text-gray-400 w-full lg:w-auto text-center lg:text-right pr-2">Collection:</span>
-              {CATEGORIES.map(cat => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`relative group px-5 py-2.5 text-xs font-bold uppercase tracking-widest transition-all duration-300 cursor-pointer overflow-hidden
-                    ${activeCategory === cat 
-                      ? 'text-elegant-dark font-semibold' 
-                      : 'text-gray-400 hover:text-elegant-dark'
-                    }`}
-                >
-                  <span className="relative z-10">{cat}</span>
-                  {/* Underline line animation */}
-                  <span className={`absolute bottom-0 left-0 right-0 h-[2px] bg-elegant-gold transition-transform duration-400 origin-left
-                    ${activeCategory === cat 
-                      ? 'scale-x-100' 
-                      : 'scale-x-0 group-hover:scale-x-100'
-                    }`} 
-                  />
-                </button>
-              ))}
+          <RevealOnScroll duration={1.0} delay={0.15}>
+            <div className="flex flex-col items-center gap-6">
+              {/* Category Filter */}
+              <div className="flex flex-wrap justify-center items-center gap-2 md:gap-4 font-sans max-w-3xl">
+                <span className="text-xs font-serif italic text-gray-400 w-full lg:w-auto text-center lg:text-right pr-2">
+                  {language === 'en' ? 'Collection:' : 'Versameling:'}
+                </span>
+                {CATEGORIES.map(cat => (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveCategory(cat)}
+                    className={`relative group px-5 py-2.5 text-xs font-bold uppercase tracking-widest transition-all duration-300 cursor-pointer overflow-hidden
+                      ${activeCategory === cat 
+                        ? 'text-elegant-dark font-semibold' 
+                        : 'text-gray-400 hover:text-elegant-dark'
+                      }`}
+                  >
+                    <span className="relative z-10">{getCategoryName(cat)}</span>
+                    {/* Underline line animation */}
+                    <span className={`absolute bottom-0 left-0 right-0 h-[2px] bg-elegant-gold transition-transform duration-400 origin-left
+                      ${activeCategory === cat 
+                        ? 'scale-x-100' 
+                        : 'scale-x-0 group-hover:scale-x-100'
+                      }`} 
+                    />
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          </RevealOnScroll>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]">
@@ -243,17 +263,18 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
                 key={item.id} 
                 className="portfolio-card group relative overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 cursor-pointer h-[420px]"
               >
-                <img 
-                  src={item.imageUrl} 
-                  alt={item.title} 
-                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                />
+                <div className="w-full h-full overflow-hidden relative">
+                  <ScrollZoomImage 
+                    src={item.imageUrl} 
+                    alt={item.title} 
+                  />
+                </div>
                 
                 {/* Overlay with glassmorphism gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8 text-white">
                   <div className="transform translate-y-6 group-hover:translate-y-0 transition-transform duration-500 ease-out">
                     <div className="flex justify-between items-center mb-2">
-                       <span className="text-elegant-gold uppercase tracking-[0.2em] text-xxs font-black">{item.category}</span>
+                       <span className="text-elegant-gold uppercase tracking-[0.2em] text-[10px] font-black">{item.category}</span>
                        <span className="text-gray-400 text-xs italic font-medium tracking-wide">{item.woodFinish}</span>
                     </div>
                     <h4 className="text-2xl font-serif italic mb-2 tracking-wide font-medium">{item.title}</h4>
@@ -271,7 +292,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
                     >
                       <span className="absolute inset-0 w-full h-full bg-elegant-gold origin-left transform scale-x-100 group-hover/btn:scale-x-0 transition-transform duration-500 ease-out z-0"></span>
                       <span className="relative z-10 text-white group-hover/btn:text-elegant-gold transition-colors duration-300">
-                        Request Quote
+                        {t.portfolioBtnInquire}
                       </span>
                     </button>
                   </div>
@@ -280,13 +301,17 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
             ))
           ) : (
             <div className="col-span-1 md:col-span-2 lg:col-span-3 flex flex-col items-center justify-center text-gray-400 py-20 bg-elegant-gray border border-dashed border-gray-200">
-               <p className="text-xl font-serif italic mb-2">No pieces found</p>
-               <p className="text-sm">Try adjusting your filters to see more of our collection.</p>
+               <p className="text-xl font-serif italic mb-2">
+                 {language === 'en' ? 'No pieces found' : 'Geen stukke gevind nie'}
+               </p>
+               <p className="text-sm">
+                 {language === 'en' ? 'Try adjusting your filters to see more of our collection.' : 'Pas asseblief u filters aan om meer van ons versameling te sien.'}
+               </p>
                <button 
                  onClick={() => { setActiveCategory("All"); }}
                  className="mt-6 text-elegant-gold font-bold uppercase text-xs tracking-[0.2em] hover:underline cursor-pointer"
                >
-                 Clear Filters
+                 {language === 'en' ? 'Clear Filters' : 'Skrap Filters'}
                </button>
             </div>
           )}

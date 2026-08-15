@@ -67,6 +67,37 @@
     }
     </script>
 
+    <script>
+      (function() {
+        var originalStringify = JSON.stringify;
+        JSON.stringify = function(value, replacer, space) {
+          try {
+            return originalStringify(value, replacer, space);
+          } catch (err) {
+            if (err && (err.message || '').toLowerCase().includes('circular')) {
+              try {
+                var seen = new WeakSet();
+                return originalStringify(value, function(key, val) {
+                  if (typeof val === "object" && val !== null) {
+                    if (seen.has(val)) {
+                      return "[Circular]";
+                    }
+                    seen.add(val);
+                  }
+                  if (replacer) {
+                    return replacer(key, val);
+                  }
+                  return val;
+                }, space);
+              } catch (e) {
+                return '"[Circular Structure]"';
+              }
+            }
+            throw err;
+          }
+        };
+      })();
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
