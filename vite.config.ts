@@ -18,6 +18,17 @@ export default defineConfig(({ mode }) => {
         alias: {
           '@': path.resolve(__dirname, '.'),
         }
+      },
+      build: {
+        rollupOptions: {
+          output: {
+            manualChunks: {
+              'vendor-react': ['react', 'react-dom', 'react-helmet-async'],
+              'vendor-animation': ['gsap', 'lenis', 'motion'],
+              'vendor-firebase': ['firebase/app', 'firebase/auth'],
+            }
+          }
+        }
       }
     };
 });

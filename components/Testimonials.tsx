@@ -58,55 +58,56 @@ export const Testimonials: React.FC = () => {
   const list = language === 'en' ? TESTIMONIALS_EN : TESTIMONIALS_AF;
 
   return (
-    <div className="bg-white py-28 px-6 border-t border-gray-100 relative overflow-hidden">
+    <section id="testimonials-reviews-section" className="bg-white py-24 md:py-28 px-6 border-t border-stone-200/60 relative overflow-hidden">
       {/* Visual slide accents */}
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-[radial-gradient(circle_at_bottom_right,rgba(197,160,89,0.02),transparent_60%)] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-[radial-gradient(circle_at_bottom_right,rgba(197,160,89,0.05),transparent_60%)] pointer-events-none" />
       
-      <div className="container mx-auto max-w-6xl relative z-10">
+      <div className="container mx-auto max-w-7xl relative z-10">
         
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-14 md:mb-16">
           <RevealOnScroll duration={0.8}>
-            <span className="text-elegant-gold font-bold tracking-[0.25em] uppercase mb-4 text-xs md:text-sm block">
+            <span className="text-[#8c6517] font-semibold tracking-[0.24em] uppercase mb-3 text-xs md:text-sm block">
               {t.testiTitle}
             </span>
-            <h3 className="text-4xl md:text-5xl font-serif text-elegant-dark leading-tight">
-              <TextReveal text={language === 'en' ? "Words of Appreciation" : "Woorde van Waardering"} />
-            </h3>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-stone-900 leading-tight mb-5">
+              <TextReveal text={language === 'en' ? "Client Testimonials & Trust" : "Kliëntegetuienisse & Vertroue"} />
+            </h2>
+            <div className="w-16 h-[1.5px] bg-[#c5a059]/40 mx-auto" />
           </RevealOnScroll>
         </div>
 
         {/* Testimonials Grid Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-7 lg:gap-8">
           {list.map((tItem, index) => (
             <RevealOnScroll 
               key={index} 
-              duration={1.0} 
-              delay={0.12 * index}
-              className="bg-elegant-gray p-8 rounded-sm shadow-sm hover:shadow-md border border-stone-100/80 hover:border-elegant-gold/45 transition-all duration-500 flex flex-col justify-between"
+              duration={0.8} 
+              delay={0.08 * index}
+              className="bg-[#faf8f5] p-7 sm:p-8 rounded-sm shadow-sm hover:shadow-xl border border-stone-200 hover:border-[#c5a059] transition-all duration-400 flex flex-col justify-between"
             >
               <div>
-                <Quote size={32} className="text-elegant-gold/30 mb-6" />
+                <Quote size={28} className="text-[#c5a059]/50 mb-5" />
                 
                 {/* Visual stars rating */}
-                <div className="flex gap-1 mb-5">
+                <div className="flex gap-1 mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={14} className="fill-elegant-gold text-elegant-gold" />
+                    <Star key={i} size={14} className="fill-[#c5a059] text-[#c5a059]" />
                   ))}
                 </div>
 
-                <p className="text-gray-600 text-sm md:text-base leading-relaxed font-light italic mb-8">
+                <p className="text-stone-700 text-sm sm:text-[15px] leading-relaxed font-light italic mb-6">
                   "{tItem.quote}"
                 </p>
               </div>
 
-              <div className="border-t border-gray-200/50 pt-5 mt-auto">
-                <h4 className="font-serif text-md text-elegant-dark font-semibold tracking-wide">
+              <div className="border-t border-stone-200/80 pt-4 mt-auto">
+                <h3 className="font-serif text-base text-stone-900 font-semibold tracking-wide">
                   {tItem.author}
-                </h4>
-                <div className="flex items-center justify-between text-[10px] tracking-wider uppercase font-sans text-gray-400 mt-1">
+                </h3>
+                <div className="flex items-center justify-between text-xs tracking-wider uppercase font-sans text-stone-500 mt-1">
                   <span>{tItem.location}</span>
-                  <span className="text-elegant-gold/80 font-bold">{tItem.project}</span>
+                  <span className="text-[#8c6517] font-bold">{tItem.project}</span>
                 </div>
               </div>
             </RevealOnScroll>
@@ -114,6 +115,6 @@ export const Testimonials: React.FC = () => {
         </div>
 
       </div>
-    </div>
+    </section>
   );
 };

@@ -9,14 +9,22 @@ import { Testimonials } from './components/Testimonials';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { CustomCursor } from './components/CustomCursor';
-import { VoiceAssistant } from './components/VoiceAssistant';
 import { SEO } from './components/SEO';
+import { CinematicLoader } from './components/CinematicLoader';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import { motion, useScroll, useSpring } from 'motion/react';
 
-gsap.registerPlugin(ScrollTrigger);
+// Register GSAP ScrollTrigger plugin safely once
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+// Code-split VoiceAssistant to reduce initial JavaScript execution on first paint
+const VoiceAssistant = React.lazy(() => 
+  import('./components/VoiceAssistant').then(module => ({ default: module.VoiceAssistant }))
+);
 
 function App() {
   const [currentView, setCurrentView] = useState<View>(View.HOME);
@@ -98,9 +106,6 @@ function App() {
       ScrollTrigger.update();
     });
 
-    // Clear existing triggers to prevent double registers on view updates or hot reloads
-    ScrollTrigger.getAll().forEach((trigger: any) => trigger.kill());
-
     return () => {
       cancelAnimationFrame(rafId);
       lenisInstance.destroy();
@@ -110,43 +115,37 @@ function App() {
 
   // Premium Scroll-Triggered Section Fade-In/Out Transitions
   useEffect(() => {
-    const sections = ['home', 'portfolio', 'finishes', 'behind-the-scenes', 'process', 'testimonials', 'contact'];
-    const triggers: gsap.core.Tween[] = [];
-
-    // Skip transitions on prefers-reduced-motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
-    sections.forEach(id => {
-      const el = document.getElementById(id);
-      if (!el) return;
+    const sections = ['home', 'portfolio', 'finishes', 'behind-the-scenes', 'process', 'testimonials', 'contact'];
+    
+    const ctx = gsap.context(() => {
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
 
-      // Soft physical connection: fade & scale slightly as they enter/leave active focus area
-      const t = gsap.fromTo(el,
-        { opacity: 0.82, scale: 0.99 },
-        {
-          opacity: 1,
-          scale: 1,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 95%", // starts entering from bottom
-            end: "top 15%",   // fully visible
-            toggleActions: "play reverse play reverse",
-            scrub: 0.6,       // luxurious physical scrub
+        // Soft physical connection: fade & scale slightly as they enter/leave active focus area
+        gsap.fromTo(el,
+          { opacity: 0.82, scale: 0.99 },
+          {
+            opacity: 1,
+            scale: 1,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 95%", // starts entering from bottom
+              end: "top 15%",   // fully visible
+              toggleActions: "play reverse play reverse",
+              scrub: 0.6,       // luxurious physical scrub
+            }
           }
-        }
-      );
-      triggers.push(t);
+        );
+      });
     });
 
     return () => {
-      triggers.forEach(t => {
-        if (t.scrollTrigger) {
-          t.scrollTrigger.kill();
-        }
-        t.kill();
-      });
+      ctx.revert();
     };
   }, [currentView]);
 
@@ -292,13 +291,17 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col font-sans relative bg-white">
       <SEO {...getSEOProps()} />
+      {/* Refined Branded Cinematic Loading & Entrance Overlay */}
+      <CinematicLoader />
       {/* Dynamic Scroll Progress Bar */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-elegant-gold z-[9999] origin-left"
         style={{ scaleX }}
       />
       <CustomCursor />
-      <VoiceAssistant />
+      <React.Suspense fallback={null}>
+        <VoiceAssistant />
+      </React.Suspense>
       <main className="flex-grow">
         {renderView()}
       </main>

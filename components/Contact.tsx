@@ -72,226 +72,271 @@ export const Contact: React.FC<ContactProps> = ({ prefillData }) => {
   };
 
   return (
-    <div className="bg-white py-24 px-6 border-t border-gray-100">
-      <div className="container mx-auto max-w-6xl">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+    <section id="contact-commission-section" className="bg-[#faf8f5] py-24 md:py-28 px-6 border-t border-stone-200/60">
+      <div className="container mx-auto max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           
-          <RevealOnScroll>
-            <h2 className="text-elegant-gold font-bold tracking-widest uppercase mb-3 text-xs md:text-sm">
-              {t.contactTitle}
-            </h2>
-            <h3 className="text-4xl md:text-5xl font-serif text-elegant-dark mb-8">
-              <TextReveal text={language === 'en' ? "Start Your Commission" : "Begin U Kommissie"} />
-            </h3>
-            <p className="text-gray-600 text-lg mb-8 leading-relaxed font-light">
-              {t.contactSub}
-            </p>
-
-            {/* Disclaimer */}
-            <div className="flex items-start gap-3 p-4 bg-gray-50 border border-gray-200 rounded-sm mb-10">
-              <AlertCircle className="text-elegant-gold shrink-0 mt-1" size={20} />
-              <p className="text-sm text-gray-600">
-                {language === 'en' ? (
-                  <>
-                    <span className="font-bold text-elegant-dark">Please Note:</span> We specialize in large custom pieces such as tables, cabinetry, beds, and <span className="font-bold">custom wooden benches</span>. 
-                    However, we <strong>do not design or manufacture dining chairs</strong> or standard wooden chairs.
-                  </>
-                ) : (
-                  <>
-                    <span className="font-bold text-elegant-dark">Let Wel:</span> Ons spesialiseer in groot pasgemaakte meubels soos kaste, kombuise, tafels, beddens en <span className="font-bold">pasgemaakte houtbankies</span>. 
-                    Ons ontwerp of vervaardig egter <strong>nie gewone eetkamerstoele nie</strong>.
-                  </>
-                )}
+          <div className="lg:col-span-5">
+            <RevealOnScroll duration={0.8}>
+              <span className="text-[#8c6517] font-semibold tracking-[0.24em] uppercase mb-3 text-xs md:text-sm block">
+                {t.contactTitle}
+              </span>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-stone-900 mb-5 leading-tight">
+                <TextReveal text={language === 'en' ? "Start Your Commission" : "Begin U Kommissie"} />
+              </h2>
+              <div className="w-16 h-[1.5px] bg-[#c5a059]/40 mb-5" />
+              <p className="text-stone-600 text-sm sm:text-base mb-8 leading-relaxed font-light">
+                {t.contactSub}
               </p>
-            </div>
 
-            <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="bg-elegant-gray p-3 rounded-full text-elegant-gold">
-                  <MapPin size={20} />
-                </div>
-                <div>
-                  <h4 className="font-serif text-xl text-elegant-dark">
-                    {language === 'en' ? 'Office Address' : 'Kantooradres'}
-                  </h4>
-                  <p className="text-gray-500">Whitehall Close, Portland<br/>Cape Town</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="bg-elegant-gray p-3 rounded-full text-elegant-gold">
-                  <Mail size={20} />
-                </div>
-                <div>
-                  <h4 className="font-serif text-xl text-elegant-dark">Email</h4>
-                  <p className="text-gray-500">elegantcompanythe@gmail.com</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="bg-elegant-gray p-3 rounded-full text-elegant-gold">
-                  <Phone size={20} />
-                </div>
-                <div>
-                  <h4 className="font-serif text-xl text-elegant-dark">
-                    {language === 'en' ? 'Phone' : 'Telefoon'}
-                  </h4>
-                  <p className="text-gray-500">0734851573</p>
-                </div>
-              </div>
-            </div>
-          </RevealOnScroll>
-
-          <RevealOnScroll className="bg-elegant-gray p-10 shadow-lg relative min-h-[500px] flex flex-col justify-between">
-            {status === 'succeeded' ? (
-              <div className="flex flex-col items-center justify-center text-center py-16 px-4 animate-fade-in my-auto">
-                <div className="w-16 h-16 bg-[#c5a059]/10 rounded-full flex items-center justify-center mb-6">
-                  <svg className="w-8 h-8 text-[#c5a059]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                  </svg>
-                </div>
-                <h4 className="text-2xl font-serif text-elegant-dark mb-4 tracking-wide">
-                  {language === 'en' ? 'Proposal Received' : 'Voorstel Ontvang'}
-                </h4>
-                <p className="text-gray-600 font-light max-w-sm mb-6 leading-relaxed">
-                  {language === 'en' 
-                    ? 'Thank you. Your custom commission inquiry has been securely delivered to our master workshop.' 
-                    : 'Dankie. U pasgemaakte kommissie-navraag is veilig by ons werkswinkel afgelewer.'}
-                </p>
-                <p className="text-xs uppercase tracking-[0.2em] font-bold text-elegant-gold">
-                  {language === 'en' ? '“We respond within 24 hours”' : '“Ons reageer binne 24 uur”'}
-                </p>
-                <button 
-                  onClick={() => setStatus('idle')}
-                  className="mt-8 px-6 py-2.5 text-[10px] uppercase tracking-[0.2em] font-bold border border-gray-300 text-gray-500 hover:text-elegant-gold hover:border-elegant-gold transition-all duration-300 rounded-sm"
-                >
-                  {language === 'en' ? 'Submit Another Request' : 'Stuur Nog \'n Navraag'}
-                </button>
-              </div>
-            ) : (
-              <form className="space-y-6" onSubmit={handleSubmit}>
-                {status === 'failed' && (
-                  <div className="p-4 bg-red-50 border border-red-200 text-red-700 text-sm flex items-center gap-2 rounded-sm mb-4">
-                    <AlertCircle className="shrink-0" size={18} />
-                    <span>{errorMessage}</span>
-                  </div>
-                )}
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-bold text-gray-700 uppercase tracking-wide mb-2">
-                      {language === 'en' ? 'First Name' : 'Voornaam'}
-                    </label>
-                    <input name="firstName" type="text" required className="w-full p-3 border border-gray-300 focus:border-elegant-gold outline-none" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-bold text-gray-700 uppercase tracking-wide mb-2">
-                      {language === 'en' ? 'Last Name' : 'Van'}
-                    </label>
-                    <input name="lastName" type="text" required className="w-full p-3 border border-gray-300 focus:border-elegant-gold outline-none" />
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-bold text-gray-700 uppercase tracking-wide mb-2">
-                      {language === 'en' ? 'Email Address' : 'E-posadres'}
-                    </label>
-                    <input name="email" type="email" required className="w-full p-3 border border-gray-300 focus:border-elegant-gold outline-none" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-bold text-gray-700 uppercase tracking-wide mb-2">
-                      {language === 'en' ? 'Phone Number' : 'Telefoonnommer'}
-                    </label>
-                    <input name="phone" type="tel" required className="w-full p-3 border border-gray-300 focus:border-elegant-gold outline-none" />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-bold text-gray-700 uppercase tracking-wide mb-2">
-                    {language === 'en' ? 'Preferred Furniture Type' : 'Verkose Meubeltipe'}
-                  </label>
-                  <select name="type" className="w-full p-3 border border-gray-300 focus:border-elegant-gold outline-none bg-white">
-                    <option value="">{language === 'en' ? 'Select a type...' : 'Kies \'n tipe...'}</option>
-                    <option value="bench">{language === 'en' ? 'Custom Wooden Bench' : 'Pasgemaakte Houtbankie'}</option>
-                    <option value="table">{language === 'en' ? 'Dining / Coffee Table' : 'Eetkamer- / Koffietafel'}</option>
-                    <option value="storage">{language === 'en' ? 'Storage / Cabinetry' : 'Kaste & Ingeboude Kaste'}</option>
-                    <option value="bed">{language === 'en' ? 'Bed Frame / Headboard' : 'Bedraam / Kopstuk'}</option>
-                    <option value="other">{language === 'en' ? 'Other Custom Wood Piece' : 'Ander Pasgemaakte Houtstuk'}</option>
-                  </select>
-                  <p className="text-xs text-gray-500 mt-1 italic">
-                    {language === 'en' ? '* We do not manufacture standard chairs.' : '* Ons vervaardig nie gewone eetkamerstoele nie.'}
-                  </p>
-                </div>
-
-                <div>
-                   <label className="block text-sm font-bold text-gray-700 uppercase tracking-wide mb-2">
-                     {language === 'en' ? 'Desired Dimensions' : 'Verlangde Afmetings'}
-                   </label>
-                   <input name="dimensions" type="text" placeholder={language === 'en' ? 'e.g. 8ft x 3ft' : 'b.v. 2.4m x 1m'} className="w-full p-3 border border-gray-300 focus:border-elegant-gold outline-none" />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                   <div>
-                      <label className="block text-sm font-bold text-gray-700 uppercase tracking-wide mb-2">
-                        {language === 'en' ? 'Wood Preference' : 'Hout-Voorkeur'}
-                      </label>
-                      <input name="wood" type="text" placeholder={language === 'en' ? 'e.g. Walnut, Oak, Cherry' : 'b.v. Okkerneuthout, Eikehout'} className="w-full p-3 border border-gray-300 focus:border-elegant-gold outline-none" />
-                   </div>
-                   <div>
-                      <label className="block text-sm font-bold text-gray-700 uppercase tracking-wide mb-2">
-                        {language === 'en' ? 'Preferred Finish' : 'Verkose Afwerking'}
-                      </label>
-                      <select name="finish" className="w-full p-3 border border-gray-300 focus:border-elegant-gold outline-none bg-white">
-                        <option value="">{language === 'en' ? 'Select Finish...' : 'Kies Afwerking...'}</option>
-                        <option value="natural">{language === 'en' ? 'Natural Oil' : 'Natuurlike Olie'}</option>
-                        <option value="matte">{language === 'en' ? 'Matte' : 'Mat'}</option>
-                        <option value="satin">{language === 'en' ? 'Satin' : 'Satyn'}</option>
-                        <option value="gloss">{language === 'en' ? 'High Gloss' : 'Hoëglans'}</option>
-                      </select>
-                   </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-bold text-gray-700 uppercase tracking-wide mb-2">
-                    {language === 'en' ? 'Specific Details & Ideas' : 'Spesifieke Besonderhede & Idees'}
-                  </label>
-                  <textarea 
-                    name="details" 
-                    value={details}
-                    onChange={(e) => setDetails(e.target.value)}
-                    placeholder={language === 'en' ? 'Tell us more about your vision...' : 'Vertel ons meer van u visie...'} 
-                    className="w-full h-32 p-3 border border-gray-300 focus:border-elegant-gold outline-none resize-none"
-                  ></textarea>
-                </div>
-
-                <button 
-                  type="submit"
-                  disabled={status === 'submitting'}
-                  className={`w-full py-4 tracking-widest uppercase text-xs shadow-md font-bold transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer ${
-                    status === 'submitting' 
-                      ? 'bg-[#c5a059] text-white opacity-80 cursor-wait' 
-                      : 'bg-elegant-dark text-white hover:bg-elegant-gold hover:shadow-lg'
-                  }`}
-                >
-                  {status === 'submitting' ? (
+              {/* Disclaimer */}
+              <div className="flex items-start gap-3.5 p-4 bg-amber-50/70 border border-amber-200/80 rounded-sm mb-8">
+                <AlertCircle className="text-[#8c6517] shrink-0 mt-0.5" size={18} />
+                <p className="text-xs sm:text-[13px] text-stone-700 leading-relaxed">
+                  {language === 'en' ? (
                     <>
-                      <svg className="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                      </svg>
-                      <span>{language === 'en' ? 'Transmitting Proposal...' : 'Besig met Versending...'}</span>
+                      <span className="font-bold text-stone-900">Please Note:</span> We specialize in bespoke commissions such as custom built-in cupboards, luxury kitchens, dining tables, cabinetry, beds, and <span className="font-bold">custom wooden benches</span>. We do not manufacture standalone chairs, metal frames, or upholstery.
                     </>
                   ) : (
-                    language === 'en' ? 'Submit Inquiry Proposal' : 'Dien Navraag-Voorstel In'
+                    <>
+                      <span className="font-bold text-stone-900">Let Wel:</span> Ons spesialiseer in groot pasgemaakte meubels soos ingeboude kaste, kombuise, tafels, beddens en <span className="font-bold">pasgemaakte houtbankies</span>. Ons ontwerp nie gewone losstaande stoele nie.
+                    </>
                   )}
-                </button>
-              </form>
-            )}
-          </RevealOnScroll>
+                </p>
+              </div>
+
+              <div className="space-y-5">
+                <div className="flex items-start gap-4 p-4 bg-white border border-stone-200/80 rounded-sm shadow-sm">
+                  <div className="w-10 h-10 rounded-sm bg-[#faf8f5] flex items-center justify-center text-[#8c6517] shrink-0 border border-stone-200">
+                    <MapPin size={18} />
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-base text-stone-900 font-semibold">
+                      {language === 'en' ? 'Workshop & Office' : 'Werkswinkel & Kantoor'}
+                    </h3>
+                    <p className="text-stone-600 text-xs sm:text-sm mt-0.5">Whitehall Close, Portland, Cape Town</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 p-4 bg-white border border-stone-200/80 rounded-sm shadow-sm">
+                  <div className="w-10 h-10 rounded-sm bg-[#faf8f5] flex items-center justify-center text-[#8c6517] shrink-0 border border-stone-200">
+                    <Mail size={18} />
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-base text-stone-900 font-semibold">Email</h3>
+                    <a href="mailto:elegantcompanythe@gmail.com" className="text-stone-600 hover:text-[#8c6517] text-xs sm:text-sm mt-0.5 block transition-colors">
+                      elegantcompanythe@gmail.com
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 p-4 bg-white border border-stone-200/80 rounded-sm shadow-sm">
+                  <div className="w-10 h-10 rounded-sm bg-[#faf8f5] flex items-center justify-center text-[#8c6517] shrink-0 border border-stone-200">
+                    <Phone size={18} />
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-base text-stone-900 font-semibold">
+                      {language === 'en' ? 'Phone & WhatsApp' : 'Telefoon & WhatsApp'}
+                    </h3>
+                    <a href="tel:0734851573" className="text-stone-600 hover:text-[#8c6517] text-xs sm:text-sm mt-0.5 block transition-colors">
+                      073 485 1573
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </RevealOnScroll>
+          </div>
+
+          <div className="lg:col-span-7">
+            <RevealOnScroll className="bg-white p-7 sm:p-10 border border-stone-200 rounded-sm shadow-lg relative min-h-[500px] flex flex-col justify-between">
+              {status === 'succeeded' ? (
+                <div className="flex flex-col items-center justify-center text-center py-16 px-4 animate-fade-in my-auto">
+                  <div className="w-16 h-16 bg-[#c5a059]/15 rounded-full flex items-center justify-center mb-6">
+                    <svg className="w-8 h-8 text-[#c5a059]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-serif text-stone-900 mb-4 tracking-wide font-medium">
+                    {language === 'en' ? 'Proposal Received' : 'Voorstel Ontvang'}
+                  </h3>
+                  <p className="text-stone-600 font-light max-w-sm mb-6 leading-relaxed text-sm sm:text-base">
+                    {language === 'en' 
+                      ? 'Thank you. Your custom commission inquiry has been securely delivered to our master workshop in Cape Town.' 
+                      : 'Dankie. U pasgemaakte kommissie-navraag is veilig by ons werkswinkel in Kaapstad afgelewer.'}
+                  </p>
+                  <p className="text-xs uppercase tracking-[0.2em] font-bold text-[#8c6517]">
+                    {language === 'en' ? '“We respond within 24 hours”' : '“Ons reageer binne 24 uur”'}
+                  </p>
+                  <button 
+                    onClick={() => setStatus('idle')}
+                    className="mt-8 px-6 py-3 text-xs uppercase tracking-[0.18em] font-bold border border-stone-300 text-stone-700 hover:text-stone-900 hover:border-stone-900 transition-all duration-300 rounded-sm cursor-pointer"
+                  >
+                    {language === 'en' ? 'Submit Another Request' : 'Stuur Nog \'n Navraag'}
+                  </button>
+                </div>
+              ) : (
+                <form className="space-y-5" onSubmit={handleSubmit}>
+                  {status === 'failed' && (
+                    <div className="p-4 bg-rose-50 border border-rose-200 text-rose-800 text-xs sm:text-sm flex items-center gap-2.5 rounded-sm">
+                      <AlertCircle className="shrink-0 text-rose-600" size={18} />
+                      <span>{errorMessage}</span>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                      <label htmlFor="firstName" className="block text-xs font-bold text-stone-700 uppercase tracking-[0.14em] mb-1.5">
+                        {language === 'en' ? 'First Name' : 'Voornaam'} *
+                      </label>
+                      <input 
+                        id="firstName"
+                        name="firstName" 
+                        type="text" 
+                        required 
+                        placeholder={language === 'en' ? 'e.g. Eleanor' : 'b.v. Johan'}
+                        className="w-full px-4 py-3 border border-stone-300 rounded-sm text-stone-900 text-sm focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-colors" 
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="lastName" className="block text-xs font-bold text-stone-700 uppercase tracking-[0.14em] mb-1.5">
+                        {language === 'en' ? 'Last Name' : 'Van'} *
+                      </label>
+                      <input 
+                        id="lastName"
+                        name="lastName" 
+                        type="text" 
+                        required 
+                        placeholder={language === 'en' ? 'e.g. Vance' : 'b.v. van der Merwe'}
+                        className="w-full px-4 py-3 border border-stone-300 rounded-sm text-stone-900 text-sm focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-colors" 
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                      <label htmlFor="email" className="block text-xs font-bold text-stone-700 uppercase tracking-[0.14em] mb-1.5">
+                        {language === 'en' ? 'Email Address' : 'E-posadres'} *
+                      </label>
+                      <input 
+                        id="email"
+                        name="email" 
+                        type="email" 
+                        required 
+                        placeholder="name@example.com"
+                        className="w-full px-4 py-3 border border-stone-300 rounded-sm text-stone-900 text-sm focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-colors" 
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="phone" className="block text-xs font-bold text-stone-700 uppercase tracking-[0.14em] mb-1.5">
+                        {language === 'en' ? 'Phone / WhatsApp' : 'Telefoon / WhatsApp'} *
+                      </label>
+                      <input 
+                        id="phone"
+                        name="phone" 
+                        type="tel" 
+                        required 
+                        placeholder="073 000 0000"
+                        className="w-full px-4 py-3 border border-stone-300 rounded-sm text-stone-900 text-sm focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-colors" 
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label htmlFor="type" className="block text-xs font-bold text-stone-700 uppercase tracking-[0.14em] mb-1.5">
+                      {language === 'en' ? 'Commission Category' : 'Kommissie-Kategorie'} *
+                    </label>
+                    <select 
+                      id="type"
+                      name="type" 
+                      required 
+                      className="w-full px-4 py-3 border border-stone-300 rounded-sm text-stone-900 text-sm focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none bg-white transition-colors cursor-pointer"
+                    >
+                      <option value="">{language === 'en' ? 'Select project type...' : 'Kies projektipe...'}</option>
+                      <option value="cupboards">{language === 'en' ? 'Built-in Cupboards & Wardrobes' : 'Ingeboude Kaste & Klerekaste'}</option>
+                      <option value="kitchen">{language === 'en' ? 'Custom Kitchen Installation' : 'Pasgemaakte Kombuisinstallasie'}</option>
+                      <option value="table">{language === 'en' ? 'Solid Hardwood Dining / Coffee Table' : 'Soliede Eetkamer- / Koffietafel'}</option>
+                      <option value="bench">{language === 'en' ? 'Custom Wooden Bench' : 'Pasgemaakte Houtbankie'}</option>
+                      <option value="restoration">{language === 'en' ? 'Antique Furniture Restoration' : 'Antieke Meubel-Restourasie'}</option>
+                      <option value="other">{language === 'en' ? 'Other Bespoke Wood Creation' : 'Ander Pasgemaakte Houtskepping'}</option>
+                    </select>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                      <label htmlFor="dimensions" className="block text-xs font-bold text-stone-700 uppercase tracking-[0.14em] mb-1.5">
+                        {language === 'en' ? 'Approx. Dimensions' : 'Benaderde Afmetings'}
+                      </label>
+                      <input 
+                        id="dimensions"
+                        name="dimensions" 
+                        type="text" 
+                        placeholder={language === 'en' ? 'e.g. 2.4m x 1.0m or room size' : 'b.v. 2.4m x 1.0m of kamergrootte'} 
+                        className="w-full px-4 py-3 border border-stone-300 rounded-sm text-stone-900 text-sm focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-colors" 
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="finish" className="block text-xs font-bold text-stone-700 uppercase tracking-[0.14em] mb-1.5">
+                        {language === 'en' ? 'Wood / Finish Choice' : 'Hout / Afwerkingskeuse'}
+                      </label>
+                      <select 
+                        id="finish"
+                        name="finish" 
+                        className="w-full px-4 py-3 border border-stone-300 rounded-sm text-stone-900 text-sm focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none bg-white transition-colors cursor-pointer"
+                      >
+                        <option value="">{language === 'en' ? 'Select Preferred Finish...' : 'Kies Verkose Afwerking...'}</option>
+                        <option value="walnut">{language === 'en' ? 'American Walnut (Natural Satin)' : 'Amerikaanse Okkerneut (Natuurlike Satyn)'}</option>
+                        <option value="french-oak">{language === 'en' ? 'French Oak (Warm Honey)' : 'Franse Eikehout (Warm Heuning)'}</option>
+                        <option value="nordic-ash">{language === 'en' ? 'Nordic Ash (Pale Linen)' : 'Nordiese Essen (Lig Linnedoek)'}</option>
+                        <option value="teak">{language === 'en' ? 'Burmese Teak (Golden Amber)' : 'Birmaanse Teak (Goue Amber)'}</option>
+                        <option value="other">{language === 'en' ? 'Other / Undecided' : 'Ander / Onbeslis'}</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label htmlFor="details" className="block text-xs font-bold text-stone-700 uppercase tracking-[0.14em] mb-1.5">
+                      {language === 'en' ? 'Project Vision & Space Details' : 'Projekvisie & Ruimte-Besonderhede'}
+                    </label>
+                    <textarea 
+                      id="details"
+                      name="details" 
+                      rows={4}
+                      value={details}
+                      onChange={(e) => setDetails(e.target.value)}
+                      placeholder={language === 'en' ? 'Describe your room, aesthetic preferences, special requirements, or inspiration...' : 'Beskryf u vertrek, estetiese voorkeure, spesiale vereistes of inspirasie...'} 
+                      className="w-full px-4 py-3 border border-stone-300 rounded-sm text-stone-900 text-sm focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none resize-none transition-colors"
+                    />
+                  </div>
+
+                  <button 
+                    id="contact-submit-button"
+                    type="submit"
+                    disabled={status === 'submitting'}
+                    className={`w-full min-h-[50px] py-4 uppercase tracking-[0.18em] text-xs sm:text-[13px] font-bold rounded-sm shadow-md transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer active:scale-[0.98] ${
+                      status === 'submitting' 
+                        ? 'bg-[#c5a059] text-white opacity-85 cursor-wait' 
+                        : 'bg-stone-950 text-white hover:bg-[#c5a059]'
+                    }`}
+                  >
+                    {status === 'submitting' ? (
+                      <>
+                        <svg className="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                        </svg>
+                        <span>{language === 'en' ? 'Transmitting Request...' : 'Besig met Versending...'}</span>
+                      </>
+                    ) : (
+                      <span>{language === 'en' ? 'Submit Commission Request' : 'Dien Kommissie-Versoek In'} &rarr;</span>
+                    )}
+                  </button>
+                </form>
+              )}
+            </RevealOnScroll>
+          </div>
 
         </div>
       </div>
-    </div>
+    </section>
   );
 };

@@ -330,22 +330,23 @@ export const Process: React.FC = () => {
   }, [activeTab]);
 
   return (
-    <div className="bg-[#fcfbf9] py-28 px-6 border-t border-gray-100 relative overflow-hidden">
+    <section id="process-walkthrough-section" className="bg-[#faf8f5] py-24 md:py-28 px-6 border-t border-stone-200/60 relative overflow-hidden">
       {/* Decorative background watermark */}
-      <div className="absolute right-0 bottom-0 text-[18vw] font-serif text-amber-950/[0.02] select-none pointer-events-none translate-y-12 translate-x-12 leading-none font-bold italic">
+      <div className="absolute right-0 bottom-0 text-[16vw] font-serif text-stone-900/[0.02] select-none pointer-events-none translate-y-12 translate-x-12 leading-none font-bold italic">
         {language === 'en' ? 'Cape Town' : 'Kaapstad'}
       </div>
       
-      <div className="container mx-auto max-w-6xl relative z-10">
+      <div className="container mx-auto max-w-7xl relative z-10">
         <RevealOnScroll duration={0.8}>
-          <div className="text-center mb-16">
-            <h2 className="text-elegant-gold font-bold tracking-[0.25em] uppercase mb-4 text-xs md:text-sm">
+          <div className="text-center mb-14 md:mb-16">
+            <span className="text-[#8c6517] font-semibold tracking-[0.24em] uppercase mb-3 text-xs md:text-sm block">
               {t.processTitle}
+            </span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-stone-900 mb-5 leading-tight">
+              <TextReveal text={language === 'en' ? "Our Bespoke Method" : "Ons Pasgemaakte Metode"} />
             </h2>
-            <h3 className="text-4xl md:text-5xl font-serif text-elegant-dark mb-6 leading-tight">
-              <TextReveal text={language === 'en' ? "Our Simple Process" : "Ons Eenvoudige Proses"} />
-            </h3>
-            <p className="text-gray-500 max-w-3xl mx-auto text-lg leading-relaxed font-light">
+            <div className="w-16 h-[1.5px] bg-[#c5a059]/40 mx-auto mb-5" />
+            <p className="text-stone-600 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed font-light">
               {t.processSub}
             </p>
           </div>
@@ -353,78 +354,85 @@ export const Process: React.FC = () => {
 
         {/* Dynamic Project Path Selectors */}
         <RevealOnScroll duration={0.9} delay={0.15}>
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-1.5 md:gap-3 mb-20 bg-stone-100 p-1.5 rounded-sm max-w-2xl mx-auto border border-stone-200">
+          <div 
+            id="process-type-tabs"
+            className="flex flex-col sm:flex-row justify-center items-center gap-1.5 sm:gap-2 mb-14 md:mb-16 bg-stone-200/60 p-1.5 rounded-sm max-w-2xl mx-auto border border-stone-200 shadow-sm"
+            role="tablist"
+            aria-label="Process workflow selector"
+          >
             <button 
+              id="process-tab-custom"
+              role="tab"
+              aria-selected={activeTab === 'custom'}
               onClick={() => setActiveTab('custom')}
-              className={`w-full sm:w-1/3 py-3.5 text-xs font-bold uppercase tracking-widest transition-all duration-400 cursor-pointer rounded-sm
+              className={`w-full sm:w-1/3 min-h-[44px] py-3 px-3 text-xs sm:text-[13px] font-bold uppercase tracking-[0.14em] transition-all duration-300 cursor-pointer rounded-sm flex items-center justify-center
                 ${activeTab === 'custom' 
-                  ? 'bg-elegant-dark text-white shadow-md' 
-                  : 'text-stone-500 hover:text-elegant-dark hover:bg-stone-50/50'
+                  ? 'bg-stone-900 text-white shadow-sm' 
+                  : 'text-stone-600 hover:text-stone-950 hover:bg-stone-100/60'
                 }`}
             >
               {language === 'en' ? 'Custom Furniture' : 'Pasgemaakte Meubels'}
             </button>
             <button 
+              id="process-tab-restoration"
+              role="tab"
+              aria-selected={activeTab === 'restoration'}
               onClick={() => setActiveTab('restoration')}
-              className={`w-full sm:w-1/3 py-3.5 text-xs font-bold uppercase tracking-widest transition-all duration-400 cursor-pointer rounded-sm
+              className={`w-full sm:w-1/3 min-h-[44px] py-3 px-3 text-xs sm:text-[13px] font-bold uppercase tracking-[0.14em] transition-all duration-300 cursor-pointer rounded-sm flex items-center justify-center
                 ${activeTab === 'restoration' 
-                  ? 'bg-elegant-dark text-white shadow-md' 
-                  : 'text-stone-500 hover:text-elegant-dark hover:bg-stone-50/50'
+                  ? 'bg-stone-900 text-white shadow-sm' 
+                  : 'text-stone-600 hover:text-stone-950 hover:bg-stone-100/60'
                 }`}
             >
-              {language === 'en' ? 'Restoration Projects' : 'Restorasie-Projekte'}
+              {language === 'en' ? 'Restoration' : 'Restorasie'}
             </button>
             <button 
+              id="process-tab-builtins"
+              role="tab"
+              aria-selected={activeTab === 'builtins'}
               onClick={() => setActiveTab('builtins')}
-              className={`w-full sm:w-1/3 py-3.5 text-xs font-bold uppercase tracking-widest transition-all duration-400 cursor-pointer rounded-sm
+              className={`w-full sm:w-1/3 min-h-[44px] py-3 px-3 text-xs sm:text-[13px] font-bold uppercase tracking-[0.14em] transition-all duration-300 cursor-pointer rounded-sm flex items-center justify-center
                 ${activeTab === 'builtins' 
-                  ? 'bg-elegant-dark text-white shadow-md' 
-                  : 'text-stone-500 hover:text-elegant-dark hover:bg-stone-50/50'
+                  ? 'bg-stone-900 text-white shadow-sm' 
+                  : 'text-stone-600 hover:text-stone-950 hover:bg-stone-100/60'
                 }`}
             >
-              {language === 'en' ? 'Kitchens & Built-ins' : 'Kombuise & Ingeboude Kaste'}
+              {language === 'en' ? 'Kitchens & Built-ins' : 'Kombuise & Kaste'}
             </button>
           </div>
         </RevealOnScroll>
 
-        {/* Horizontal Line Indicator */}
-        <div className="relative mb-20 hidden lg:block">
-          <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-stone-200 -translate-y-1/2"></div>
-          <div className="absolute top-1/2 left-10 right-10 h-1.5 bg-gradient-to-r from-elegant-gold/0 via-elegant-gold/30 to-elegant-gold/0 -translate-y-1/2 rounded-full blur-sm"></div>
-        </div>
-
         {/* Staggered Process Card Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 lg:gap-8 mb-16 md:mb-20">
           {getTranslatedSteps().map((step, index) => (
             <RevealOnScroll 
               key={step.id} 
-              duration={0.9}
-              delay={0.12 * index}
-              className="process-step-premium-card group bg-white p-8 rounded-sm shadow-sm hover:shadow-lg border border-stone-100 hover:border-elegant-gold transition-all duration-500 relative cursor-default flex flex-col justify-between min-h-[340px]"
+              duration={0.8}
+              delay={0.08 * index}
+              className="process-step-premium-card group bg-white p-7 sm:p-8 rounded-sm shadow-sm hover:shadow-xl border border-stone-200 hover:border-[#c5a059] transition-all duration-400 relative cursor-default flex flex-col justify-between min-h-[320px]"
             >
               <div>
                 {/* Floating behind-number watermarked */}
-                <div className="absolute top-4 right-6 font-serif italic text-4xl lg:text-5xl font-extralight text-stone-100/60 group-hover:text-amber-100/40 select-none pointer-events-none transition-colors duration-500">
+                <div className="absolute top-4 right-6 font-serif italic text-4xl lg:text-5xl font-light text-stone-200 group-hover:text-amber-200/50 select-none pointer-events-none transition-colors duration-400">
                   {step.num}
                 </div>
 
-                {/* Glassy Amber Floating Icon Chamber */}
-                <div className="w-14 h-14 rounded-full bg-elegant-gray flex items-center justify-center mb-8 relative group-hover:scale-110 group-hover:bg-elegant-dark transition-all duration-500 shadow-sm border border-stone-300">
-                  <span className="absolute inset-0 rounded-full border border-transparent group-hover:border-elegant-gold group-hover:scale-120 opacity-0 group-hover:opacity-100 transition-all duration-500"></span>
-                  <div className="relative z-10 transform group-hover:rotate-12 transition-transform duration-500">
+                {/* Ambient Icon Chamber */}
+                <div className="w-12 h-12 rounded-sm bg-[#faf8f5] flex items-center justify-center mb-6 relative group-hover:scale-105 group-hover:bg-stone-900 transition-all duration-400 shadow-sm border border-stone-200 group-hover:border-stone-900">
+                  <div className="relative z-10 text-[#c5a059] group-hover:text-[#c5a059] transition-transform duration-400">
                     {step.icon}
                   </div>
                 </div>
 
-                <p className="text-[10px] text-elegant-gold uppercase tracking-[0.2em] font-bold mb-1 group-hover:text-amber-600 transition-colors">
+                <span className="text-[11px] text-[#8c6517] uppercase tracking-[0.2em] font-bold block mb-1.5">
                   {step.subtitle}
-                </p>
-                <h4 className="text-lg font-serif text-elegant-dark mb-4 group-hover:text-elegant-gold transition-colors duration-400">
+                </span>
+                <h3 className="text-xl font-serif text-stone-900 mb-3 group-hover:text-[#8c6517] transition-colors duration-300 font-medium">
                   {step.title}
-                </h4>
+                </h3>
               </div>
 
-              <p className="text-gray-500 text-sm leading-relaxed font-light mt-auto">
+              <p className="text-stone-600 text-sm sm:text-[14.5px] leading-relaxed font-light mt-auto">
                 {step.description}
               </p>
             </RevealOnScroll>
@@ -432,58 +440,58 @@ export const Process: React.FC = () => {
         </div>
 
         {/* Premium Banner clarifying Call out & Business Conditions */}
-        <RevealOnScroll className="bg-elegant-dark text-white p-10 md:p-14 lg:p-16 border border-stone-800 relative overflow-hidden rounded-sm">
+        <RevealOnScroll className="bg-stone-950 text-white p-8 sm:p-12 lg:p-14 border border-stone-800 relative overflow-hidden rounded-sm shadow-xl">
           <div className="absolute top-0 right-0 w-80 h-80 bg-[radial-gradient(circle_at_top_right,rgba(197,160,89,0.12),transparent_60%)] pointer-events-none"></div>
           
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-7 space-y-4">
-              <span className="text-[10px] tracking-[0.3em] font-bold text-elegant-gold uppercase inline-flex items-center gap-2">
-                <MapPin size={12} className="text-elegant-gold" /> {language === 'en' ? 'Cape Town, South Africa' : 'Kaapstad, Suid-Afrika'}
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            <div className="lg:col-span-6 space-y-4">
+              <span className="text-[11px] tracking-[0.25em] font-bold text-[#c5a059] uppercase inline-flex items-center gap-2">
+                <MapPin size={13} className="text-[#c5a059]" /> {language === 'en' ? 'Cape Town, South Africa' : 'Kaapstad, Suid-Afrika'}
               </span>
-              <h3 className="text-3xl font-serif text-white tracking-wide font-medium">
-                {language === 'en' ? 'Transparent Operations & Trust' : 'Deursigtige Bedrywighede & Vertroue'}
+              <h3 className="text-2xl sm:text-3xl font-serif text-white tracking-wide font-medium">
+                {language === 'en' ? 'Transparent Operations & Clarity' : 'Deursigtige Bedrywighede & Duidelikheid'}
               </h3>
-              <p className="text-stone-300 font-light leading-relaxed text-base">
+              <p className="text-stone-300 font-light leading-relaxed text-sm sm:text-base">
                 {language === 'en' 
-                  ? 'We believe premium craftsmanship starts with honest clarity. To keep our high-end workshop fully dedicated and our materials premium, we operate within explicit local guidelines.'
-                  : 'Ons glo dat premium vakmanskap met eerlike duursame deursigtigheid begin. Om ons werkswinkel heeltemal gefokus te hou op hoë-gehalte werk, volg ons duidelike plaaslike riglyne.'}
+                  ? 'We believe bespoke craftsmanship starts with total transparency. To keep our high-end studio dedicated and our material selection pristine, we operate with structured local guidelines.'
+                  : 'Ons glo dat pasgemaakte vakmanskap met volkome deursigtigheid begin. Om ons ateljee toegewy en ons houtkeuses ongerep te hou, volg ons duidelike plaaslike riglyne.'}
               </p>
             </div>
 
-            <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
               {/* Card 1: Call-out Fee */}
-              <div className="bg-stone-900/60 p-5 border border-stone-800 rounded-sm space-y-2">
-                <div className="flex items-center gap-2.5">
-                  <Coins size={16} className="text-elegant-gold shrink-0" />
-                  <span className="text-xs uppercase tracking-widest text-elegant-gold font-bold">
+              <div className="bg-stone-900/90 p-5 sm:p-6 border border-stone-800 rounded-sm space-y-2">
+                <div className="flex items-center gap-2">
+                  <Coins size={16} className="text-[#c5a059] shrink-0" />
+                  <span className="text-xs uppercase tracking-[0.18em] text-[#c5a059] font-bold">
                     {language === 'en' ? 'R500 Call-Out' : 'R500 Uitroep'}
                   </span>
                 </div>
                 <h4 className="text-sm font-serif font-semibold text-white">
-                  {language === 'en' ? 'Measurement Security' : 'Metings-Sekuriteit'}
+                  {language === 'en' ? 'Site Audit & Laser Scan' : 'Perseel-Oudit & Lasermeting'}
                 </h4>
-                <p className="text-[10px] text-stone-400 leading-relaxed font-light">
+                <p className="text-xs text-stone-300 leading-relaxed font-light">
                   {language === 'en' 
-                    ? 'A standard R500 fee applies for physical Cape Town site visits (laser-mapping spaces, wood patina matching, taking measurements).'
-                    : 'A standaard R500 fooi geld vir fisiese Kaapstadse perseelbesoeke (laser-skanderings, bypassende houtpatinas en metings).'}
+                    ? 'A standard R500 fee applies for physical Cape Town site visits (laser-mapping spaces, wood patina matching, taking exact measurements).'
+                    : 'A standaard R500 fooi geld vir fisiese Kaapstadse perseelbesoeke (laser-skanderings, bypassende houtpatinas en akkurate metings).'}
                 </p>
               </div>
 
               {/* Card 2: Exclusions */}
-              <div className="bg-stone-900/60 p-5 border border-stone-800 rounded-sm space-y-2">
-                <div className="flex items-center gap-2.5">
-                  <XCircle size={16} className="text-red-400 shrink-0" />
-                  <span className="text-xs uppercase tracking-widest text-red-300 font-bold">
+              <div className="bg-stone-900/90 p-5 sm:p-6 border border-stone-800 rounded-sm space-y-2">
+                <div className="flex items-center gap-2">
+                  <XCircle size={16} className="text-rose-400 shrink-0" />
+                  <span className="text-xs uppercase tracking-[0.18em] text-rose-300 font-bold">
                     {language === 'en' ? 'Scope Focus' : 'Bestekfokus'}
                   </span>
                 </div>
                 <h4 className="text-sm font-serif font-semibold text-white">
-                  {language === 'en' ? 'Select Woodcraft Only' : 'Slegs Geselekteerde Houtwerk'}
+                  {language === 'en' ? 'Solid Woodcraft Only' : 'Slegs Soliede Houtwerk'}
                 </h4>
-                <p className="text-[10px] text-stone-400 leading-relaxed font-light">
+                <p className="text-xs text-stone-300 leading-relaxed font-light">
                   {language === 'en' 
-                    ? 'We excel in tables, cabinets, beds, study suites, and wooden benches. We do not manufacture standard dining chairs, metal frames, or upholstery.'
-                    : 'Ons spesialiseer in kaste, kombuise, tafels, beddens en houtbankies. Ons maak nie losstaande stoele, metaalrame of stoffering nie.'}
+                    ? 'We excel in custom built-ins, kitchens, tables, cabinetry, and desks. We do not manufacture standalone chairs, metal frames, or upholstery.'
+                    : 'Ons spesialiseer in ingeboude kaste, kombuise, tafels, kabinette en lessenaars. Ons maak nie losstaande stoele, metaalrame of stoffering nie.'}
                 </p>
               </div>
             </div>
@@ -491,6 +499,6 @@ export const Process: React.FC = () => {
         </RevealOnScroll>
 
       </div>
-    </div>
+    </section>
   );
 };

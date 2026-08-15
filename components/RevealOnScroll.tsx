@@ -1,8 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface RevealOnScrollProps {
   children: React.ReactNode;
@@ -30,31 +27,30 @@ export const RevealOnScroll: React.FC<RevealOnScrollProps> = ({
       return;
     }
 
-    // Set initial off-screen state
-    gsap.set(el, { 
-      opacity: 0, 
-      y: 40 
-    });
+    const ctx = gsap.context(() => {
+      // Set initial off-screen state
+      gsap.set(el, { 
+        opacity: 0, 
+        y: 40 
+      });
 
-    const animation = gsap.to(el, {
-      opacity: 1,
-      y: 0,
-      duration: duration,
-      delay: delay,
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: el,
-        start: "top 88%", // Trigger when the top of the element hits 88% of the viewport height
-        toggleActions: "play none none none",
-        once: true
-      }
-    });
+      gsap.to(el, {
+        opacity: 1,
+        y: 0,
+        duration: duration,
+        delay: delay,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 88%", // Trigger when the top of the element hits 88% of the viewport height
+          toggleActions: "play none none none",
+          once: true
+        }
+      });
+    }, elementRef);
 
     return () => {
-      if (animation.scrollTrigger) {
-        animation.scrollTrigger.kill();
-      }
-      animation.kill();
+      ctx.revert();
     };
   }, [delay, duration]);
 

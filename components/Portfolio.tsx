@@ -11,7 +11,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     id: 1, 
     title: "Ebonized Oak Coffee Table", 
     category: "Living Room", 
-    imageUrl: "/images/coffee-table-after-2.jpg",
+    imageUrl: "/images/coffee-table-after-2.webp",
     materials: "Solid Oak, Black Stain",
     description: "A bold statement piece featuring ebonized oak with distinct grain patterns and robust joinery.",
     woodFinish: "Satin"
@@ -20,7 +20,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     id: 2, 
     title: "Ebonized Oak Detail", 
     category: "Living Room", 
-    imageUrl: "/images/coffee-table-after.jpg",
+    imageUrl: "/images/coffee-table-after.webp",
     materials: "Solid Oak, Black Stain",
     description: "Precision joinery highlighting the structural integrity and clean lines of the design.",
     woodFinish: "Satin"
@@ -29,7 +29,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     id: 3, 
     title: "Ebonized Oak Profile", 
     category: "Living Room", 
-    imageUrl: "/images/coffee-table-after-3.jpg",
+    imageUrl: "/images/coffee-table-after-3.webp",
     materials: "Solid Oak, Black Stain",
     description: "The low profile and substantial legs create a grounded, modern aesthetic.",
     woodFinish: "Satin"
@@ -38,7 +38,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     id: 4, 
     title: "Piano Black Headboard", 
     category: "Storage", 
-    imageUrl: "/images/1770732675622~2.png",
+    imageUrl: "/images/1770732675622~2.webp",
     materials: "Restored Wood, High Gloss Lacquer",
     description: "A restored classic finished in a deep, reflective black lacquer for a luxurious touch.",
     woodFinish: "High Gloss"
@@ -47,7 +47,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     id: 5, 
     title: "Piano Black Angle", 
     category: "Storage", 
-    imageUrl: "/images/1770732574204.png",
+    imageUrl: "/images/1770732574204.webp",
     materials: "Restored Wood, High Gloss Lacquer",
     description: "The high gloss finish catches the light, emphasizing the curves and craftsmanship.",
     woodFinish: "High Gloss"
@@ -56,7 +56,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     id: 6, 
     title: "Restoration Project: Table", 
     category: "Restoration", 
-    imageUrl: "/images/coffee-table-raw.jpg",
+    imageUrl: "/images/coffee-table-raw.webp",
     materials: "Raw Oak",
     description: "The journey begins with stripping back years of wear to reveal the beautiful grain underneath.",
     woodFinish: "Raw"
@@ -65,7 +65,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     id: 7, 
     title: "Restoration Project: Headboard", 
     category: "Restoration", 
-    imageUrl: "/images/1770565768335~2.png",
+    imageUrl: "/images/1770565768335~2.webp",
     materials: "Raw Wood",
     description: "Preparing a vintage piece for a new life with careful sanding and repair.",
     woodFinish: "Raw"
@@ -74,34 +74,34 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     id: 8, 
     title: "Bespoke Entryway Bench", 
     category: "Living Room", 
-    imageUrl: "/images/1771076250919~2.png",
+    imageUrl: "/images/1771076250919~2.webp",
     materials: "Solid White Oak",
     description: "A stunning custom entryway bench showcasing minimalist lines and master grain matching.",
     woodFinish: "Natural Satin"
   },
-  {
-    id: 9,
-    title: "Artisan Joinery Detail",
-    category: "Living Room",
-    imageUrl: "/images/1771076167909~2.png",
+  { 
+    id: 9, 
+    title: "Artisan Joinery Detail", 
+    category: "Living Room", 
+    imageUrl: "/images/1771076167909~2.webp",
     materials: "Solid Walnut Accent",
     description: "Close-up perspective exhibiting the perfection of our seamless modern joinery join detail.",
     woodFinish: "Natural Oil"
   },
-  {
-    id: 10,
-    title: "Custom Study Workspace",
-    category: "Office",
-    imageUrl: "/images/Lumii_20260110_183904669.jpg",
+  { 
+    id: 10, 
+    title: "Custom Study Workspace", 
+    category: "Office", 
+    imageUrl: "/images/Lumii_20260110_183904669.webp",
     materials: "Fiddleback Oak & Steel",
     description: "A customized luxury study desk engineered with traditional cabinetmaking methods.",
     woodFinish: "Fine Matte"
   },
-  {
-    id: 11,
-    title: "Artisan Bench Profile",
-    category: "Living Room",
-    imageUrl: "/images/Lumii_20260110_183951986.jpg",
+  { 
+    id: 11, 
+    title: "Artisan Bench Profile", 
+    category: "Living Room", 
+    imageUrl: "/images/Lumii_20260110_183951986.webp",
     materials: "Premium Red Oak",
     description: "Low-angled profile showcasing the hand-sanded curves and structural stability.",
     woodFinish: "Hand-rubbed Poly"
@@ -205,50 +205,48 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
 
 
   return (
-    <div className="bg-white py-24 px-6 relative overflow-hidden">
+    <section id="portfolio-collection-section" className="bg-[#faf8f5] py-24 md:py-28 px-6 relative overflow-hidden border-t border-stone-200/60">
       {/* Visual background accents */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[radial-gradient(circle_at_top_right,rgba(197,160,89,0.03),transparent_60%)] pointer-events-none"></div>
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-[radial-gradient(circle_at_bottom_left,rgba(197,160,89,0.03),transparent_60%)] pointer-events-none"></div>
+      <div className="absolute top-0 right-0 w-96 h-96 bg-[radial-gradient(circle_at_top_right,rgba(197,160,89,0.06),transparent_60%)] pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-[radial-gradient(circle_at_bottom_left,rgba(197,160,89,0.06),transparent_60%)] pointer-events-none"></div>
 
-      <div className="container mx-auto">
-        <div className="text-center mb-16">
+      <div className="container mx-auto max-w-7xl">
+        <div className="text-center mb-14 md:mb-16">
           <RevealOnScroll duration={0.8}>
-            <h2 className="text-elegant-gold font-bold tracking-[0.25em] uppercase mb-3 text-xs md:text-sm">
+            <span className="text-[#8c6517] font-semibold tracking-[0.24em] uppercase mb-3 text-xs md:text-sm block">
               {t.portfolioTitle}
-            </h2>
-            <h3 className="text-4xl md:text-5xl font-serif text-elegant-dark mb-6 leading-tight">
+            </span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-stone-900 mb-5 leading-tight">
               <TextReveal text={language === 'en' ? "Mastery in Wood" : "Meesterskap in Hout"} />
-            </h3>
-            <p className="text-gray-500 max-w-2xl mx-auto font-sans font-light text-xs sm:text-sm leading-relaxed mb-8">
+            </h2>
+            <div className="w-16 h-[1.5px] bg-[#c5a059]/40 mx-auto mb-5" />
+            <p className="text-stone-600 max-w-2xl mx-auto font-sans font-light text-sm sm:text-base leading-relaxed">
               {t.portfolioSub}
             </p>
           </RevealOnScroll>
           
           <RevealOnScroll duration={1.0} delay={0.15}>
-            <div className="flex flex-col items-center gap-6">
+            <div className="flex flex-col items-center gap-6 mt-8">
               {/* Category Filter */}
-              <div className="flex flex-wrap justify-center items-center gap-2 md:gap-4 font-sans max-w-3xl">
-                <span className="text-xs font-serif italic text-gray-400 w-full lg:w-auto text-center lg:text-right pr-2">
-                  {language === 'en' ? 'Collection:' : 'Versameling:'}
-                </span>
+              <div 
+                id="portfolio-category-filters"
+                className="flex flex-wrap justify-center items-center gap-1.5 sm:gap-2.5 font-sans max-w-4xl p-1.5 bg-stone-200/50 rounded-sm border border-stone-200"
+                role="tablist"
+                aria-label="Portfolio category filter"
+              >
                 {CATEGORIES.map(cat => (
                   <button
                     key={cat}
+                    role="tab"
+                    aria-selected={activeCategory === cat}
                     onClick={() => setActiveCategory(cat)}
-                    className={`relative group px-5 py-2.5 text-xs font-bold uppercase tracking-widest transition-all duration-300 cursor-pointer overflow-hidden
+                    className={`relative px-4 sm:px-6 py-2.5 min-h-[44px] text-xs sm:text-[13px] font-bold uppercase tracking-[0.14em] transition-all duration-300 cursor-pointer rounded-sm flex items-center justify-center
                       ${activeCategory === cat 
-                        ? 'text-elegant-dark font-semibold' 
-                        : 'text-gray-400 hover:text-elegant-dark'
+                        ? 'bg-stone-900 text-white shadow-sm' 
+                        : 'text-stone-600 hover:text-stone-950 hover:bg-stone-100/60'
                       }`}
                   >
-                    <span className="relative z-10">{getCategoryName(cat)}</span>
-                    {/* Underline line animation */}
-                    <span className={`absolute bottom-0 left-0 right-0 h-[2px] bg-elegant-gold transition-transform duration-400 origin-left
-                      ${activeCategory === cat 
-                        ? 'scale-x-100' 
-                        : 'scale-x-0 group-hover:scale-x-100'
-                      }`} 
-                    />
+                    <span>{getCategoryName(cat)}</span>
                   </button>
                 ))}
               </div>
@@ -256,60 +254,86 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
           </RevealOnScroll>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 lg:gap-8 min-h-[400px]">
           {filteredItems.length > 0 ? (
             filteredItems.map((item) => (
               <div 
                 key={item.id} 
-                className="portfolio-card group relative overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 cursor-pointer h-[420px]"
+                id={`portfolio-item-${item.id}`}
+                className="portfolio-card group relative overflow-hidden rounded-sm bg-stone-900 shadow-md hover:shadow-2xl transition-all duration-500 cursor-pointer h-[430px] flex flex-col justify-end border border-stone-200/40 hover:border-[#c5a059]/80"
+                onClick={() => handleRequestQuote(item)}
+                tabIndex={0}
+                role="article"
+                aria-label={`${item.title} - ${item.category}`}
+                onKeyDown={(e) => e.key === 'Enter' && handleRequestQuote(item)}
               >
-                <div className="w-full h-full overflow-hidden relative">
+                <div className="w-full h-full absolute inset-0 overflow-hidden">
                   <ScrollZoomImage 
                     src={item.imageUrl} 
-                    alt={item.title} 
+                    alt={`${item.title} - Bespoke ${item.category} crafted by The Elegant Company`} 
                   />
                 </div>
                 
-                {/* Overlay with glassmorphism gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8 text-white">
-                  <div className="transform translate-y-6 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                {/* Permanent subtle bottom contrast pill for mobile clarity */}
+                <div className="absolute inset-x-0 bottom-0 p-5 bg-gradient-to-t from-black/85 via-black/40 to-transparent lg:opacity-0 group-hover:opacity-0 transition-opacity pointer-events-none">
+                  <span className="text-[#c5a059] uppercase tracking-[0.2em] text-[10px] font-bold block mb-1">
+                    {item.category}
+                  </span>
+                  <h3 className="text-lg font-serif text-white font-medium tracking-wide">
+                    {item.title}
+                  </h3>
+                </div>
+
+                {/* Overlay with glassmorphism gradient on hover */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-7 sm:p-8 text-white z-10">
+                  <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-400 ease-out flex flex-col">
                     <div className="flex justify-between items-center mb-2">
-                       <span className="text-elegant-gold uppercase tracking-[0.2em] text-[10px] font-black">{item.category}</span>
-                       <span className="text-gray-400 text-xs italic font-medium tracking-wide">{item.woodFinish}</span>
+                       <span className="text-[#c5a059] uppercase tracking-[0.22em] text-[11px] font-bold">
+                         {item.category}
+                       </span>
+                       <span className="text-stone-300 text-xs italic font-medium tracking-wide">
+                         {item.woodFinish}
+                       </span>
                     </div>
-                    <h4 className="text-2xl font-serif italic mb-2 tracking-wide font-medium">{item.title}</h4>
-                    <p className="text-sm text-gray-300 mb-3 font-light leading-relaxed">{item.description}</p>
-                    <p className="text-xs text-elegant-gold uppercase tracking-widest border-t border-white/20 pt-3 mt-3 mb-5 leading-normal">
-                      {item.materials}
+                    <h3 className="text-xl sm:text-2xl font-serif mb-2 tracking-wide font-medium text-white">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-stone-300 mb-3 font-light leading-relaxed">
+                      {item.description}
                     </p>
+                    <div className="text-xs text-[#c5a059] uppercase tracking-wider border-t border-stone-700/80 pt-3 mt-2 mb-5 font-medium">
+                      <span className="text-stone-400 text-[10px] block mb-0.5 uppercase tracking-widest font-normal">
+                        {language === 'en' ? 'Materials' : 'Materiale'}
+                      </span>
+                      {item.materials}
+                    </div>
                     
                     <button 
+                      type="button"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleRequestQuote(item);
                       }}
-                      className="relative group/btn overflow-hidden px-6 py-3 border-2 border-elegant-gold bg-transparent text-white uppercase tracking-widest font-bold transition-all duration-300 cursor-pointer text-xs"
+                      className="min-h-[44px] w-full px-6 py-3 bg-[#c5a059] hover:bg-[#b48f48] text-white uppercase tracking-[0.16em] font-bold text-xs rounded-sm transition-all duration-300 cursor-pointer text-center flex items-center justify-center gap-2 shadow-sm"
                     >
-                      <span className="absolute inset-0 w-full h-full bg-elegant-gold origin-left transform scale-x-100 group-hover/btn:scale-x-0 transition-transform duration-500 ease-out z-0"></span>
-                      <span className="relative z-10 text-white group-hover/btn:text-elegant-gold transition-colors duration-300">
-                        {t.portfolioBtnInquire}
-                      </span>
+                      <span>{t.portfolioBtnInquire}</span>
+                      <span className="text-base leading-none">&rarr;</span>
                     </button>
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <div className="col-span-1 md:col-span-2 lg:col-span-3 flex flex-col items-center justify-center text-gray-400 py-20 bg-elegant-gray border border-dashed border-gray-200">
-               <p className="text-xl font-serif italic mb-2">
+            <div className="col-span-1 md:col-span-2 lg:col-span-3 flex flex-col items-center justify-center text-stone-500 py-20 bg-stone-100 border border-dashed border-stone-300 rounded-sm">
+               <p className="text-xl font-serif italic mb-2 text-stone-800">
                  {language === 'en' ? 'No pieces found' : 'Geen stukke gevind nie'}
                </p>
-               <p className="text-sm">
+               <p className="text-sm text-stone-600">
                  {language === 'en' ? 'Try adjusting your filters to see more of our collection.' : 'Pas asseblief u filters aan om meer van ons versameling te sien.'}
                </p>
                <button 
                  onClick={() => { setActiveCategory("All"); }}
-                 className="mt-6 text-elegant-gold font-bold uppercase text-xs tracking-[0.2em] hover:underline cursor-pointer"
+                 className="mt-6 px-6 py-2.5 bg-stone-900 text-white font-bold uppercase text-xs tracking-[0.18em] rounded-sm hover:bg-[#c5a059] transition-colors cursor-pointer"
                >
                  {language === 'en' ? 'Clear Filters' : 'Skrap Filters'}
                </button>
@@ -317,6 +341,6 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
           )}
         </div>
       </div>
-    </div>
+    </section>
   );
 };

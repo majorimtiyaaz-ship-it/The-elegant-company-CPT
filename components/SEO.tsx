@@ -20,7 +20,7 @@ export const SEO: React.FC<SEOProps> = ({
   type = 'website',
   showSchema = false,
 }) => {
-  const productionDomain = 'https://the-elegant-company-cpt.vercel.app';
+  const productionDomain = 'https://theelegantcompany.co.za';
   
   // Resolve canonical URL: prioritize explicitly passed canonical prop, then build from current route or fallback
   const resolvedCanonical = canonical 
@@ -37,12 +37,14 @@ export const SEO: React.FC<SEOProps> = ({
     'description': 'Handcrafted bespoke kitchens, luxury cabinetry, custom solid wood furniture, and home improvement solutions.',
     'url': productionDomain,
     'logo': `${productionDomain}/logo.png`, // Placeholder for company logo
-    'telephone': '+27-73-485-1573',
-    'email': 'elegantcompanythe@gmail.com',
+    'telephone': '+27-XX-XXX-XXXX', // Placeholder for telephone
+    'email': 'info@theelegantcompany.co.za', // Placeholder for email
     'address': {
       '@type': 'PostalAddress',
-      'addressLocality': 'Portlands',
+      'streetAddress': 'Placeholder Street Address', // Placeholder for address street
+      'addressLocality': 'Cape Town',
       'addressRegion': 'Western Cape',
+      'postalCode': '8000',
       'addressCountry': 'ZA'
     },
     'areaServed': {
@@ -50,7 +52,8 @@ export const SEO: React.FC<SEOProps> = ({
       'name': 'Cape Town'
     },
     'sameAs': [
-      'https://www.instagram.com/the_elegant_company'
+      'https://www.facebook.com/theelegantcompany', // Placeholder for Facebook
+      'https://www.instagram.com/theelegantcompany' // Placeholder for Instagram
     ],
     'hasOfferCatalog': {
       '@type': 'OfferCatalog',
@@ -129,7 +132,7 @@ export const SEO: React.FC<SEOProps> = ({
       <meta name="viewport" content="width=device-width, initial-scale=1" />
 
       {/* 3. Search Engine Robots */}
-      <meta name="robots" content="noindex, follow" />
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 
       {/* 4. Canonical URL Link */}
       <link rel="canonical" href={resolvedCanonical} />

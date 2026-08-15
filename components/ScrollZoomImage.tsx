@@ -28,6 +28,8 @@ export const ScrollZoomImage: React.FC<ScrollZoomImageProps> = ({
       <motion.img
         src={src}
         alt={alt}
+        loading="lazy"
+        decoding="async"
         style={{ scale }}
         className={`w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-115 ${className}`}
       />

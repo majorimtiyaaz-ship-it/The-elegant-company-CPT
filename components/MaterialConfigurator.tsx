@@ -7,11 +7,11 @@ import { useLanguage } from './LanguageContext';
 
 // Import our beautiful high-end generated showcase images
 // @ts-ignore
-import charcoalOakImg from '../src/assets/images/config_charcoal_smoked_oak_1784376777227.jpg';
+import charcoalOakImg from '../src/assets/images/config_charcoal_smoked_oak_1784376777227.webp';
 // @ts-ignore
-import frenchWalnutImg from '../src/assets/images/config_natural_walnut_1784376794679.jpg';
+import frenchWalnutImg from '../src/assets/images/config_natural_walnut_1784376794679.webp';
 // @ts-ignore
-import honeyMapleImg from '../src/assets/images/config_honey_maple_1784376809378.jpg';
+import honeyMapleImg from '../src/assets/images/config_honey_maple_1784376809378.webp';
 
 interface FinishOption {
   id: string;
@@ -148,24 +148,24 @@ export const MaterialConfigurator: React.FC<MaterialConfiguratorProps> = ({ onNa
   };
 
   return (
-    <section className="bg-[#f5f0eb] py-24 px-6 relative overflow-hidden border-t border-elegant-gold/10">
+    <section id="finishes-configurator-section" className="bg-[#f5f0eb] py-24 md:py-28 px-6 relative overflow-hidden border-t border-stone-200/60">
       {/* Editorial Grain and Accent Overlay */}
       <div className="absolute top-0 left-0 w-full h-full bg-noise opacity-[0.02] pointer-events-none" />
-      <div className="absolute top-0 left-0 w-96 h-96 bg-[radial-gradient(circle_at_top_left,rgba(197,160,89,0.04),transparent_60%)] pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-[radial-gradient(circle_at_bottom_right,rgba(197,160,89,0.04),transparent_60%)] pointer-events-none" />
+      <div className="absolute top-0 left-0 w-96 h-96 bg-[radial-gradient(circle_at_top_left,rgba(197,160,89,0.06),transparent_60%)] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-[radial-gradient(circle_at_bottom_right,rgba(197,160,89,0.06),transparent_60%)] pointer-events-none" />
 
       <div className="container mx-auto max-w-7xl">
         {/* Title Block */}
         <RevealOnScroll duration={1.0}>
-          <div className="text-center mb-16">
-            <span className="text-elegant-gold font-bold tracking-[0.25em] uppercase mb-3 text-xs md:text-sm block">
+          <div className="text-center mb-14 md:mb-16">
+            <span className="text-[#8c6517] font-semibold tracking-[0.24em] uppercase mb-3 text-xs md:text-sm block">
               {t.configTitle}
             </span>
-            <h2 className="text-4xl md:text-5xl font-serif text-elegant-dark leading-tight tracking-wide">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-stone-900 leading-tight tracking-wide mb-5">
               {language === 'en' ? 'Interactive Finishes Configurator' : 'Interaktiewe Afwerkings-Konfigurator'}
             </h2>
-            <div className="w-16 h-[1.5px] bg-elegant-gold/30 mx-auto mt-6" />
-            <p className="text-stone-500 font-sans font-light mt-4 max-w-xl mx-auto text-sm leading-relaxed">
+            <div className="w-16 h-[1.5px] bg-[#c5a059]/40 mx-auto mb-5" />
+            <p className="text-stone-600 font-sans font-light max-w-xl mx-auto text-sm sm:text-base leading-relaxed">
               {t.configSub}
             </p>
           </div>
@@ -173,47 +173,47 @@ export const MaterialConfigurator: React.FC<MaterialConfiguratorProps> = ({ onNa
 
         {/* Customizer Grid */}
         <RevealOnScroll duration={1.2} delay={0.15}>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             
             {/* Left / Top Side: Main Cross-Fading Showcase Screen */}
             <div className="lg:col-span-7 relative">
-              <div className="aspect-[16/10] w-full bg-stone-900 rounded-sm overflow-hidden shadow-2xl relative border border-stone-800 group">
+              <div className="aspect-[16/10] w-full bg-stone-900 rounded-sm overflow-hidden shadow-2xl relative border border-stone-800/80 group">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={selectedFinish.id}
                     initial={{ opacity: 0, scale: 1.03 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.98 }}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                     className="absolute inset-0 w-full h-full"
                   >
                     <img
                       src={selectedFinish.image}
-                      alt={selectedFinish.name}
+                      alt={`${selectedFinish.name} timber finish`}
                       className="w-full h-full object-cover select-none"
                       referrerPolicy="no-referrer"
                     />
                     {/* Subtle luxury overlay gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10 pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10 pointer-events-none" />
                   </motion.div>
                 </AnimatePresence>
 
                 {/* Live Spec Overlay Tag */}
-                <div className="absolute bottom-6 left-6 z-10 bg-black/70 backdrop-blur-md px-4 py-2 border-l border-elegant-gold/60 text-white select-none">
-                  <span className="text-[9px] uppercase tracking-[0.3em] font-sans font-medium text-elegant-gold block mb-0.5">
-                    {language === 'en' ? 'CURRENT SELECTION' : 'HUIDIGE SELEKSIE'}
+                <div className="absolute bottom-6 left-6 z-10 bg-black/80 backdrop-blur-md px-4 py-2.5 border-l-2 border-[#c5a059] text-white select-none rounded-r-sm">
+                  <span className="text-[10px] uppercase tracking-[0.25em] font-sans font-semibold text-[#c5a059] block mb-0.5">
+                    {language === 'en' ? 'SELECTED FINISH' : 'GEKOSE AFWERKING'}
                   </span>
-                  <span className="text-sm font-serif italic">{currentFinish.name}</span>
+                  <span className="text-sm sm:text-base font-serif italic text-stone-100">{currentFinish.name}</span>
                 </div>
               </div>
 
               {/* Micro-Interaction Tip */}
-              <div className="flex items-center justify-between mt-4 text-[10px] text-stone-400 font-sans tracking-widest uppercase">
+              <div className="flex items-center justify-between mt-4 text-[11px] text-stone-500 font-sans tracking-wider uppercase font-medium">
                 <span className="flex items-center gap-2">
-                  <Sparkles size={12} className="text-elegant-gold animate-pulse" />
-                  {language === 'en' ? 'Click swatches to preview texture' : 'Klik op monsters om tekstuur te sien'}
+                  <Sparkles size={13} className="text-[#c5a059]" />
+                  {language === 'en' ? 'Select swatches to explore texture' : 'Kies monsters om tekstuur te verken'}
                 </span>
-                <span>{language === 'en' ? '100% Sourced Sustainable Hardwoods' : '100% Volhoubare Hardehout'}</span>
+                <span>{language === 'en' ? '100% Sustainable Hardwoods' : '100% Volhoubare Hardehout'}</span>
               </div>
             </div>
 
@@ -225,15 +225,15 @@ export const MaterialConfigurator: React.FC<MaterialConfiguratorProps> = ({ onNa
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={selectedFinish.id}
-                      initial={{ opacity: 0, x: 20 }}
+                      initial={{ opacity: 0, x: 15 }}
                       animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                      exit={{ opacity: 0, x: -15 }}
+                      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                     >
-                      <span className="text-elegant-gold text-xs uppercase tracking-[0.2em] font-semibold block mb-1">
+                      <span className="text-[#8c6517] text-xs uppercase tracking-[0.2em] font-bold block mb-1">
                         {currentFinish.subtitle}
                       </span>
-                      <h3 className="text-3xl font-serif text-elegant-dark">
+                      <h3 className="text-2xl sm:text-3xl font-serif text-stone-900 font-medium">
                         {currentFinish.name}
                       </h3>
                     </motion.div>
@@ -241,30 +241,38 @@ export const MaterialConfigurator: React.FC<MaterialConfiguratorProps> = ({ onNa
                 </div>
 
                 {/* Minimalist Material Swatch Selector */}
-                <div className="flex items-center gap-5 p-4 bg-white/60 border border-stone-200/50 rounded-sm mb-8 select-none">
-                  <span className="text-[10px] font-sans tracking-widest text-stone-500 uppercase font-semibold">
-                    {language === 'en' ? 'SWATCHES:' : 'MONSTERS:'}
+                <div 
+                  id="finish-swatches-container"
+                  className="flex flex-col gap-3 p-4 bg-white border border-stone-200 rounded-sm mb-6 select-none shadow-sm"
+                >
+                  <span className="text-[11px] font-sans tracking-widest text-stone-600 uppercase font-bold">
+                    {language === 'en' ? 'SELECT MATERIAL SPECIMEN:' : 'KIES MATERIAAL-MONSTER:'}
                   </span>
-                  <div className="flex gap-4">
+                  <div className="flex gap-4 sm:gap-5 items-center">
                     {FINISH_OPTIONS.map((option) => {
                       const isSelected = selectedFinish.id === option.id;
                       return (
                         <button
                           key={option.id}
+                          id={`finish-swatch-${option.id}`}
                           onClick={() => handleSelect(option)}
-                          className={`relative w-12 h-12 rounded-full cursor-pointer transition-all duration-500 flex items-center justify-center focus:outline-none overflow-hidden
-                            ${isSelected ? 'ring-2 ring-elegant-gold ring-offset-4' : 'hover:scale-105 hover:ring-1 hover:ring-stone-300'}`}
+                          className={`relative w-13 h-13 sm:w-14 sm:h-14 rounded-full cursor-pointer transition-all duration-300 flex items-center justify-center focus:outline-none overflow-hidden
+                            ${isSelected 
+                              ? 'ring-2 ring-[#c5a059] ring-offset-2 ring-offset-white shadow-md scale-105' 
+                              : 'hover:scale-105 ring-1 ring-stone-300 hover:ring-stone-400'}`}
                           style={{ backgroundColor: option.colorSwatch }}
                           title={option.name}
+                          aria-label={`Select ${option.name} finish`}
+                          aria-pressed={isSelected}
                         >
                           {/* Real wood grain preview zoomed inside circle */}
                           <img 
                             src={option.image} 
                             alt={option.name} 
-                            className="w-full h-full object-cover opacity-85 hover:opacity-100 transition-opacity duration-300 scale-150"
+                            className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-300 scale-150"
                           />
                           {/* Dark cover filter to preserve select checkmark visibility */}
-                          <div className={`absolute inset-0 bg-black/20 transition-opacity duration-300 ${isSelected ? 'opacity-40' : 'opacity-0 hover:opacity-10'}`} />
+                          <div className={`absolute inset-0 bg-black/30 transition-opacity duration-300 ${isSelected ? 'opacity-50' : 'opacity-0 hover:opacity-15'}`} />
                           
                           {/* Selected Checkmark indicator */}
                           <AnimatePresence>
@@ -275,7 +283,7 @@ export const MaterialConfigurator: React.FC<MaterialConfiguratorProps> = ({ onNa
                                 exit={{ scale: 0, opacity: 0 }}
                                 className="absolute z-10 text-white"
                               >
-                                <Check size={14} className="stroke-[3]" />
+                                <Check size={16} className="stroke-[3]" />
                               </motion.div>
                             )}
                           </AnimatePresence>
@@ -286,15 +294,15 @@ export const MaterialConfigurator: React.FC<MaterialConfiguratorProps> = ({ onNa
                 </div>
 
                 {/* Detailed Description */}
-                <div className="mb-8 min-h-[110px]">
+                <div className="mb-6 min-h-[90px]">
                   <AnimatePresence mode="wait">
                     <motion.p
                       key={selectedFinish.id}
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 0.85, y: 0 }}
-                      exit={{ opacity: 0, y: -15 }}
-                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                      className="text-stone-600 font-sans font-light text-sm leading-relaxed"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                      className="text-stone-700 font-sans font-light text-sm sm:text-base leading-relaxed"
                     >
                       {currentFinish.description}
                     </motion.p>
@@ -302,50 +310,50 @@ export const MaterialConfigurator: React.FC<MaterialConfiguratorProps> = ({ onNa
                 </div>
 
                 {/* Specifications Matrix */}
-                <div className="space-y-4 border-t border-b border-stone-200 py-6 mb-8">
+                <div className="space-y-3.5 border-t border-b border-stone-200/80 py-5 mb-8">
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={selectedFinish.id}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      transition={{ duration: 0.4 }}
-                      className="space-y-4"
+                      transition={{ duration: 0.35 }}
+                      className="space-y-3"
                     >
                       {/* Grain detail */}
-                      <div className="grid grid-cols-3 gap-2 text-xs font-sans">
-                        <span className="text-stone-400 font-light uppercase tracking-wider">
+                      <div className="grid grid-cols-3 gap-2 text-xs sm:text-[13px] font-sans">
+                        <span className="text-stone-500 font-medium uppercase tracking-wider">
                           {language === 'en' ? 'Grain Character' : 'Greep-Karakter'}
                         </span>
-                        <span className="col-span-2 text-stone-700 font-medium">{currentFinish.character}</span>
+                        <span className="col-span-2 text-stone-900 font-semibold">{currentFinish.character}</span>
                       </div>
 
                       {/* Hardness */}
-                      <div className="grid grid-cols-3 gap-2 text-xs font-sans">
-                        <span className="text-stone-400 font-light uppercase tracking-wider">
+                      <div className="grid grid-cols-3 gap-2 text-xs sm:text-[13px] font-sans">
+                        <span className="text-stone-500 font-medium uppercase tracking-wider">
                           {language === 'en' ? 'Density Rating' : 'Digtheids-Graad'}
                         </span>
-                        <span className="col-span-2 text-stone-700 font-medium flex items-center gap-1.5">
-                          <ShieldCheck size={14} className="text-elegant-gold" />
+                        <span className="col-span-2 text-stone-900 font-semibold flex items-center gap-1.5">
+                          <ShieldCheck size={15} className="text-[#c5a059] shrink-0" />
                           {currentFinish.hardness}
                         </span>
                       </div>
 
                       {/* Finish Method */}
-                      <div className="grid grid-cols-3 gap-2 text-xs font-sans">
-                        <span className="text-stone-400 font-light uppercase tracking-wider">
+                      <div className="grid grid-cols-3 gap-2 text-xs sm:text-[13px] font-sans">
+                        <span className="text-stone-500 font-medium uppercase tracking-wider">
                           {language === 'en' ? 'Lustre Treatment' : 'Glans-Behandeling'}
                         </span>
-                        <span className="col-span-2 text-stone-700 font-medium">{currentFinish.finishMethod}</span>
+                        <span className="col-span-2 text-stone-900 font-semibold">{currentFinish.finishMethod}</span>
                       </div>
 
                       {/* Ideal match */}
-                      <div className="grid grid-cols-3 gap-2 text-xs font-sans">
-                        <span className="text-stone-400 font-light uppercase tracking-wider">
+                      <div className="grid grid-cols-3 gap-2 text-xs sm:text-[13px] font-sans">
+                        <span className="text-stone-500 font-medium uppercase tracking-wider">
                           {language === 'en' ? 'Aesthetic Cohesion' : 'Estetiese Samehang'}
                         </span>
-                        <span className="col-span-2 text-stone-700 font-medium flex items-center gap-1.5">
-                          <Compass size={14} className="text-elegant-gold" />
+                        <span className="col-span-2 text-stone-900 font-semibold flex items-center gap-1.5">
+                          <Compass size={15} className="text-[#c5a059] shrink-0" />
                           {currentFinish.idealMatch}
                         </span>
                       </div>
@@ -355,15 +363,14 @@ export const MaterialConfigurator: React.FC<MaterialConfiguratorProps> = ({ onNa
               </div>
 
               {/* Action Trigger */}
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+              <button
+                id="finish-request-quote-button"
                 onClick={handleRequestQuote}
-                className="w-full flex items-center justify-center gap-3 bg-elegant-dark text-white hover:bg-elegant-gold transition-colors duration-500 uppercase tracking-widest text-xs font-bold py-[18px] px-6 rounded-sm shadow-lg cursor-pointer"
+                className="w-full min-h-[50px] flex items-center justify-center gap-3 bg-stone-950 text-white hover:bg-[#c5a059] transition-all duration-300 uppercase tracking-[0.16em] text-xs sm:text-[13px] font-bold py-4 px-6 rounded-sm shadow-md cursor-pointer active:scale-[0.98]"
               >
-                {language === 'en' ? `Request Custom Build In ${currentFinish.name}` : `Vra Pasgemaakte Bou In ${currentFinish.name}`}
-                <ArrowRight size={14} />
-              </motion.button>
+                <span>{language === 'en' ? `Request Custom Build In ${currentFinish.name}` : `Vra Pasgemaakte Bou In ${currentFinish.name}`}</span>
+                <ArrowRight size={15} className="shrink-0" />
+              </button>
             </div>
 
           </div>

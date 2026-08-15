@@ -4,9 +4,6 @@ import { View } from '../types';
 import { RevealOnScroll } from './RevealOnScroll';
 import { useLanguage } from './LanguageContext';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface CraftSecret {
   id: string;
@@ -168,8 +165,10 @@ export const BehindTheScenes: React.FC<BehindTheScenesProps> = ({ onNavigate }) 
       <div className="absolute inset-0 w-full h-[130%] pointer-events-none overflow-hidden top-0 left-0 z-0">
         <img
           ref={bgImageRef}
-          src="/images/coffee-table-raw.jpg"
+          src="/images/coffee-table-raw.webp"
           alt="Bespoke raw timber workshop grain texture"
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover opacity-[0.035] mix-blend-luminosity filter brightness-[0.4] contrast-[1.2] select-none"
         />
       </div>
@@ -188,15 +187,15 @@ export const BehindTheScenes: React.FC<BehindTheScenesProps> = ({ onNavigate }) 
       <div className="container mx-auto max-w-7xl relative z-10">
         {/* Header Block */}
         <RevealOnScroll duration={1.0}>
-          <div className="text-center mb-16">
-            <span className="text-elegant-gold font-bold tracking-[0.25em] uppercase mb-3 text-xs md:text-sm block">
+          <div className="text-center mb-14 md:mb-16">
+            <span className="text-[#c5a059] font-semibold tracking-[0.24em] uppercase mb-3 text-xs md:text-sm block">
               {t.btsTitle}
             </span>
-            <h2 className="text-4xl md:text-5xl font-serif text-white leading-tight tracking-wide">
-              {language === 'en' ? 'Behind the Scenes: Tactile Mastery' : 'Agter die Skerms: Taktiele Meesterskap'}
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-white leading-tight tracking-wide mb-5">
+              {language === 'en' ? 'Tactile Mastery & Workshop Craft' : 'Taktiele Meesterskap & Werkswinkel-Vakmanskap'}
             </h2>
-            <div className="w-16 h-[1.5px] bg-elegant-gold/40 mx-auto mt-6" />
-            <p className="text-stone-400 font-sans font-light mt-4 max-w-2xl mx-auto text-sm leading-relaxed">
+            <div className="w-16 h-[1.5px] bg-[#c5a059]/50 mx-auto mb-5" />
+            <p className="text-stone-300 font-sans font-light max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
               {t.btsSub}
             </p>
           </div>
@@ -208,35 +207,35 @@ export const BehindTheScenes: React.FC<BehindTheScenesProps> = ({ onNavigate }) 
             {secrets.map((secret, index) => (
               <div
                 key={secret.id}
-                className="bg-stone-900/40 border border-stone-800/60 p-6 md:p-8 rounded-sm hover:border-elegant-gold/60 transition-all duration-500 flex flex-col justify-between group relative overflow-hidden h-full"
+                className="bg-stone-900/60 border border-stone-800 p-7 rounded-sm hover:border-[#c5a059]/80 transition-all duration-400 flex flex-col justify-between group relative overflow-hidden h-full shadow-lg"
               >
                 {/* Subtle card highlight glow */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_top_right,rgba(197,160,89,0.01),transparent_60%)] pointer-events-none group-hover:bg-[radial-gradient(circle_at_top_right,rgba(197,160,89,0.04),transparent_60%)] transition-all duration-500" />
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_top_right,rgba(197,160,89,0.06),transparent_60%)] pointer-events-none group-hover:bg-[radial-gradient(circle_at_top_right,rgba(197,160,89,0.12),transparent_60%)] transition-all duration-400" />
                 
                 <div>
                   {/* Floating Number */}
-                  <div className="text-stone-800/45 font-mono text-[10px] uppercase tracking-widest mb-6">
-                    {language === 'en' ? 'Commandment' : 'Gebod'} 0{index + 1}
+                  <div className="text-[#c5a059]/60 font-sans text-xs uppercase tracking-[0.2em] font-bold mb-5">
+                    {language === 'en' ? 'Phase' : 'Fase'} 0{index + 1}
                   </div>
 
                   {/* Icon Frame */}
-                  <div className="w-12 h-12 rounded-sm bg-stone-800/30 border border-stone-700/40 flex items-center justify-center mb-6 text-elegant-gold group-hover:border-elegant-gold/40 group-hover:bg-elegant-gold/5 transition-all duration-500">
+                  <div className="w-12 h-12 rounded-sm bg-stone-800/80 border border-stone-700/80 flex items-center justify-center mb-5 text-[#c5a059] group-hover:border-[#c5a059] group-hover:bg-stone-800 transition-all duration-400">
                     {secret.icon}
                   </div>
 
                   {/* Subtitle / Phase */}
-                  <span className="text-[10px] uppercase tracking-widest font-semibold block text-elegant-gold mb-1">
+                  <span className="text-[11px] uppercase tracking-[0.18em] font-bold block text-[#c5a059] mb-1.5">
                     {secret.subtitle}
                   </span>
 
                   {/* Title */}
-                  <h3 className="text-lg md:text-xl font-serif text-white mb-4 tracking-wide group-hover:text-elegant-gold transition-colors duration-400">
+                  <h3 className="text-xl font-serif text-white mb-3 tracking-wide group-hover:text-[#c5a059] transition-colors duration-300 font-medium">
                     {secret.title}
                   </h3>
                 </div>
 
                 {/* Description */}
-                <p className="text-stone-400 font-sans font-light text-xs leading-relaxed mt-4">
+                <p className="text-stone-300 font-sans font-light text-sm leading-relaxed mt-3">
                   {secret.description}
                 </p>
               </div>
@@ -246,16 +245,16 @@ export const BehindTheScenes: React.FC<BehindTheScenesProps> = ({ onNavigate }) 
 
         {/* Quick Call to Action Link */}
         <RevealOnScroll duration={1.0} delay={0.3}>
-          <div className="mt-16 flex flex-col sm:flex-row items-center justify-between gap-6 border-t border-stone-800/60 pt-8">
-            <span className="text-xs md:text-sm font-serif italic text-stone-400 text-center sm:text-left">
-              {language === 'en' ? '"Respecting the natural voice of Western Cape timber."' : '"Respek vir die natuurlike stem van Wes-Kaapse hout."'}
+          <div className="mt-14 md:mt-16 flex flex-col sm:flex-row items-center justify-between gap-6 border-t border-stone-800 pt-8">
+            <span className="text-sm md:text-base font-serif italic text-stone-300 text-center sm:text-left">
+              {language === 'en' ? '"Honouring the natural character of Western Cape timber."' : '"Respek vir die natuurlike stem van Wes-Kaapse hout."'}
             </span>
             <button
               onClick={() => onNavigate(View.HOME, 'contact')}
-              className="text-xs font-bold uppercase tracking-widest text-white hover:text-elegant-gold transition-colors duration-300 cursor-pointer flex items-center gap-1.5 group border border-stone-800/80 px-5 py-3 hover:border-elegant-gold/40 rounded-sm bg-stone-900/20"
+              className="min-h-[44px] text-xs font-bold uppercase tracking-[0.16em] text-white bg-[#c5a059] hover:bg-[#b48f48] transition-all duration-300 cursor-pointer flex items-center gap-2 px-6 py-3 rounded-sm shadow-md active:scale-[0.98]"
             >
-              {language === 'en' ? 'Inquire For Custom Build' : 'Doen Navraag vir Pasgemaakte Bou'}
-              <span className="transform group-hover:translate-x-1 transition-transform duration-300">&rarr;</span>
+              <span>{language === 'en' ? 'Inquire For Custom Build' : 'Doen Navraag vir Pasgemaakte Bou'}</span>
+              <span className="text-sm leading-none">&rarr;</span>
             </button>
           </div>
         </RevealOnScroll>

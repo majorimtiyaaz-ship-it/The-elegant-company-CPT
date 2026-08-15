@@ -2,7 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
 import { LanguageProvider } from './components/LanguageContext';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import App from './App';
+
+// Register GSAP plugins globally once on application initialization
+gsap.registerPlugin(ScrollTrigger);
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {

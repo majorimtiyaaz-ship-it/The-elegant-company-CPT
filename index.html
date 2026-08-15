@@ -67,49 +67,26 @@
     }
     </script>
 
-    <script>
-      (function() {
-        var originalStringify = JSON.stringify;
-        JSON.stringify = function(value, replacer, space) {
-          try {
-            return originalStringify(value, replacer, space);
-          } catch (err) {
-            if (err && (err.message || '').toLowerCase().includes('circular')) {
-              try {
-                var seen = new WeakSet();
-                return originalStringify(value, function(key, val) {
-                  if (typeof val === "object" && val !== null) {
-                    if (seen.has(val)) {
-                      return "[Circular]";
-                    }
-                    seen.add(val);
-                  }
-                  if (replacer) {
-                    return replacer(key, val);
-                  }
-                  return val;
-                }, space);
-              } catch (e) {
-                return '"[Circular Structure]"';
-              }
-            }
-            throw err;
-          }
-        };
-      })();
-    </script>
+    <!-- Resource Preconnects & High-Priority Hero Preload -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="image" href="/images/1770732574204.webp" type="image/webp" fetchpriority="high">
+
+    <!-- Essential Google Fonts with font-display: swap and Non-Blocking Asynchronous Loading -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap">
+    </noscript>
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
-              serif: ['"Playfair Display"', 'serif'],
-              sans: ['"Lato"', 'sans-serif'],
+              serif: ['"Playfair Display"', 'Georgia', 'Cambria', '"Times New Roman"', 'serif'],
+              sans: ['"Lato"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
             },
             colors: {
               'elegant-gold': '#c5a059',
@@ -142,12 +119,12 @@
         pointer-events: none;
       }
       body {
-        font-family: 'Lato', sans-serif;
+        font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         color: #1a1a1a;
         overflow-x: hidden;
       }
       h1, h2, h3, h4, h5, h6 {
-        font-family: 'Playfair Display', serif;
+        font-family: 'Playfair Display', Georgia, Cambria, 'Times New Roman', serif;
       }
       /* Custom Premium Scrollbar */
       ::-webkit-scrollbar {
