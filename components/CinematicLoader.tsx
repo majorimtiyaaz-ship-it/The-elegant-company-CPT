@@ -8,7 +8,7 @@ interface CinematicLoaderProps {
 
 export const CinematicLoader: React.FC<CinematicLoaderProps> = ({
   onComplete,
-  heroImageUrl = '/images/1770732574204.webp',
+  heroImageUrl = '/images/hero-kitchen.webp',
 }) => {
   const [isDismissed, setIsDismissed] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);

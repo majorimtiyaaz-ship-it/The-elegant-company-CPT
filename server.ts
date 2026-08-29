@@ -177,17 +177,24 @@ Today is ${new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'nu
     }
   });
 
-  // API Route: ElevenLabs Text-to-Speech
+  // API Route: Text-to-Speech (ElevenLabs with seamless fallback)
   app.post('/api/tts', async (req, res) => {
     try {
       const apiKey = process.env.ELEVENLABS_API_KEY;
       if (!apiKey) {
-        return res.status(401).json({ error: "ELEVENLABS_API_KEY is not configured on this environment. Please configure it in your Settings/secrets." });
+        // Return fallback indicator so client smoothly employs browser speech synthesis
+        return res.json({ fallback: true, message: "ELEVENLABS_API_KEY not configured. Falling back to browser speech synthesis." });
       }
 
       const { text } = req.body;
       if (!text) {
         return res.status(400).json({ error: "Text content is required for TTS conversion" });
+      }
+
+      // Clean markdown tags or system notations before sending to TTS
+      const cleanText = String(text).replace(/\[SYSTEM:[^\]]*\]/g, '').replace(/[*_#`~]/g, '').trim();
+      if (!cleanText) {
+        return res.json({ fallback: true, message: "No speakable text" });
       }
 
       // Standard warm female voice id 'Rachel': 21m00Tcm4TlvDq8ikWAM
@@ -202,7 +209,7 @@ Today is ${new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'nu
           "accept": "audio/mpeg"
         },
         body: JSON.stringify({
-          text,
+          text: cleanText,
           model_id: modelId,
           voice_settings: {
             stability: 0.5,
@@ -213,8 +220,8 @@ Today is ${new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'nu
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("ElevenLabs API failure response:", errorText);
-        return res.status(response.status).json({ error: `ElevenLabs returned an error: ${errorText}` });
+        console.warn("ElevenLabs API response non-ok, falling back to browser speech synthesis:", errorText);
+        return res.json({ fallback: true, message: errorText });
       }
 
       // Read output stream as an ArrayBuffer and return it to the client as audio/mpeg
@@ -226,10 +233,15 @@ Today is ${new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'nu
       return res.end(buffer);
 
     } catch (err: any) {
-      console.error("TTS API error:", err);
-      return res.status(500).json({ error: err.message || "An error occurred during Text-to-Speech translation." });
+      console.warn("TTS API non-fatal error, notifying client to fallback:", err.message);
+      return res.json({ fallback: true, message: err.message });
     }
   });
+
+  // Direct static assets delivery for public directory and images
+  const publicDir = path.join(process.cwd(), 'public');
+  app.use('/images', express.static(path.join(publicDir, 'images')));
+  app.use(express.static(publicDir));
 
   // Vite integration
   if (process.env.NODE_ENV !== "production") {

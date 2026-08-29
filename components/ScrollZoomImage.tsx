@@ -1,5 +1,4 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
+import React, { useState, useEffect } from 'react';
 
 interface ScrollZoomImageProps {
   src: string;
@@ -12,26 +11,29 @@ export const ScrollZoomImage: React.FC<ScrollZoomImageProps> = ({
   alt, 
   className = "" 
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [imgSrc, setImgSrc] = useState(src);
 
-  // Monitor scroll progress of the container as it passes through the viewport
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
+  useEffect(() => {
+    setImgSrc(src);
+  }, [src]);
 
-  // Scale smoothly from 1.15 down to 1.05 based on viewport scroll position
-  const scale = useTransform(scrollYProgress, [0, 1], [1.15, 1.05]);
+  const handleError = () => {
+    if (imgSrc.endsWith('.webp')) {
+      setImgSrc(imgSrc.replace('.webp', '.jpg'));
+    } else if (imgSrc.endsWith('.jpg')) {
+      setImgSrc(imgSrc.replace('.jpg', '.png'));
+    }
+  };
 
   return (
-    <div ref={containerRef} className="w-full h-full overflow-hidden relative">
-      <motion.img
-        src={src}
+    <div className="w-full h-full overflow-hidden relative bg-stone-900">
+      <img
+        src={imgSrc}
         alt={alt}
-        loading="lazy"
+        loading="eager"
         decoding="async"
-        style={{ scale }}
-        className={`w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-115 ${className}`}
+        onError={handleError}
+        className={`w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 select-none ${className}`}
       />
     </div>
   );

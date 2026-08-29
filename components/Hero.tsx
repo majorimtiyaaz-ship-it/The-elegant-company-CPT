@@ -173,27 +173,11 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
               <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-elegant-gold group-hover:w-full transition-all duration-300" />
             </button>
             <button 
-              id="nav-link-finishes"
-              onClick={() => handleNavClick('finishes')}
-              className="text-stone-300 hover:text-elegant-gold transition-colors duration-300 cursor-pointer py-1.5 relative group"
-            >
-              <span>{t.navFinishes}</span>
-              <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-elegant-gold group-hover:w-full transition-all duration-300" />
-            </button>
-            <button 
               id="nav-link-process"
               onClick={() => handleNavClick('process')}
               className="text-stone-300 hover:text-elegant-gold transition-colors duration-300 cursor-pointer py-1.5 relative group"
             >
               <span>{t.navProcess}</span>
-              <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-elegant-gold group-hover:w-full transition-all duration-300" />
-            </button>
-            <button 
-              id="nav-link-bts"
-              onClick={() => handleNavClick('behind-the-scenes')}
-              className="text-stone-300 hover:text-elegant-gold transition-colors duration-300 cursor-pointer py-1.5 relative group"
-            >
-              <span>{t.navBts}</span>
               <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-elegant-gold group-hover:w-full transition-all duration-300" />
             </button>
             <button 
@@ -261,22 +245,10 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
               {t.navCollection}
             </button>
             <button 
-              onClick={() => handleNavClick('finishes')}
-              className="text-left py-2.5 text-stone-200 hover:text-elegant-gold border-b border-stone-800/60 transition-colors"
-            >
-              {t.navFinishes}
-            </button>
-            <button 
               onClick={() => handleNavClick('process')}
               className="text-left py-2.5 text-stone-200 hover:text-elegant-gold border-b border-stone-800/60 transition-colors"
             >
               {t.navProcess}
-            </button>
-            <button 
-              onClick={() => handleNavClick('behind-the-scenes')}
-              className="text-left py-2.5 text-stone-200 hover:text-elegant-gold border-b border-stone-800/60 transition-colors"
-            >
-              {t.navBts}
             </button>
             <button 
               onClick={() => handleNavClick('testimonials')}

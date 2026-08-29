@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View } from './types';
 import { Hero } from './components/Hero';
 import { Portfolio } from './components/Portfolio';
-import { MaterialConfigurator } from './components/MaterialConfigurator';
-import { BehindTheScenes } from './components/BehindTheScenes';
 import { Process } from './components/Process';
 import { Testimonials } from './components/Testimonials';
 import { Contact } from './components/Contact';
@@ -236,12 +234,6 @@ function App() {
             </div>
             <div id="portfolio" className="scroll-mt-20">
               <Portfolio onNavigate={handleNavigate} />
-            </div>
-            <div id="finishes" className="scroll-mt-20">
-              <MaterialConfigurator onNavigate={handleNavigate} />
-            </div>
-            <div id="behind-the-scenes" className="scroll-mt-20">
-              <BehindTheScenes onNavigate={handleNavigate} />
             </div>
             <div id="process" className="scroll-mt-20">
               <Process />

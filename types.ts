@@ -16,5 +16,9 @@ export interface PortfolioItem {
   imageUrl: string;
   materials: string;
   description: string;
+  woodSpecies?: string;
   woodFinish?: string;
+  finishType?: string;
+  constructionDetails?: string;
+  careGuide?: string;
 }

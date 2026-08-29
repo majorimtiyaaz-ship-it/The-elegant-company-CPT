@@ -1,8 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextReveal } from './TextReveal';
 import { RevealOnScroll } from './RevealOnScroll';
 import { useLanguage } from './LanguageContext';
+
+// Ensure ScrollTrigger is registered
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 import { 
   MessageSquare, 
   Layers, 
@@ -161,6 +167,11 @@ type ProjectType = 'custom' | 'restoration' | 'builtins';
 export const Process: React.FC = () => {
   const { language, t } = useLanguage();
   const [activeTab, setActiveTab] = useState<ProjectType>('custom');
+  const sectionRef = useRef<HTMLElement>(null);
+  const bgParallaxImgRef = useRef<HTMLImageElement>(null);
+  const watermarkRef = useRef<HTMLDivElement>(null);
+  const bannerSectionRef = useRef<HTMLDivElement>(null);
+  const bannerBgRef = useRef<HTMLImageElement>(null);
 
   const getTranslatedSteps = (): ProcessStep[] => {
     if (language === 'en') {
@@ -307,6 +318,85 @@ export const Process: React.FC = () => {
     }
   };
 
+  // Parallax ScrollTrigger Effect on background visual elements
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion || !sectionRef.current) return;
+
+    const ctx = gsap.context(() => {
+      // Main section background image parallax translation
+      if (bgParallaxImgRef.current) {
+        gsap.fromTo(
+          bgParallaxImgRef.current,
+          { 
+            yPercent: -15,
+            scale: 1.08
+          },
+          { 
+            yPercent: 15,
+            scale: 1.0,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1.0,
+              invalidateOnRefresh: true,
+            }
+          }
+        );
+      }
+
+      // Watermark text counter-parallax
+      if (watermarkRef.current) {
+        gsap.fromTo(
+          watermarkRef.current,
+          { 
+            y: 90,
+            x: 30
+          },
+          { 
+            y: -90,
+            x: -20,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1.5,
+            }
+          }
+        );
+      }
+
+      // Dark Banner timber backdrop parallax
+      if (bannerBgRef.current && bannerSectionRef.current) {
+        gsap.fromTo(
+          bannerBgRef.current,
+          { 
+            yPercent: -16,
+            scale: 1.12
+          },
+          { 
+            yPercent: 16,
+            scale: 1.0,
+            ease: "none",
+            scrollTrigger: {
+              trigger: bannerSectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1.2,
+            }
+          }
+        );
+      }
+    }, sectionRef);
+
+    return () => {
+      ctx.revert();
+    };
+  }, []);
+
   // Run premium GSAP reveal animation whenever the active tab switches
   useEffect(() => {
     gsap.killTweensOf(".process-step-premium-card");
@@ -330,9 +420,32 @@ export const Process: React.FC = () => {
   }, [activeTab]);
 
   return (
-    <section id="process-walkthrough-section" className="bg-[#faf8f5] py-24 md:py-28 px-6 border-t border-stone-200/60 relative overflow-hidden">
-      {/* Decorative background watermark */}
-      <div className="absolute right-0 bottom-0 text-[16vw] font-serif text-stone-900/[0.02] select-none pointer-events-none translate-y-12 translate-x-12 leading-none font-bold italic">
+    <section 
+      ref={sectionRef}
+      id="process-walkthrough-section" 
+      className="bg-[#faf8f5] py-24 md:py-28 px-6 border-t border-stone-200/60 relative overflow-hidden"
+    >
+      {/* GSAP Scroll-Triggered Parallax Background Image */}
+      <div className="absolute inset-0 w-full h-[140%] -top-[20%] pointer-events-none overflow-hidden select-none z-0">
+        <img
+          ref={bgParallaxImgRef}
+          src="/images/1770565768335~2.webp"
+          alt=""
+          role="presentation"
+          aria-hidden="true"
+          decoding="async"
+          className="w-full h-full object-cover opacity-[0.04] mix-blend-luminosity filter contrast-[1.3] brightness-[0.9] pointer-events-none transform origin-center will-change-transform"
+        />
+        {/* Subtle gradient fades top and bottom */}
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#faf8f5] to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#faf8f5] to-transparent pointer-events-none" />
+      </div>
+
+      {/* Decorative background watermark with counter-parallax */}
+      <div 
+        ref={watermarkRef}
+        className="absolute right-0 bottom-0 text-[16vw] font-serif text-stone-900/[0.025] select-none pointer-events-none translate-y-12 translate-x-12 leading-none font-bold italic will-change-transform z-0"
+      >
         {language === 'en' ? 'Cape Town' : 'Kaapstad'}
       </div>
       
@@ -439,9 +552,26 @@ export const Process: React.FC = () => {
           ))}
         </div>
 
-        {/* Premium Banner clarifying Call out & Business Conditions */}
-        <RevealOnScroll className="bg-stone-950 text-white p-8 sm:p-12 lg:p-14 border border-stone-800 relative overflow-hidden rounded-sm shadow-xl">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-[radial-gradient(circle_at_top_right,rgba(197,160,89,0.12),transparent_60%)] pointer-events-none"></div>
+        {/* Premium Banner clarifying Call out & Business Conditions with GSAP Parallax */}
+        <RevealOnScroll className="relative">
+          <div 
+            ref={bannerSectionRef} 
+            className="bg-stone-950 text-white p-8 sm:p-12 lg:p-14 border border-stone-800 relative overflow-hidden rounded-sm shadow-xl"
+          >
+            {/* Parallax background timber grain for the banner */}
+            <div className="absolute inset-0 w-full h-[140%] -top-[20%] pointer-events-none overflow-hidden select-none z-0">
+              <img
+                ref={bannerBgRef}
+                src="/images/coffee-table-after-2.webp"
+                alt=""
+                role="presentation"
+                aria-hidden="true"
+                decoding="async"
+                className="w-full h-full object-cover opacity-[0.08] mix-blend-luminosity filter contrast-[1.4] brightness-[0.7] pointer-events-none transform origin-center will-change-transform"
+              />
+            </div>
+
+            <div className="absolute top-0 right-0 w-80 h-80 bg-[radial-gradient(circle_at_top_right,rgba(197,160,89,0.12),transparent_60%)] pointer-events-none"></div>
           
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-6 space-y-4">
@@ -496,7 +626,8 @@ export const Process: React.FC = () => {
               </div>
             </div>
           </div>
-        </RevealOnScroll>
+        </div>
+      </RevealOnScroll>
 
       </div>
     </section>

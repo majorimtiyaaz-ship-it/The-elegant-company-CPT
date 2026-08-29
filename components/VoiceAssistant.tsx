@@ -429,9 +429,87 @@ export const VoiceAssistant: React.FC = () => {
     }
   };
 
+  // Stop all speech synthesis and audio playback
+  const stopAllAudio = () => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
+    setIsSpeaking(false);
+  };
+
+  // Browser Web Speech Synthesis fallback (100% reliable with zero external API key requirements)
+  const speakWithBrowserSpeech = (textToSpeak: string) => {
+    if (muteVoice || typeof window === 'undefined' || !('speechSynthesis' in window)) {
+      setIsSpeaking(false);
+      return;
+    }
+
+    try {
+      window.speechSynthesis.cancel();
+
+      // Clean text of system annotations, bracket instructions, and markdown
+      const cleanText = textToSpeak
+        .replace(/\[SYSTEM:[^\]]*\]/g, '')
+        .replace(/[*_#`~]/g, '')
+        .replace(/https?:\/\/\S+/g, '')
+        .trim();
+
+      if (!cleanText) {
+        setIsSpeaking(false);
+        return;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.rate = 0.96; // Elegant, measured cadence
+      utterance.pitch = 1.04; // Warm, hospitable tone
+
+      // Select matching voice
+      const voices = window.speechSynthesis.getVoices();
+      if (languageRef.current === 'af') {
+        const afVoice = voices.find(v => v.lang.startsWith('af') || v.name.toLowerCase().includes('afrikaans'));
+        if (afVoice) utterance.voice = afVoice;
+      } else {
+        const preferredVoice = voices.find(v => 
+          (v.name.includes('Samantha') || 
+           v.name.includes('Karen') || 
+           v.name.includes('Serena') || 
+           v.name.includes('Victoria') || 
+           v.name.includes('Google UK English Female') ||
+           v.name.includes('Natural') ||
+           (v.lang.startsWith('en') && v.name.toLowerCase().includes('female')))
+        ) || voices.find(v => v.lang.startsWith('en'));
+        
+        if (preferredVoice) utterance.voice = preferredVoice;
+      }
+
+      utterance.onstart = () => {
+        setIsSpeaking(true);
+      };
+
+      utterance.onend = () => {
+        setIsSpeaking(false);
+      };
+
+      utterance.onerror = (e) => {
+        console.warn("Speech synthesis notice:", e);
+        setIsSpeaking(false);
+      };
+
+      window.speechSynthesis.speak(utterance);
+    } catch (e) {
+      console.warn("Browser speech synthesis error:", e);
+      setIsSpeaking(false);
+    }
+  };
+
   // TTS Voice Synthesis
   const speakText = async (textToSpeak: string) => {
     if (muteVoice) return;
+    stopAllAudio();
+
     try {
       const response = await fetch('/api/tts', {
         method: 'POST',
@@ -440,22 +518,44 @@ export const VoiceAssistant: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error('TTS server failed');
+        speakWithBrowserSpeech(textToSpeak);
+        return;
+      }
+
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        const data = await response.json().catch(() => ({ fallback: true }));
+        if (data.fallback || !data.audio) {
+          speakWithBrowserSpeech(textToSpeak);
+          return;
+        }
       }
 
       const audioBlob = await response.blob();
+      if (audioBlob.size < 120) {
+        speakWithBrowserSpeech(textToSpeak);
+        return;
+      }
+
       const audioUrl = URL.createObjectURL(audioBlob);
 
       if (audioRef.current) {
+        setupAudioContext();
         audioRef.current.src = audioUrl;
-        audioRef.current.play().catch(e => {
-          console.warn("Autoplay blocked or playback issue. Speech requires user click.", e);
-          setIsSpeaking(false);
-        });
+        audioRef.current.play()
+          .then(() => {
+            setIsSpeaking(true);
+          })
+          .catch(e => {
+            console.warn("Audio element playback interrupted, using browser speech synthesis:", e);
+            speakWithBrowserSpeech(textToSpeak);
+          });
+      } else {
+        speakWithBrowserSpeech(textToSpeak);
       }
     } catch (err) {
-      console.error("TTS voice synthesis failed:", err);
-      setIsSpeaking(false);
+      console.warn("TTS server call noticed, using browser speech synthesis fallback:", err);
+      speakWithBrowserSpeech(textToSpeak);
     }
   };
 
@@ -601,146 +701,116 @@ export const VoiceAssistant: React.FC = () => {
       const width = canvas.width;
       const height = canvas.height;
       
-      // Clear canvas with soft transparency for premium friction trail
-      ctx.fillStyle = 'rgba(26, 26, 26, 0.1)';
+      // Clear canvas with ultra-soft fade for fluid harmonic trails
+      ctx.fillStyle = 'rgba(13, 14, 16, 0.25)';
       ctx.fillRect(0, 0, width, height);
 
-      // Centered coordinate details
-      const cx = width / 2;
       const cy = height / 2;
-      const baseRadius = 55;
+      particlePulse += 0.03;
+      rotation += 0.04;
 
-      // Check current mode to draw proper luxury waveform orb
-      if (isSpeakingRef.current && analyserRef.current) {
-        // A. Eleanor Voice Output - Active Golden Circular Waveform
-        const analyser = analyserRef.current;
-        const bufferLength = analyser.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
-        analyser.getByteFrequencyData(dataArray);
+      if (isSpeakingRef.current) {
+        // A. Eleanor Voice Output - Luxury Fluid Harmonic Audio Ribbon
+        let avg = 0.45;
+        if (analyserRef.current) {
+          const analyser = analyserRef.current;
+          const bufferLength = analyser.frequencyBinCount;
+          const dataArray = new Uint8Array(bufferLength);
+          analyser.getByteFrequencyData(dataArray);
 
-        // Draw multiple layered organic fluid loops
-        for (let layer = 0; layer < 3; layer++) {
-          ctx.beginPath();
-          ctx.strokeStyle = layer === 0 ? 'rgba(197, 160, 89, 0.9)' : layer === 1 ? 'rgba(197, 160, 89, 0.4)' : 'rgba(230, 210, 160, 0.15)';
-          ctx.lineWidth = layer === 0 ? 3 : layer === 1 ? 2 : 4;
-          
-          const offsetAngle = layer * (Math.PI / 3);
-
-          for (let i = 0; i <= 64; i++) {
-            const angle = (i / 64) * Math.PI * 2 + offsetAngle;
-            const dataIndex = Math.floor((i % 32) * (bufferLength / 32));
-            const value = dataArray[dataIndex] / 255;
-            
-            // Push radius outward synchronously with voice volume frequency
-            const r = baseRadius + value * 22 * (1.2 - layer * 0.3);
-            const x = cx + Math.cos(angle) * r;
-            const y = cy + Math.sin(angle) * r;
-
-            if (i === 0) {
-              ctx.moveTo(x, y);
-            } else {
-              ctx.lineTo(x, y);
-            }
-          }
-          ctx.closePath();
-          ctx.stroke();
+          let sum = 0;
+          for (let i = 0; i < 32; i++) sum += dataArray[i];
+          const calculatedAvg = sum / 32 / 255;
+          if (calculatedAvg > 0.04) avg = calculatedAvg;
+        } else {
+          // Synthetic audio envelope for browser speech synthesis
+          avg = 0.4 + Math.sin(particlePulse * 3.2) * 0.22 + Math.cos(particlePulse * 6.5) * 0.12;
         }
 
-        // Draw center gold energy core
-        ctx.beginPath();
-        ctx.fillStyle = 'rgba(197, 160, 89, 0.08)';
-        ctx.arc(cx, cy, baseRadius - 5, 0, Math.PI * 2);
-        ctx.fill();
+        const layers = [
+          { color: 'rgba(197, 160, 89, 0.95)', width: 2.2, speed: 2.2, amp: 24 * (1 + avg * 1.8), freq: 0.022 },
+          { color: 'rgba(235, 210, 150, 0.65)', width: 1.5, speed: -1.6, amp: 18 * (1 + avg * 1.5), freq: 0.03 },
+          { color: 'rgba(197, 160, 89, 0.25)', width: 3.5, speed: 1.2, amp: 14 * (1 + avg * 1.2), freq: 0.015 }
+        ];
+
+        layers.forEach((layer) => {
+          ctx.beginPath();
+          ctx.strokeStyle = layer.color;
+          ctx.lineWidth = layer.width;
+
+          for (let x = 0; x <= width; x += 4) {
+            const normalizedX = (x - width / 2) / (width / 2);
+            // Windowing function (Hanning-like) to taper ends gracefully
+            const envelope = Math.cos(normalizedX * Math.PI * 0.5);
+            const y = cy + Math.sin(x * layer.freq + particlePulse * layer.speed) * layer.amp * Math.max(0, envelope);
+
+            if (x === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        });
 
       } else if (isListeningRef.current && micAnalyserRef.current) {
-        // B. User Speaking Input - Active Audio Mic Waveform
+        // B. User Speaking Input - Warm Amber Acoustic Waveform
         const analyser = micAnalyserRef.current;
         const bufferLength = analyser.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);
         analyser.getByteFrequencyData(dataArray);
 
+        let sum = 0;
+        for (let i = 0; i < 32; i++) sum += dataArray[i];
+        const avg = sum / 32 / 255;
+
         ctx.beginPath();
-        ctx.strokeStyle = 'rgba(239, 68, 68, 0.85)'; // Elite glowing warm coral-red for listening active indication
-        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = 'rgba(220, 165, 80, 0.9)';
+        ctx.lineWidth = 2;
 
-        for (let i = 0; i <= 64; i++) {
-          const angle = (i / 64) * Math.PI * 2;
-          const dataIndex = Math.floor((i % 32) * (bufferLength / 32));
-          const value = dataArray[dataIndex] / 255;
-          
-          const r = baseRadius + value * 25;
-          const x = cx + Math.cos(angle) * r;
-          const y = cy + Math.sin(angle) * r;
+        for (let x = 0; x <= width; x += 3) {
+          const normalizedX = (x - width / 2) / (width / 2);
+          const envelope = Math.cos(normalizedX * Math.PI * 0.5);
+          const dataIdx = Math.floor((x / width) * 32);
+          const waveAmp = (dataArray[dataIdx] / 255) * 28 + 6;
+          const y = cy + Math.sin(x * 0.04 + particlePulse * 3) * waveAmp * Math.max(0, envelope);
 
-          if (i === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
         }
-        ctx.closePath();
         ctx.stroke();
-
-        ctx.beginPath();
-        ctx.fillStyle = 'rgba(239, 68, 68, 0.06)';
-        ctx.arc(cx, cy, baseRadius - 10, 0, Math.PI * 2);
-        ctx.fill();
 
       } else if (isThinkingRef.current) {
-        // C. Thinking / Processing State - Smooth orbit tracks
-        rotation += 0.06;
-        ctx.lineWidth = 1.5;
+        // C. Thinking State - Harmonic Double Helix Wave
+        for (let k = 0; k < 2; k++) {
+          const phase = k * Math.PI;
+          ctx.beginPath();
+          ctx.strokeStyle = k === 0 ? 'rgba(197, 160, 89, 0.85)' : 'rgba(215, 185, 125, 0.45)';
+          ctx.lineWidth = 1.8;
 
-        // Draw double nested orbiting gold particles
-        ctx.beginPath();
-        ctx.strokeStyle = 'rgba(197, 160, 89, 0.35)';
-        ctx.arc(cx, cy, baseRadius, 0, Math.PI * 2);
-        ctx.stroke();
+          for (let x = 0; x <= width; x += 4) {
+            const normalizedX = (x - width / 2) / (width / 2);
+            const envelope = Math.cos(normalizedX * Math.PI * 0.5);
+            const y = cy + Math.sin(x * 0.025 + rotation * 2 + phase) * 14 * Math.max(0, envelope);
 
-        // Orbit particle 1
-        const ox1 = cx + Math.cos(rotation) * baseRadius;
-        const oy1 = cy + Math.sin(rotation) * baseRadius;
-        ctx.beginPath();
-        ctx.fillStyle = '#c5a059';
-        ctx.arc(ox1, oy1, 5, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Orbit particle 2 (opposite direction, wider track)
-        ctx.beginPath();
-        ctx.strokeStyle = 'rgba(197, 160, 89, 0.15)';
-        ctx.arc(cx, cy, baseRadius + 15, 0, Math.PI * 2);
-        ctx.stroke();
-
-        const ox2 = cx + Math.cos(-rotation * 0.7) * (baseRadius + 15);
-        const oy2 = cy + Math.sin(-rotation * 0.7) * (baseRadius + 15);
-        ctx.beginPath();
-        ctx.fillStyle = 'rgba(197, 160, 89, 0.75)';
-        ctx.arc(ox2, oy2, 4, 0, Math.PI * 2);
-        ctx.fill();
+            if (x === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        }
 
       } else {
-        // D. IDLE - Slow beautiful breathing luxury golden ring
-        particlePulse += 0.025;
-        const breathingRadius = baseRadius + Math.sin(particlePulse) * 4;
-
+        // D. Idle State - Serene Atelier Drafting Horizon Line
         ctx.beginPath();
-        ctx.strokeStyle = 'rgba(197, 160, 89, 0.5)';
-        ctx.lineWidth = 1.5;
-        ctx.arc(cx, cy, breathingRadius, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(197, 160, 89, 0.45)';
+        ctx.lineWidth = 1.4;
+
+        for (let x = 0; x <= width; x += 4) {
+          const normalizedX = (x - width / 2) / (width / 2);
+          const envelope = Math.cos(normalizedX * Math.PI * 0.5);
+          const y = cy + Math.sin(x * 0.018 + particlePulse * 0.8) * 6 * Math.max(0, envelope);
+
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
         ctx.stroke();
-
-        // Subtly layered glow
-        ctx.beginPath();
-        ctx.strokeStyle = 'rgba(197, 160, 89, 0.18)';
-        ctx.lineWidth = 6;
-        ctx.arc(cx, cy, breathingRadius, 0, Math.PI * 2);
-        ctx.stroke();
-
-        // Micro gold node center dot
-        ctx.beginPath();
-        ctx.fillStyle = '#c5a059';
-        ctx.arc(cx, cy, 3, 0, Math.PI * 2);
-        ctx.fill();
       }
 
       animationFrameId.current = requestAnimationFrame(render);
@@ -749,159 +819,191 @@ export const VoiceAssistant: React.FC = () => {
     render();
   };
 
+  // Quick inquiry prompt chips
+  const quickPrompts = [
+    { label: language === 'af' ? "Bespoke Kombuis" : "Bespoke Kitchen", query: "Can you advise me on commissioning a bespoke luxury kitchen in Cape Town?" },
+    { label: language === 'af' ? "Pasgemaakte Kaste" : "Custom Cabinetry", query: "Tell me about your custom cabinetry, fluted wood profiles and wardrobes." },
+    { label: language === 'af' ? "Bespreek Konsultasie" : "Book Consultation", query: "I would like to schedule a design consultation on my calendar." },
+    { label: language === 'af' ? "Houtafwerkings" : "Wood Finishes", query: "What timber species, French Oak and travertine finishes do you offer?" }
+  ];
+
   return (
     <>
-      {/* 1. FLOATING BRANDED ORB BUTTON (Bottom Right Launcher) */}
+      {/* 1. FLOATING LUXURY ATELIER BADGE LAUNCHER (Bottom Right) */}
       <div className="fixed bottom-6 right-6 z-[9990] flex flex-col items-end">
         <AnimatePresence>
-          {(!isOpen) && (
+          {!isOpen && (
             <motion.button
               id="eleanor-floating-launcher"
-              initial={{ opacity: 0, scale: 0.8, y: 10 }}
+              initial={{ opacity: 0, scale: 0.88, y: 12 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.8, y: 5 }}
+              exit={{ opacity: 0, scale: 0.88, y: 8 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               onClick={() => setIsOpen(true)}
-              className="group relative flex items-center gap-3 bg-[#0a0a0a] border border-[#c5a059]/40 hover:border-[#c5a059] text-white px-5 py-3.5 rounded-full shadow-[0_12px_40px_rgba(0,0,0,0.5)] cursor-pointer select-none overflow-hidden transition-all duration-300 active:scale-95"
+              className="group relative flex items-center gap-3.5 bg-[#0e0f11]/95 backdrop-blur-xl border border-[#c5a059]/40 hover:border-[#c5a059] text-white pl-4 pr-5 py-3 rounded-full shadow-[0_16px_48px_rgba(0,0,0,0.65)] cursor-pointer select-none overflow-hidden transition-all duration-400 hover:shadow-[0_20px_56px_rgba(197,160,89,0.2)] active:scale-[0.97]"
             >
-              {/* Gold light sheen shimmer animation inside launcher */}
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
-              
-              <div className="relative">
-                <span className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-[#0a0a0a] animate-pulse"></span>
-                <MessageSquare size={16} className="text-[#c5a059] group-hover:scale-110 transition-transform duration-300" />
+              {/* Subtle gold light sweep sheen */}
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-[#c5a059]/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
+
+              {/* Atelier Medallion Icon */}
+              <div className="relative w-8 h-8 rounded-full bg-[#18191c] border border-[#c5a059]/50 flex items-center justify-center shrink-0 shadow-inner">
+                <Sparkles size={14} className="text-[#c5a059] group-hover:rotate-12 transition-transform duration-300" />
+                <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[#c5a059] rounded-full border-2 border-[#0e0f11] shadow-[0_0_8px_#c5a059]" />
               </div>
 
+              {/* Brand Typography */}
               <div className="flex flex-col items-start leading-none text-left">
-                <span className="text-[10px] font-sans tracking-[0.18em] uppercase font-bold text-gray-400">
-                  {language === 'af' ? 'Praat Met' : 'Speak With'}
+                <span className="text-[9px] font-sans tracking-[0.24em] uppercase font-semibold text-stone-400">
+                  {language === 'af' ? 'Ateljee-Konsultant' : 'Atelier Consultant'}
                 </span>
-                <span className="text-xs font-serif font-semibold text-[#c5a059] tracking-wide mt-1.5">Eleanor</span>
+                <span className="text-[13px] font-serif font-medium text-[#e4caa0] tracking-wide mt-1 group-hover:text-[#c5a059] transition-colors">
+                  Eleanor
+                </span>
               </div>
             </motion.button>
           )}
         </AnimatePresence>
       </div>
 
-      {/* 2. CHAT MODAL INTERFACE PANEL (Sophisticated sliding cards with glassmorphism) */}
+      {/* 2. CHAT MODAL INTERFACE PANEL (Architectural Atelier Drawer) */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
             id="eleanor-consultant-sidebar"
-            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            initial={{ opacity: 0, y: 24, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ type: 'spring', damping: 26, stiffness: 180 }}
-            className="fixed bottom-6 right-6 z-[9995] w-full max-w-[400px] h-[640px] max-h-[calc(100vh-48px)] bg-[#141414]/98 backdrop-blur-xl border border-stone-800/80 rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.7)] overflow-hidden flex flex-col font-sans"
+            exit={{ opacity: 0, y: 18, scale: 0.96 }}
+            transition={{ type: 'spring', damping: 28, stiffness: 220 }}
+            className="fixed bottom-6 right-6 z-[9995] w-[calc(100vw-32px)] sm:w-[410px] h-[640px] max-h-[calc(100vh-48px)] bg-[#0d0e10]/98 backdrop-blur-2xl border border-stone-800/90 rounded-2xl shadow-[0_32px_100px_rgba(0,0,0,0.85)] overflow-hidden flex flex-col font-sans"
           >
-            {/* Elegant Header section */}
-            <div className="p-5 border-b border-stone-900 flex items-center justify-between select-none bg-stone-950/60">
+            {/* A. Refined Atelier Header */}
+            <div className="px-5 py-4 border-b border-stone-900/90 flex items-center justify-between select-none bg-stone-950/70">
               <div className="flex items-center gap-3">
-                <div className="relative w-9 h-9 rounded-full bg-[#1c1c1c] border border-[#c5a059]/40 flex items-center justify-center">
-                  <span className="text-xs font-serif text-[#c5a059] font-semibold">E</span>
-                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border border-[#141414] animate-pulse"></span>
+                <div className="relative w-9 h-9 rounded-full bg-[#18191c] border border-[#c5a059]/60 flex items-center justify-center shadow-inner">
+                  <span className="text-xs font-serif text-[#e4caa0] font-semibold">E</span>
+                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[#c5a059] rounded-full border border-[#0d0e10] shadow-[0_0_6px_#c5a059]" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-serif font-semibold text-white tracking-wide leading-none">Eleanor</h3>
-                  <p className="text-[10px] font-sans text-[#c5a059]/80 tracking-widest uppercase mt-1">
-                    {language === 'af' ? 'Unieke Ontwerpkonsultant' : 'Bespoke Design Consultant'}
+                  <h3 className="text-sm font-serif font-medium text-white tracking-wide leading-none">Eleanor</h3>
+                  <p className="text-[9px] font-sans text-stone-400 tracking-[0.16em] uppercase mt-1">
+                    {language === 'af' ? 'Hoof-Ontwerpkonsultant · Kaapstad' : 'Principal Consultant · Cape Town'}
                   </p>
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
-                {/* Sign-in status widget */}
+                {/* Google Calendar Sync status */}
                 {user ? (
-                  <div className="flex items-center gap-2">
-                     <span className="text-[9px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider font-semibold font-sans">
-                       {language === 'af' ? 'Kalender-sinchronisasie' : 'Calendar Sync'}
-                     </span>
-                    <button 
-                      onClick={handleSignOut}
-                       title={language === 'af' ? 'Ontkoppel Kalender' : 'Disconnect Calendar'}
-                      className="text-stone-500 hover:text-red-400 transition-colors duration-300 text-[10px] uppercase tracking-wider cursor-pointer font-sans underline"
-                    >
-                       {language === 'af' ? 'Ontkoppel' : 'Disconnect'}
-                    </button>
+                  <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/25 px-2 py-0.5 rounded-full">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-[9px] text-emerald-300 uppercase tracking-wider font-semibold font-sans">
+                      {language === 'af' ? 'Kalender Gekoppel' : 'Calendar Synced'}
+                    </span>
                   </div>
                 ) : (
                   <button
                     onClick={handleGoogleSignIn}
                     disabled={isSigningIn}
-                    className="flex items-center gap-1.5 text-[9px] text-[#c5a059] bg-[#c5a059]/10 hover:bg-[#c5a059]/20 border border-[#c5a059]/20 px-2.5 py-1 rounded-full uppercase tracking-wider font-semibold font-sans transition-all duration-300 cursor-pointer disabled:opacity-50"
+                    title="Connect Google Calendar for real-time consultation scheduling"
+                    className="flex items-center gap-1 text-[9px] text-[#c5a059] bg-[#c5a059]/10 hover:bg-[#c5a059]/20 border border-[#c5a059]/30 px-2.5 py-1 rounded-full uppercase tracking-wider font-semibold font-sans transition-all duration-300 cursor-pointer disabled:opacity-50"
                   >
                     <Calendar size={10} />
-                     {isSigningIn 
-                       ? (language === 'af' ? "Besig met sinchronisering..." : "Syncing...") 
-                       : (language === 'af' ? "Koppel Kalender" : "Sync Calendar")}
+                    <span>{isSigningIn ? '...' : (language === 'af' ? 'Kalender' : 'Sync Calendar')}</span>
                   </button>
                 )}
 
                 <button
-                  onClick={() => setIsOpen(false)}
-                  className="text-stone-400 hover:text-white transition-colors duration-300 p-1 rounded-full hover:bg-stone-900 cursor-pointer"
+                  onClick={() => {
+                    stopAllAudio();
+                    setIsOpen(false);
+                  }}
+                  className="text-stone-400 hover:text-white transition-colors duration-300 p-1.5 rounded-full hover:bg-stone-900 cursor-pointer"
+                  aria-label="Close consultant panel"
                 >
-                  <X size={16} />
+                  <X size={15} />
                 </button>
               </div>
             </div>
 
-            {/* A. Dynamic Soundwave Visualizer Section */}
-            <div className="relative h-[160px] shrink-0 bg-stone-950/40 border-b border-stone-900 flex flex-col items-center justify-center overflow-hidden">
+            {/* B. Organic Acoustic Waveform Visualizer */}
+            <div className="relative h-[95px] shrink-0 bg-gradient-to-b from-[#090a0c] to-[#0e0f11] border-b border-stone-900/80 flex flex-col items-center justify-center overflow-hidden">
               <canvas 
                 ref={canvasRef} 
-                width={360} 
-                height={150} 
+                width={380} 
+                height={95} 
                 className="w-full h-full object-contain pointer-events-none"
               />
               
-              {/* Dynamic Overlay State text label */}
-              <div className="absolute bottom-3 left-0 right-0 text-center select-none">
-                <span className="text-[10px] font-sans tracking-[0.2em] uppercase font-light text-stone-400">
+              {/* Dynamic State Caption */}
+              <div className="absolute bottom-2 inset-x-0 text-center select-none flex items-center justify-center gap-1.5">
+                <span className={`w-1.5 h-1.5 rounded-full ${
+                  isSpeaking ? 'bg-[#c5a059] animate-ping' : isListening ? 'bg-amber-400 animate-pulse' : isThinking ? 'bg-[#c5a059] animate-bounce' : 'bg-stone-600'
+                }`} />
+                <span className="text-[9px] font-sans tracking-[0.22em] uppercase font-medium text-stone-400">
                   {isSpeaking 
                     ? (language === 'af' ? "Eleanor praat tans..." : "Eleanor is speaking...") 
                     : isListening 
-                      ? (language === 'af' ? "Luister na u stem..." : "Listening to your voice...") 
+                      ? (language === 'af' ? "Luister na u stem..." : "Listening attentively...") 
                       : isThinking 
-                        ? (language === 'af' ? "Raadpleeg meester-houtwerkswinkel..." : "Consulting master woodcraft workshop...") 
-                        : (language === 'af' ? "Eleanor is aandagtig" : "Eleanor is attentive")}
+                        ? (language === 'af' ? "Raadpleeg ateljee..." : "Consulting atelier archives...") 
+                        : (language === 'af' ? "Eleanor is gereed" : "Atelier AI Active")}
                 </span>
               </div>
             </div>
 
-            {/* B. Conversation History Panel */}
-            <div className="flex-grow overflow-y-auto p-5 space-y-4 scrollbar-thin scrollbar-thumb-stone-800 bg-[#121212]/40">
+            {/* C. Conversation History Scroll Area */}
+            <div className="flex-grow overflow-y-auto p-4 space-y-3.5 scrollbar-thin scrollbar-thumb-stone-800 bg-[#0d0e10]/60">
               {messages.map((msg) => (
                 <div 
                   key={msg.id} 
                   className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}
                 >
-                  <div className={`max-w-[85%] rounded-xl px-4 py-3 text-sm leading-relaxed ${
+                  <div className={`max-w-[88%] rounded-xl px-3.5 py-2.5 text-[13px] leading-relaxed ${
                     msg.role === 'user' 
-                      ? 'bg-[#c5a059] text-white rounded-tr-none shadow-[0_4px_12px_rgba(197,160,89,0.12)]' 
-                      : 'bg-stone-900 text-stone-200 rounded-tl-none border border-stone-800/60 shadow-[0_4px_12px_rgba(0,0,0,0.1)]'
+                      ? 'bg-gradient-to-r from-[#c5a059] to-[#ad8a43] text-white rounded-tr-none shadow-[0_4px_16px_rgba(197,160,89,0.18)] font-sans' 
+                      : 'bg-[#151618] text-stone-200 rounded-tl-none border border-stone-800/80 shadow-[0_4px_12px_rgba(0,0,0,0.3)] font-sans'
                   }`}>
                     {msg.content}
                   </div>
-                  <span className="text-[9px] text-stone-500 font-sans tracking-wide mt-1.5 px-1 uppercase font-light">
-                    {msg.role === 'user' ? (language === 'af' ? 'Jy' : 'You') : 'Eleanor'} &bull; {msg.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                  <span className="text-[8.5px] text-stone-500 font-sans tracking-wider mt-1 px-1 uppercase">
+                    {msg.role === 'user' ? (language === 'af' ? 'U' : 'You') : 'Eleanor'} · {msg.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                   </span>
                 </div>
               ))}
 
-              {/* Booking Prompt Highlight overlay */}
+              {/* Quick Prompt Suggestions when conversation is young */}
+              {messages.length <= 2 && (
+                <div className="pt-2 pb-1">
+                  <p className="text-[9px] font-sans uppercase tracking-[0.2em] text-stone-500 mb-2">
+                    {language === 'af' ? 'Voorgestelde navrae:' : 'Suggested inquiries:'}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {quickPrompts.map((qp, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => {
+                          handleSubmitText(qp.query);
+                        }}
+                        className="text-[10px] font-sans text-stone-300 bg-stone-900/80 hover:bg-[#c5a059]/15 hover:text-[#e4caa0] border border-stone-800 hover:border-[#c5a059]/40 px-2.5 py-1 rounded-full transition-all duration-200 cursor-pointer"
+                      >
+                        {qp.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Booking Confirmation Card */}
               {bookingDetails && (
-                <div className="p-4 bg-[#c5a059]/10 border border-[#c5a059]/30 rounded-xl space-y-3 shadow-md">
+                <div className="p-3.5 bg-[#c5a059]/10 border border-[#c5a059]/30 rounded-xl space-y-2.5 shadow-md">
                   <div className="flex items-start gap-2.5">
-                    <Calendar className="text-[#c5a059] shrink-0 mt-0.5" size={16} />
+                    <Calendar className="text-[#c5a059] shrink-0 mt-0.5" size={15} />
                     <div>
-                      <h4 className="text-xs font-serif font-bold text-white tracking-wide">
-                        {language === 'af' ? "Bespreek Kalender-konsultasie" : "Secure Calendar Callback Appointment"}
+                      <h4 className="text-xs font-serif font-medium text-white tracking-wide">
+                        {language === 'af' ? "Kalender-Konsultasie Gereed" : "Consultation Slot Ready"}
                       </h4>
-                      <p className="text-[11px] text-stone-300 mt-1 leading-relaxed">
-                        {language === 'af' ? "Eleanor het u konsultasiebesonderhede saamgestel:" : "Eleanor has compiled your consultation details:"} 
-                        <span className="block italic text-[#c5a059] font-medium mt-1">
-                          {bookingDetails.projectType} {language === 'af' ? "konsultasie op" : "consultation on"} {new Date(bookingDetails.dateTime).toLocaleDateString(language === 'af' ? 'af-ZA' : 'en-ZA', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                        </span>
+                      <p className="text-[11px] text-stone-300 mt-0.5 leading-relaxed">
+                        {bookingDetails.projectType} · {new Date(bookingDetails.dateTime).toLocaleDateString(language === 'af' ? 'af-ZA' : 'en-ZA', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                       </p>
                     </div>
                   </div>
@@ -910,25 +1012,25 @@ export const VoiceAssistant: React.FC = () => {
                     <button
                       onClick={handleGoogleSignIn}
                       disabled={isSigningIn}
-                      className="w-full py-2 bg-[#c5a059] hover:bg-[#b48f48] text-white text-[10px] uppercase tracking-widest font-bold font-sans rounded-md transition-all duration-300 cursor-pointer shadow-md text-center"
+                      className="w-full py-2 bg-[#c5a059] hover:bg-[#b48f48] text-white text-[10px] uppercase tracking-widest font-semibold font-sans rounded transition-all duration-300 cursor-pointer shadow-md text-center"
                     >
                       {isSigningIn 
-                        ? (language === 'af' ? "U word aangemeld..." : "Signing you in...") 
-                        : (language === 'af' ? "Koppel Google Kalender om te Bespreek" : "Connect Google Calendar to Book")}
+                        ? (language === 'af' ? "Meld aan..." : "Connecting...") 
+                        : (language === 'af' ? "Koppel Google Kalender om te Bevestig" : "Connect Google Calendar to Confirm")}
                     </button>
                   ) : (
                     <button
                       onClick={() => executeGoogleBooking(bookingDetails, oauthToken!)}
                       disabled={isBooking}
-                      className="w-full py-2 bg-[#c5a059] hover:bg-[#b48f48] text-white text-[10px] uppercase tracking-widest font-bold font-sans rounded-md transition-all duration-300 cursor-pointer shadow-md text-center flex items-center justify-center gap-1.5"
+                      className="w-full py-2 bg-[#c5a059] hover:bg-[#b48f48] text-white text-[10px] uppercase tracking-widest font-semibold font-sans rounded transition-all duration-300 cursor-pointer shadow-md text-center flex items-center justify-center gap-1.5"
                     >
                       {isBooking ? (
                         <>
-                          <svg className="animate-spin h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24">
+                          <svg className="animate-spin h-3 w-3 text-white" fill="none" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                           </svg>
-                          <span>{language === 'af' ? "Bespreking word gedoen..." : "Securing Appointment..."}</span>
+                          <span>{language === 'af' ? "Bespreking word gedoen..." : "Securing Slot..."}</span>
                         </>
                       ) : (
                         language === 'af' ? "Bevestig Kalender-bespreking" : "Confirm Calendar Slot Now"
@@ -939,21 +1041,21 @@ export const VoiceAssistant: React.FC = () => {
               )}
 
               {isThinking && (
-                <div className="flex items-center gap-2 text-stone-500 text-xs italic px-1 animate-pulse">
+                <div className="flex items-center gap-2 text-stone-400 text-xs italic px-1">
                   <div className="flex gap-1">
-                    <span className="w-1.5 h-1.5 bg-[#c5a059] rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-                    <span className="w-1.5 h-1.5 bg-[#c5a059] rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-                    <span className="w-1.5 h-1.5 bg-[#c5a059] rounded-full animate-bounce"></span>
+                    <span className="w-1.5 h-1.5 bg-[#c5a059] rounded-full animate-bounce [animation-delay:-0.3s]" />
+                    <span className="w-1.5 h-1.5 bg-[#c5a059] rounded-full animate-bounce [animation-delay:-0.15s]" />
+                    <span className="w-1.5 h-1.5 bg-[#c5a059] rounded-full animate-bounce" />
                   </div>
-                  <span>
-                    {language === 'af' ? "Eleanor hersien houtnerf-opsies..." : "Eleanor is reviewing wood grains..."}
+                  <span className="text-[11px] font-sans">
+                    {language === 'af' ? "Eleanor verwerk u versoek..." : "Eleanor is consulting the atelier..."}
                   </span>
                 </div>
               )}
 
               {speechError && (
-                <div className="p-3 bg-red-950/40 border border-red-500/20 text-red-300 text-xs rounded-lg flex items-start gap-2 animate-fade-in shadow-inner">
-                  <AlertCircle className="shrink-0 mt-0.5 text-red-400" size={14} />
+                <div className="p-2.5 bg-red-950/40 border border-red-500/25 text-red-300 text-xs rounded-lg flex items-start gap-2">
+                  <AlertCircle className="shrink-0 mt-0.5 text-red-400" size={13} />
                   <span>{speechError}</span>
                 </div>
               )}
@@ -961,108 +1063,89 @@ export const VoiceAssistant: React.FC = () => {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* C. Interactive Input Console Footer bar */}
-            <div className="p-4 border-t border-stone-900 bg-stone-950/60 space-y-3 shrink-0 select-none">
-              <div className="flex items-center justify-between">
-                {/* Settings triggers */}
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setMuteVoice(prev => !prev)}
-                    title={muteVoice 
-                      ? (language === 'af' ? "Ontdemp Eleanor se stem" : "Unmute Eleanor Voice") 
-                      : (language === 'af' ? "Demp Eleanor se stem" : "Mute Eleanor Voice")}
-                    className={`p-2 rounded-lg border transition-all duration-300 cursor-pointer ${
-                      muteVoice 
-                        ? 'border-stone-800 bg-stone-900/40 text-stone-500 hover:text-stone-300' 
-                        : 'border-[#c5a059]/20 bg-[#c5a059]/5 text-[#c5a059] hover:bg-[#c5a059]/10'
-                     }`}
+            {/* D. Unified Luxury Input Capsule */}
+            <div className="p-3.5 border-t border-stone-900/90 bg-stone-950/80 shrink-0 select-none">
+              {/* Voice active transcription feedback banner */}
+              {isListening && (
+                <div className="mb-2 px-3 py-1.5 bg-amber-500/10 border border-amber-500/20 rounded-lg flex items-center justify-between">
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping shrink-0" />
+                    <span className="text-xs text-amber-200 italic font-light truncate">
+                      {textInput || (language === 'af' ? "Luister..." : "Listening...")}
+                    </span>
+                  </div>
+                  <button 
+                    onClick={toggleListening} 
+                    className="text-[10px] text-amber-400 hover:text-amber-200 uppercase font-sans font-semibold ml-2 cursor-pointer"
                   >
-                    {muteVoice ? <VolumeX size={14} /> : <Volume2 size={14} />}
-                  </button>
-
-                  <button
-                    onClick={() => setInputMode(prev => prev === 'voice' ? 'text' : 'voice')}
-                    title={inputMode === 'voice' 
-                      ? (language === 'af' ? "Skakel oor na sleutelbord" : "Switch to typing keyboard") 
-                      : (language === 'af' ? "Skakel oor na spraak" : "Switch to speech voice")}
-                    className={`p-2 rounded-lg border transition-all duration-300 cursor-pointer ${
-                      inputMode === 'text' 
-                        ? 'border-[#c5a059]/20 bg-[#c5a059]/5 text-[#c5a059]' 
-                        : 'border-stone-800 bg-stone-900/40 text-stone-400 hover:text-white'
-                    }`}
-                  >
-                    {inputMode === 'voice' ? <Keyboard size={14} /> : <Mic size={14} />}
+                    Done
                   </button>
                 </div>
+              )}
 
-                {/* Micro instructions */}
-                <span className="text-[10px] text-stone-500 font-sans tracking-wide uppercase font-light">
-                  {inputMode === 'voice' 
-                    ? (language === 'af' ? "Tik op mikrofoon en praat" : "Tap Mic and talk") 
-                    : (language === 'af' ? "Tik u navraag" : "Type your inquiry")}
-                </span>
-              </div>
-
-              {inputMode === 'voice' ? (
-                /* VOICE INPUT VIEW */
-                <div className="flex flex-col items-center justify-center py-2 bg-stone-900/40 rounded-xl border border-stone-800/50">
-                  <button
-                    onClick={toggleListening}
-                    className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 shadow-lg cursor-pointer transform ${
-                      isListening 
-                        ? 'bg-red-500 hover:bg-red-600 animate-pulse scale-110' 
-                        : 'bg-[#c5a059] hover:bg-[#b48f48] text-white hover:shadow-[#c5a059]/20 active:scale-95'
-                    }`}
-                  >
-                    {isListening ? <MicOff size={22} className="text-white" /> : <Mic size={22} className="text-white" />}
-                  </button>
-                  
-                  {/* Interim Real-time Transcription label */}
-                  {textInput && (
-                    <p className="text-xs text-stone-300 px-4 mt-3 text-center line-clamp-2 italic font-light font-sans max-w-[280px]">
-                      “{textInput}”
-                    </p>
-                  )}
-                </div>
-              ) : (
-                /* TEXT KEYBOARD INPUT VIEW */
-                <form 
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    handleSubmitText();
+              <form 
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSubmitText();
+                }}
+                className="flex items-center gap-2 bg-[#141517] border border-stone-800 focus-within:border-[#c5a059]/60 rounded-full px-2 py-1 transition-all duration-300 shadow-inner"
+              >
+                {/* Voice Mute Toggle */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMuteVoice(prev => {
+                      if (!prev) stopAllAudio();
+                      return !prev;
+                    });
                   }}
-                  className="flex gap-2"
+                  title={muteVoice ? "Unmute Eleanor" : "Mute Eleanor"}
+                  className={`p-1.5 rounded-full transition-colors cursor-pointer ${
+                    muteVoice ? 'text-stone-600 hover:text-stone-400' : 'text-[#c5a059] hover:text-[#e4caa0]'
+                  }`}
                 >
-                  <input
-                    type="text"
-                    value={textInput}
-                    onChange={(e) => setTextInput(e.target.value)}
-                    placeholder={language === 'af' ? "Vertel Eleanor van u ruimte..." : "Tell Eleanor about your space..."}
-                    disabled={isThinking}
-                    className="flex-grow p-3 bg-stone-900 border border-stone-800 text-white rounded-lg text-sm focus:border-[#c5a059] outline-none disabled:opacity-50 font-sans"
-                  />
+                  {muteVoice ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                </button>
+
+                {/* Text input */}
+                <input
+                  type="text"
+                  value={textInput}
+                  onChange={(e) => setTextInput(e.target.value)}
+                  placeholder={language === 'af' ? "Vra Eleanor of praat..." : "Inquire with Eleanor..."}
+                  disabled={isThinking}
+                  className="flex-grow bg-transparent text-white text-[13px] placeholder:text-stone-500 outline-none font-sans px-1"
+                />
+
+                {/* Voice Mic Trigger Button */}
+                <button
+                  type="button"
+                  onClick={toggleListening}
+                  title={isListening ? "Stop listening" : "Speak to Eleanor"}
+                  className={`p-2 rounded-full transition-all duration-300 cursor-pointer flex items-center justify-center ${
+                    isListening 
+                      ? 'bg-amber-500 text-black animate-pulse shadow-[0_0_12px_#f59e0b]' 
+                      : 'text-stone-400 hover:text-[#c5a059] hover:bg-stone-900'
+                  }`}
+                >
+                  {isListening ? <MicOff size={15} /> : <Mic size={15} />}
+                </button>
+
+                {/* Send Button */}
+                {textInput.trim() && (
                   <button
                     type="submit"
                     disabled={isThinking || !textInput.trim()}
-                    className="p-3 bg-[#c5a059] hover:bg-[#b48f48] disabled:bg-stone-800 disabled:text-stone-600 text-white rounded-lg transition-all duration-300 cursor-pointer shadow-md"
+                    className="p-2 bg-[#c5a059] hover:bg-[#b48f48] text-white rounded-full transition-all duration-300 cursor-pointer shadow-md flex items-center justify-center shrink-0"
                   >
-                    <Send size={15} />
+                    <Send size={13} />
                   </button>
-                </form>
-              )}
+                )}
+              </form>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Embedded CSS Shimmer animation helper */}
-      <style>{`
-        @keyframes shimmer {
-          100% {
-            transform: translateX(100%);
-          }
-        }
-      `}</style>
     </>
   );
 };
