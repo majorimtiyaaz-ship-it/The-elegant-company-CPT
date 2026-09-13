@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View } from './types';
 import { Hero } from './components/Hero';
+import { StatsCounter } from './components/StatsCounter';
 import { Portfolio } from './components/Portfolio';
 import { Process } from './components/Process';
 import { Testimonials } from './components/Testimonials';
@@ -232,6 +233,7 @@ function App() {
             <div id="home" className="scroll-mt-0">
               <Hero onNavigate={handleNavigate} />
             </div>
+            <StatsCounter />
             <div id="portfolio" className="scroll-mt-20">
               <Portfolio onNavigate={handleNavigate} />
             </div>
