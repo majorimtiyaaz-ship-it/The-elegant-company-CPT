@@ -20,10 +20,7 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// Code-split VoiceAssistant to reduce initial JavaScript execution on first paint
-const VoiceAssistant = React.lazy(() => 
-  import('./components/VoiceAssistant').then(module => ({ default: module.VoiceAssistant }))
-);
+// Eleanor (VoiceAssistant) removed
 
 function App() {
   const [currentView, setCurrentView] = useState<View>(View.HOME);
@@ -293,9 +290,6 @@ function App() {
         style={{ scaleX }}
       />
       <CustomCursor />
-      <React.Suspense fallback={null}>
-        <VoiceAssistant />
-      </React.Suspense>
       <main className="flex-grow">
         {renderView()}
       </main>
