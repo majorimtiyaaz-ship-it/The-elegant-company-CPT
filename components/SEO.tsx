@@ -15,7 +15,7 @@ export const SEO: React.FC<SEOProps> = ({
   title,
   description,
   keywords,
-  image = '/og-image.jpg',
+  image = '/images/hero-kitchen.webp', // TODO: replace with a purpose-made 1200x630 social share image
   canonical,
   type = 'website',
   showSchema = false,
@@ -36,12 +36,11 @@ export const SEO: React.FC<SEOProps> = ({
     'name': 'The Elegant Company',
     'description': 'Handcrafted bespoke kitchens, luxury cabinetry, custom solid wood furniture, and home improvement solutions.',
     'url': productionDomain,
-    'logo': `${productionDomain}/logo.png`, // Placeholder for company logo
-    'telephone': '+27-XX-XXX-XXXX', // Placeholder for telephone
+    'telephone': '+27 73 485 1573',
     'email': 'info@theelegantcompany.co.za', // Placeholder for email
     'address': {
       '@type': 'PostalAddress',
-      'streetAddress': 'Placeholder Street Address', // Placeholder for address street
+      'streetAddress': 'Whitehall Close, Portland',
       'addressLocality': 'Cape Town',
       'addressRegion': 'Western Cape',
       'postalCode': '8000',
