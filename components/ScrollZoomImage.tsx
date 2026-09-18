@@ -30,7 +30,7 @@ export const ScrollZoomImage: React.FC<ScrollZoomImageProps> = ({
       <img
         src={imgSrc}
         alt={alt}
-        loading="eager"
+        loading="lazy"
         decoding="async"
         onError={handleError}
         className={`w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 select-none ${className}`}
