@@ -14,10 +14,6 @@ export default defineConfig(({ mode }) => {
         },
       },
       plugins: [react()],
-      define: {
-        'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
-      },
       resolve: {
         alias: {
           '@': path.resolve(__dirname, '.'),
@@ -29,7 +25,6 @@ export default defineConfig(({ mode }) => {
             manualChunks: {
               'vendor-react': ['react', 'react-dom', 'react-helmet-async'],
               'vendor-animation': ['gsap', 'lenis', 'motion'],
-              'vendor-firebase': ['firebase/app', 'firebase/auth'],
             }
           }
         }
