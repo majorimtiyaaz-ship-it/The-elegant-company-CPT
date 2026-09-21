@@ -16,7 +16,7 @@ const TESTIMONIALS_EN: Testimonial[] = [
     quote: "Good reliable company and a very punctual team with a swift installation time and excellent customer service.",
     author: "Savannah Hurling",
     location: "Cape Town",
-    project: "Google Review"
+    project: "Furniture Glazing"
   },
   {
     quote: "Service was outstanding, would recommend The Elegant Company to anyone, fantastic work.",
@@ -29,6 +29,12 @@ const TESTIMONIALS_EN: Testimonial[] = [
     author: "Abdul Aliem Anthony",
     location: "Cape Town",
     project: "Google Review"
+  },
+  {
+    quote: "Absolutely professional, honest reliable guys and fantastic workmanship.",
+    author: "Sean Bergman",
+    location: "Cape Town",
+    project: "Cabinet Installation"
   }
 ];
 
@@ -37,7 +43,7 @@ const TESTIMONIALS_AF: Testimonial[] = [
     quote: "Good reliable company and a very punctual team with a swift installation time and excellent customer service.",
     author: "Savannah Hurling",
     location: "Kaapstad",
-    project: "Google-resensie"
+    project: "Meubelglasering"
   },
   {
     quote: "Service was outstanding, would recommend The Elegant Company to anyone, fantastic work.",
@@ -50,6 +56,12 @@ const TESTIMONIALS_AF: Testimonial[] = [
     author: "Abdul Aliem Anthony",
     location: "Kaapstad",
     project: "Google-resensie"
+  },
+  {
+    quote: "Absolutely professional, honest reliable guys and fantastic workmanship.",
+    author: "Sean Bergman",
+    location: "Kaapstad",
+    project: "Kabinetinstallasie"
   }
 ];
 
@@ -78,7 +90,7 @@ export const Testimonials: React.FC = () => {
         </div>
 
         {/* Testimonials Grid Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-7 lg:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 lg:gap-6">
           {list.map((tItem, index) => (
             <RevealOnScroll 
               key={index} 
