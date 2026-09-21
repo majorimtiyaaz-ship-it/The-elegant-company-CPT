@@ -7,6 +7,7 @@ import { Process } from './components/Process';
 import { Testimonials } from './components/Testimonials';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
+import { WhatsAppButton } from './components/WhatsAppButton';
 import { CustomCursor } from './components/CustomCursor';
 import { SEO } from './components/SEO';
 import { CinematicLoader } from './components/CinematicLoader';
@@ -290,6 +291,7 @@ function App() {
         style={{ scaleX }}
       />
       <CustomCursor />
+      <WhatsAppButton />
       <main className="flex-grow">
         {renderView()}
       </main>
