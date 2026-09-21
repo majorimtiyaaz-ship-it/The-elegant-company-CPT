@@ -14,7 +14,6 @@ import { CinematicLoader } from './components/CinematicLoader';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
-import { motion, useScroll, useSpring } from 'motion/react';
 
 // Register GSAP ScrollTrigger plugin safely once
 if (typeof window !== 'undefined') {
@@ -27,14 +26,8 @@ function App() {
   const [currentView, setCurrentView] = useState<View>(View.HOME);
   const [contactPrefill, setContactPrefill] = useState<{ details?: string }>({});
   const lenisRef = useRef<any>(null);
-
-  // Set up scroll progress tracking using Framer Motion
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 120,
-    damping: 24,
-    restDelta: 0.001
-  });
+  const progressBarRef = useRef<HTMLDivElement>(null);
+  const progressTweenRef = useRef<((value: number) => void) | null>(null);
 
   const [activeSection, setActiveSection] = useState<'home' | 'portfolio' | 'contact'>('home');
 
@@ -90,6 +83,14 @@ function App() {
 
     lenisRef.current = lenisInstance;
 
+    // Smoothed scroll-progress bar, replacing Framer Motion's useScroll/useSpring
+    if (progressBarRef.current) {
+      progressTweenRef.current = gsap.quickTo(progressBarRef.current, 'scaleX', {
+        duration: 0.3,
+        ease: 'power2.out',
+      });
+    }
+
     // Standard requestAnimationFrame loop for Lenis
     let rafId: number;
     function raf(time: number) {
@@ -98,9 +99,12 @@ function App() {
     }
     rafId = requestAnimationFrame(raf);
 
-    // On Lenis scroll, update ScrollTrigger
-    lenisInstance.on('scroll', () => {
+    // On Lenis scroll, update ScrollTrigger and the progress bar
+    lenisInstance.on('scroll', (e: any) => {
       ScrollTrigger.update();
+      if (progressTweenRef.current) {
+        progressTweenRef.current(e.progress);
+      }
     });
 
     return () => {
@@ -286,9 +290,10 @@ function App() {
       {/* Refined Branded Cinematic Loading & Entrance Overlay */}
       <CinematicLoader />
       {/* Dynamic Scroll Progress Bar */}
-      <motion.div
+      <div
+        ref={progressBarRef}
         className="fixed top-0 left-0 right-0 h-1 bg-elegant-gold z-[9999] origin-left"
-        style={{ scaleX }}
+        style={{ transform: 'scaleX(0)' }}
       />
       <CustomCursor />
       <WhatsAppButton />
