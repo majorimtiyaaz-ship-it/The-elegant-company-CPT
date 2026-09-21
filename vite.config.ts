@@ -24,7 +24,7 @@ export default defineConfig(() => {
           output: {
             manualChunks: {
               'vendor-react': ['react', 'react-dom', 'react-helmet-async'],
-              'vendor-animation': ['gsap', 'lenis', 'motion'],
+              'vendor-animation': ['gsap', 'lenis'],
             }
           }
         }
