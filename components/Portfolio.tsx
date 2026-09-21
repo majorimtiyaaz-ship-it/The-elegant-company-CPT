@@ -159,7 +159,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
   }
 ];
 
-const CATEGORIES = ["All", "Living Room", "Dining", "Office", "Storage", "Restoration"];
+const CATEGORIES = ["All", "Living Room", "Office", "Storage", "Restoration"];
 
 interface PortfolioProps {
   onNavigate: (view: View, sectionId?: string, prefillData?: { details?: string }) => void;
