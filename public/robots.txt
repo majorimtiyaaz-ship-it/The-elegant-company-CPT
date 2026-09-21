@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://the-elegant-company-cpt.vercel.app/sitemap.xml
