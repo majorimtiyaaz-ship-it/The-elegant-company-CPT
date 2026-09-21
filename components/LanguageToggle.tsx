@@ -1,9 +1,29 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useLanguage } from './LanguageContext';
-import { motion } from 'motion/react';
+import { gsap } from 'gsap';
 
 export const LanguageToggle: React.FC = () => {
   const { language, setLanguage } = useLanguage();
+  const indicatorRef = useRef<HTMLDivElement>(null);
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (!indicatorRef.current) return;
+    const xPercent = language === 'en' ? 0 : 100;
+
+    if (isFirstRender.current) {
+      // Match the original `initial={false}` behavior: snap to position on mount, no animation
+      gsap.set(indicatorRef.current, { xPercent });
+      isFirstRender.current = false;
+      return;
+    }
+
+    gsap.to(indicatorRef.current, {
+      xPercent,
+      duration: 0.5,
+      ease: 'elastic.out(1, 0.75)',
+    });
+  }, [language]);
 
   return (
     <div 
@@ -12,17 +32,9 @@ export const LanguageToggle: React.FC = () => {
     >
       {/* Sliding Active Background */}
       <div className="absolute inset-y-1 left-1 right-1 pointer-events-none flex">
-        <motion.div
+        <div
+          ref={indicatorRef}
           className="h-full w-1/2 bg-elegant-gold rounded-full"
-          initial={false}
-          animate={{
-            x: language === 'en' ? '0%' : '100%',
-          }}
-          transition={{
-            type: 'spring',
-            stiffness: 300,
-            damping: 30,
-          }}
         />
       </div>
 
