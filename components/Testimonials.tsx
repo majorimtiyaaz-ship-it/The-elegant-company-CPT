@@ -13,43 +13,43 @@ interface Testimonial {
 
 const TESTIMONIALS_EN: Testimonial[] = [
   {
-    quote: "The Elegant Company engineered a bespoke 10-seater Solid Oak Dining Table for our dining hall. The continuous grain matching across the entire top is masterly. It has become our home's absolute focal point.",
-    author: "Eleanor Vance",
-    location: "Constantia, Cape Town",
-    project: "Solid Oak Dining Suite"
+    quote: "Good reliable company and a very punctual team with a swift installation time and excellent customer service.",
+    author: "Savannah Hurling",
+    location: "Cape Town",
+    project: "Google Review"
   },
   {
-    quote: "I commissioned a custom white oak entryway bench with seamless modern joints. The precision, the smooth hand-rubbed satin seal, and the quick professional delivery were exceptional. Absolute elite craftsmanship.",
-    author: "Richard Holloway",
-    location: "Camps Bay, Cape Town",
-    project: "Bespoke Entryway Bench"
+    quote: "Service was outstanding, would recommend The Elegant Company to anyone, fantastic work.",
+    author: "Ameen Hernandez",
+    location: "Cape Town",
+    project: "Google Review"
   },
   {
-    quote: "Our family antique credenza was structurally splitting. Their restoration team stripping the weathered coatings and rebuilding the interlocking joints has saved a centennial piece. Sublime attention to history.",
-    author: "Sophia de Wet",
-    location: "Franschhoek, Winelands",
-    project: "Restoration Project"
+    quote: "Punctual, informative, not complicated, and great attention to detail. I would recommend you guys to any business. Thanks for your workmanship.",
+    author: "Abdul Aliem Anthony",
+    location: "Cape Town",
+    project: "Google Review"
   }
 ];
 
 const TESTIMONIALS_AF: Testimonial[] = [
   {
-    quote: "The Elegant Company het 'n unieke 10-sitplek soliede eikehout-eetkamertafel vir ons eetsaal gebou. Die aaneenlopende greep-passing oor die hele blad is meesterlik. Dit het ons huis se absolute middelpunt geword.",
-    author: "Eleanor Vance",
-    location: "Constantia, Kaapstad",
-    project: "Soliede Eikehout-Eetkamerstel"
+    quote: "Good reliable company and a very punctual team with a swift installation time and excellent customer service.",
+    author: "Savannah Hurling",
+    location: "Kaapstad",
+    project: "Google-resensie"
   },
   {
-    quote: "Ek het 'n pasgemaakte wit-eikehout bankie vir die ingangsportaal met naatlose moderne verbindings bestel. Die presisie, die gladde handvryf satyn-afwerking, en die vinnige professionele aflewering was uitstekend. Absolute elite vakmanskap.",
-    author: "Richard Holloway",
-    location: "Kampsbaai, Kaapstad",
-    project: "Pasgemaakte Ingangsbankie"
+    quote: "Service was outstanding, would recommend The Elegant Company to anyone, fantastic work.",
+    author: "Ameen Hernandez",
+    location: "Kaapstad",
+    project: "Google-resensie"
   },
   {
-    quote: "Ons familie se antieke kredens was besig om struktureel te skeur. Hul restourasiespan het die verweerde lae afgestroop en die penverbindings herstel om hierdie honderdjarige meubelstuk te red. Ongelooflike historiese akkuraatheid.",
-    author: "Sophia de Wet",
-    location: "Franschhoek, Wynlande",
-    project: "Restorasie-Projek"
+    quote: "Punctual, informative, not complicated, and great attention to detail. I would recommend you guys to any business. Thanks for your workmanship.",
+    author: "Abdul Aliem Anthony",
+    location: "Kaapstad",
+    project: "Google-resensie"
   }
 ];
 
