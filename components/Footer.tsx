@@ -1,11 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { Instagram, Facebook } from 'lucide-react';
-import { useLanguage } from './LanguageContext';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 export const Footer: React.FC = () => {
-  const { language } = useLanguage();
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -53,9 +51,7 @@ export const Footer: React.FC = () => {
           </div>
           
           <p className="text-stone-400 leading-relaxed mb-6 font-light text-sm sm:text-base max-w-md">
-            {language === 'en' 
-              ? 'Bespoke furniture and custom installations crafted with integrity in Cape Town, South Africa. Designed for architectural harmony and generations of use.'
-              : 'Pasgemaakte meubels en installasies gebou met integriteit in Kaapstad, Suid-Afrika. Ontwerp vir argitektoniese harmonie en geslagte se gebruik.'}
+            Bespoke furniture and custom installations crafted with integrity in Cape Town, South Africa. Designed for architectural harmony and generations of use.
           </p>
           <div className="flex gap-4">
             <a 
@@ -81,32 +77,32 @@ export const Footer: React.FC = () => {
 
         <div className="md:col-span-3 lg:col-span-3">
           <h4 className="text-xs uppercase tracking-[0.2em] font-bold text-[#c5a059] mb-5">
-            {language === 'en' ? 'Craft Specialties' : 'Vakmanskap-Spesialiteite'}
+            Craft Specialties
           </h4>
           <ul className="space-y-3 text-stone-400 text-sm">
             <li className="footer-animate-item">
               <span className="hover:text-white transition-colors">
-                {language === 'en' ? 'Built-in Cupboards & Closets' : 'Ingeboude Kaste & Klerekaste'}
+                Built-in Cupboards & Closets
               </span>
             </li>
             <li className="footer-animate-item">
               <span className="hover:text-white transition-colors">
-                {language === 'en' ? 'Custom Kitchens' : 'Pasgemaakte Kombuise'}
+                Custom Kitchens
               </span>
             </li>
             <li className="footer-animate-item">
               <span className="hover:text-white transition-colors">
-                {language === 'en' ? 'Solid Dining Tables' : 'Soliede Eettafels'}
+                Solid Dining Tables
               </span>
             </li>
             <li className="footer-animate-item">
               <span className="hover:text-white transition-colors">
-                {language === 'en' ? 'Custom Wooden Benches' : 'Pasgemaakte Houtbankies'}
+                Custom Wooden Benches
               </span>
             </li>
             <li className="footer-animate-item">
               <span className="hover:text-white transition-colors">
-                {language === 'en' ? 'Heritage Wood Restoration' : 'Erfenis-Houtrestorasie'}
+                Heritage Wood Restoration
               </span>
             </li>
           </ul>
@@ -114,7 +110,7 @@ export const Footer: React.FC = () => {
 
         <div className="md:col-span-3 lg:col-span-4">
           <h4 className="text-xs uppercase tracking-[0.2em] font-bold text-[#c5a059] mb-5">
-            {language === 'en' ? 'Cape Town Studio' : 'Kaapstad Ateljee'}
+            Cape Town Studio
           </h4>
           <p className="text-stone-400 text-sm leading-relaxed mb-3">
             Whitehall Close, Portland<br />Cape Town, 7785<br />Western Cape, South Africa
@@ -126,9 +122,9 @@ export const Footer: React.FC = () => {
 
       </div>
       <div className="container mx-auto max-w-7xl mt-12 pt-6 border-t border-stone-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-stone-500 text-xs">
-        <p>&copy; {new Date().getFullYear()} The Elegant Company. {language === 'en' ? 'All rights reserved.' : 'Alle regte voorbehou.'}</p>
+        <p>&copy; {new Date().getFullYear()} The Elegant Company. All rights reserved.</p>
         <p className="text-stone-500 font-light">
-          {language === 'en' ? 'Bespoke Furniture & Kitchen Installations · Cape Town' : 'Pasgemaakte Meubels & Kombuisinstallasies · Kaapstad'}
+          Bespoke Furniture & Kitchen Installations · Cape Town
         </p>
       </div>
     </footer>
