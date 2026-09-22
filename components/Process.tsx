@@ -3,7 +3,6 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextReveal } from './TextReveal';
 import { RevealOnScroll } from './RevealOnScroll';
-import { useLanguage } from './LanguageContext';
 
 // Ensure ScrollTrigger is registered
 if (typeof window !== 'undefined') {
@@ -165,7 +164,6 @@ const INSTALLATION_STEPS: ProcessStep[] = [
 type ProjectType = 'custom' | 'restoration' | 'builtins';
 
 export const Process: React.FC = () => {
-  const { language, t } = useLanguage();
   const [activeTab, setActiveTab] = useState<ProjectType>('custom');
   const sectionRef = useRef<HTMLElement>(null);
   const bgParallaxImgRef = useRef<HTMLImageElement>(null);
@@ -174,147 +172,12 @@ export const Process: React.FC = () => {
   const bannerBgRef = useRef<HTMLImageElement>(null);
 
   const getTranslatedSteps = (): ProcessStep[] => {
-    if (language === 'en') {
-      switch (activeTab) {
-        case 'restoration': return RESTORATION_STEPS;
-        case 'builtins': return INSTALLATION_STEPS;
-        case 'custom':
-        default:
-          return CUSTOM_FURNITURE_STEPS;
-      }
-    } else {
-      switch (activeTab) {
-        case 'restoration':
-          return [
-            {
-              id: 1,
-              num: "01",
-              title: "Digitale Foto-Beoordeling",
-              subtitle: "Gratis Aanvanklike Strukturele Diagnose",
-              description: "Stuur vir ons duidelike foto's van u verweerde of stukkende houtmeubels. Ons meester-restoureerders ontleed houtbreuke, skrynwerkkrake en die oorspronklike vernis gratis aanlyn.",
-              icon: RESTORATION_STEPS[0].icon
-            },
-            {
-              id: 2,
-              num: "02",
-              title: "Op-perseel Kaapstadse Afhaling",
-              subtitle: "Vervoerlogistiek & R500 Fooi",
-              description: "Vir diepgaande restourasie vervoer ons u meubels veilig met beskermende komberse. Ons span laai die meubelstuk by u Kaapstadse perseel op (standaard uitroepfooi van R500 geld).",
-              icon: RESTORATION_STEPS[1].icon
-            },
-            {
-              id: 3,
-              num: "03",
-              title: "Deskundige Afstroop Van Verf/Vernis",
-              subtitle: "Veilige Verwydering Van Ou Oplosmiddels",
-              description: "Ons stroop geoksideerde lae was, industriële vernis of afskilferende verf af met veilige, nie-korrosiewe chemiese oplossings, en skuur dit sagkens met die hand langs die houtgreep.",
-              icon: RESTORATION_STEPS[2].icon
-            },
-            {
-              id: 4,
-              num: "04",
-              title: "Strukturele Herstelwerk & Verlyming",
-              subtitle: "Era-Akkurate Rekonstruksie",
-              description: "Ons demonteer stukkende penverbindings, wend tradisionele dierehuid- of premium houtlyme aan, en herstel beskadigde areas met bypassende antieke houtvesels.",
-              icon: RESTORATION_STEPS[3].icon
-            },
-            {
-              id: 5,
-              num: "05",
-              title: "Patina-Afwerking",
-              subtitle: "Polering tot Historiese Standaard",
-              description: "Ons bewaar u antieke meubelstuk se natuurlike patina deur dit met die hand te vryf met natuurlike olies of deur bypassende hoë-glans vernis aan te wend wat by sy ontstaansera pas.",
-              icon: RESTORATION_STEPS[4].icon
-            },
-            {
-              id: 6,
-              num: "06",
-              title: "Aflewering & Onderhouds-Gids",
-              subtitle: "Gerestoureer Vir Nog 'n Eeu",
-              description: "Ons besorg die pragtige stuk terug met 'n spesiale sorg-handleiding om te help om die regte vogvlakke te handhaaf, sodat dit vir geslagte lank bewaar bly.",
-              icon: RESTORATION_STEPS[5].icon
-            }
-          ];
-        case 'builtins':
-          return [
-            {
-              id: 1,
-              num: "01",
-              title: "Kaapstad Laser-Meting Besoek",
-              subtitle: "Perseel-Oudit & R500 Uitroepfooi",
-              description: "Ons installasie-leier besoek u perseel in Kaapstad om mure, vloerlyste en pype met lasers te skandeer. Hierdie metings- en skanderingsoudit kos R500.",
-              icon: INSTALLATION_STEPS[0].icon
-            },
-            {
-              id: 2,
-              num: "02",
-              title: "Hout- & Ysterware-Keuse",
-              subtitle: "Kies U Argitektoniese Afwerking",
-              description: "Kies duursame eikehout-fineer of ryk geverfde soliede hout. Ons koördineer alle skarniere en laaie met behulp van hoë-gehalte Europese sagtesluit-kasstelsels.",
-              icon: INSTALLATION_STEPS[1].icon
-            },
-            {
-              id: 3,
-              num: "03",
-              title: "Millimeter-Presiese Skrynwerk",
-              subtitle: "Stofvrye Werkswinkel Vooraf-Vervaardiging",
-              description: "Ons sny, bou en verf die kaste vooraf in ons spesiale Kaapstadse werkswinkel om saagsels en ontwrigting by u huis tot die absolute minimum te beperk.",
-              icon: INSTALLATION_STEPS[2].icon
-            },
-            {
-              id: 4,
-              num: "04",
-              title: "Chirurgiese Installasie",
-              subtitle: "Netjies Ingeboude Kaste",
-              description: "Ons skrynwerkers lewer, anker en belyn elke laai en kasdeur perfek om 'n foutlose ingeboude kasstelsel te skep wat gelyk is met u mure.",
-              icon: INSTALLATION_STEPS[3].icon
-            }
-          ];
-        case 'custom':
-        default:
-          return [
-            {
-              id: 1,
-              num: "01",
-              title: "Aanvanklike Ontwerpkonsultasie",
-              subtitle: "Omskakeling Van Visie In Bloudrukke",
-              description: "U reis begin met 'n persoonlike konsultasie. Ons bespreek u estetiese wense, kamergrootte en funksionele behoeftes, en skep gedetailleerde tekeninge en planne sonder enige verpligting.",
-              icon: CUSTOM_FURNITURE_STEPS[0].icon
-            },
-            {
-              id: 2,
-              num: "02",
-              title: "Volhoubare Materiaalkeuse",
-              subtitle: "Verkryging Van Premium Hardehout",
-              description: "Sien en kies inheemse hardehout uit ons gesertifiseerde volhoubare voorraad (Okkerneuthout, Franse Akkerhout, Essenhout of Teakhout) om perfek by u huis se karakter te pas.",
-              icon: CUSTOM_FURNITURE_STEPS[1].icon
-            },
-            {
-              id: 3,
-              num: "03",
-              title: "Unieke Meester-Skrynwerk",
-              subtitle: "Tradisionele Erfenis-Houtwerk",
-              description: "Ambagsmanne vorm u hout in ons Kaapstadse werkswinkel met behulp van pen-en-gatverbindings en interlocking swaelsterte vir uitstekende duursaamheid.",
-              icon: CUSTOM_FURNITURE_STEPS[2].icon
-            },
-            {
-              id: 4,
-              num: "04",
-              title: "Handvryf-Afwerking",
-              subtitle: "Onttrekking Van Natuurlike Patina",
-              description: "Ons handskuur elke greepvlak voor ons dit verseël. Met organiese, voedselveilige olies, natuurlike byewas of bypassende lae-glans vernis beskerm ons die hout.",
-              icon: CUSTOM_FURNITURE_STEPS[3].icon
-            },
-            {
-              id: 5,
-              num: "05",
-              title: "Persoonlike Vervoer & Installasie",
-              subtitle: "Perfekte Voltooide Afwerking",
-              description: "Ons vervoerspan draai u nuwe meubels deeglik toe, lewer dit af en installeer dit perfek in u huis met 'n laaste oppervlak-poleerproses.",
-              icon: CUSTOM_FURNITURE_STEPS[4].icon
-            }
-          ];
-      }
+    switch (activeTab) {
+      case 'restoration': return RESTORATION_STEPS;
+      case 'builtins': return INSTALLATION_STEPS;
+      case 'custom':
+      default:
+        return CUSTOM_FURNITURE_STEPS;
     }
   };
 
@@ -446,21 +309,21 @@ export const Process: React.FC = () => {
         ref={watermarkRef}
         className="absolute right-0 bottom-0 text-[16vw] font-serif text-stone-900/[0.025] select-none pointer-events-none translate-y-12 translate-x-12 leading-none font-bold italic will-change-transform z-0"
       >
-        {language === 'en' ? 'Cape Town' : 'Kaapstad'}
+        Cape Town
       </div>
       
       <div className="container mx-auto max-w-7xl relative z-10">
         <RevealOnScroll duration={0.8}>
           <div className="text-center mb-14 md:mb-16">
             <span className="text-[#8c6517] font-semibold tracking-[0.24em] uppercase mb-3 text-xs md:text-sm block">
-              {t.processTitle}
+              THE BESPOKE EXPERIENCE
             </span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-stone-900 mb-5 leading-tight">
-              <TextReveal text={language === 'en' ? "Our Bespoke Method" : "Ons Pasgemaakte Metode"} />
+              <TextReveal text="Our Bespoke Method" />
             </h2>
             <div className="w-16 h-[1.5px] bg-[#c5a059]/40 mx-auto mb-5" />
             <p className="text-stone-600 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed font-light">
-              {t.processSub}
+              Our meticulous design and manufacturing process guarantees exceptional results from initial concept to master installation.
             </p>
           </div>
         </RevealOnScroll>
@@ -484,7 +347,7 @@ export const Process: React.FC = () => {
                   : 'text-stone-600 hover:text-stone-950 hover:bg-stone-100/60'
                 }`}
             >
-              {language === 'en' ? 'Custom Furniture' : 'Pasgemaakte Meubels'}
+              Custom Furniture
             </button>
             <button 
               id="process-tab-restoration"
@@ -497,7 +360,7 @@ export const Process: React.FC = () => {
                   : 'text-stone-600 hover:text-stone-950 hover:bg-stone-100/60'
                 }`}
             >
-              {language === 'en' ? 'Restoration' : 'Restorasie'}
+              Restoration
             </button>
             <button 
               id="process-tab-builtins"
@@ -510,7 +373,7 @@ export const Process: React.FC = () => {
                   : 'text-stone-600 hover:text-stone-950 hover:bg-stone-100/60'
                 }`}
             >
-              {language === 'en' ? 'Kitchens & Built-ins' : 'Kombuise & Kaste'}
+              Kitchens & Built-ins
             </button>
           </div>
         </RevealOnScroll>
@@ -576,15 +439,13 @@ export const Process: React.FC = () => {
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-6 space-y-4">
               <span className="text-[11px] tracking-[0.25em] font-bold text-[#c5a059] uppercase inline-flex items-center gap-2">
-                <MapPin size={13} className="text-[#c5a059]" /> {language === 'en' ? 'Cape Town, South Africa' : 'Kaapstad, Suid-Afrika'}
+                <MapPin size={13} className="text-[#c5a059]" /> Cape Town, South Africa
               </span>
               <h3 className="text-2xl sm:text-3xl font-serif text-white tracking-wide font-medium">
-                {language === 'en' ? 'Transparent Operations & Clarity' : 'Deursigtige Bedrywighede & Duidelikheid'}
+                Transparent Operations & Clarity
               </h3>
               <p className="text-stone-300 font-light leading-relaxed text-sm sm:text-base">
-                {language === 'en' 
-                  ? 'We believe bespoke craftsmanship starts with total transparency. To keep our high-end studio dedicated and our material selection pristine, we operate with structured local guidelines.'
-                  : 'Ons glo dat pasgemaakte vakmanskap met volkome deursigtigheid begin. Om ons ateljee toegewy en ons houtkeuses ongerep te hou, volg ons duidelike plaaslike riglyne.'}
+                We believe bespoke craftsmanship starts with total transparency. To keep our high-end studio dedicated and our material selection pristine, we operate with structured local guidelines.
               </p>
             </div>
 
@@ -594,16 +455,14 @@ export const Process: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <Coins size={16} className="text-[#c5a059] shrink-0" />
                   <span className="text-xs uppercase tracking-[0.18em] text-[#c5a059] font-bold">
-                    {language === 'en' ? 'R500 Call-Out' : 'R500 Uitroep'}
+                    R500 Call-Out
                   </span>
                 </div>
                 <h4 className="text-sm font-serif font-semibold text-white">
-                  {language === 'en' ? 'Site Audit & Laser Scan' : 'Perseel-Oudit & Lasermeting'}
+                  Site Audit & Laser Scan
                 </h4>
                 <p className="text-xs text-stone-300 leading-relaxed font-light">
-                  {language === 'en' 
-                    ? 'A standard R500 fee applies for physical Cape Town site visits (laser-mapping spaces, wood patina matching, taking exact measurements).'
-                    : 'A standaard R500 fooi geld vir fisiese Kaapstadse perseelbesoeke (laser-skanderings, bypassende houtpatinas en akkurate metings).'}
+                  A standard R500 fee applies for physical Cape Town site visits (laser-mapping spaces, wood patina matching, taking exact measurements).
                 </p>
               </div>
 
@@ -612,16 +471,14 @@ export const Process: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <XCircle size={16} className="text-rose-400 shrink-0" />
                   <span className="text-xs uppercase tracking-[0.18em] text-rose-300 font-bold">
-                    {language === 'en' ? 'Scope Focus' : 'Bestekfokus'}
+                    Scope Focus
                   </span>
                 </div>
                 <h4 className="text-sm font-serif font-semibold text-white">
-                  {language === 'en' ? 'Solid Woodcraft Only' : 'Slegs Soliede Houtwerk'}
+                  Solid Woodcraft Only
                 </h4>
                 <p className="text-xs text-stone-300 leading-relaxed font-light">
-                  {language === 'en' 
-                    ? 'We excel in custom built-ins, kitchens, tables, cabinetry, and desks. We do not manufacture standalone chairs, metal frames, or upholstery.'
-                    : 'Ons spesialiseer in ingeboude kaste, kombuise, tafels, kabinette en lessenaars. Ons maak nie losstaande stoele, metaalrame of stoffering nie.'}
+                  We excel in custom built-ins, kitchens, tables, cabinetry, and desks. We do not manufacture standalone chairs, metal frames, or upholstery.
                 </p>
               </div>
             </div>
