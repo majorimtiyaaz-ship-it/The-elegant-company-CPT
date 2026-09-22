@@ -2,7 +2,6 @@ import React from 'react';
 import { Quote, Star } from 'lucide-react';
 import { RevealOnScroll } from './RevealOnScroll';
 import { TextReveal } from './TextReveal';
-import { useLanguage } from './LanguageContext';
 
 interface Testimonial {
   quote: string;
@@ -11,7 +10,7 @@ interface Testimonial {
   project: string;
 }
 
-const TESTIMONIALS_EN: Testimonial[] = [
+const TESTIMONIALS: Testimonial[] = [
   {
     quote: "Good reliable company and a very punctual team with a swift installation time and excellent customer service.",
     author: "Savannah Hurling",
@@ -38,37 +37,7 @@ const TESTIMONIALS_EN: Testimonial[] = [
   }
 ];
 
-const TESTIMONIALS_AF: Testimonial[] = [
-  {
-    quote: "Good reliable company and a very punctual team with a swift installation time and excellent customer service.",
-    author: "Savannah Hurling",
-    location: "Kaapstad",
-    project: "Meubelglasering"
-  },
-  {
-    quote: "Service was outstanding, would recommend The Elegant Company to anyone, fantastic work.",
-    author: "Ameen Hernandez",
-    location: "Kaapstad",
-    project: "Google-resensie"
-  },
-  {
-    quote: "Punctual, informative, not complicated, and great attention to detail. I would recommend you guys to any business. Thanks for your workmanship.",
-    author: "Abdul Aliem Anthony",
-    location: "Kaapstad",
-    project: "Google-resensie"
-  },
-  {
-    quote: "Absolutely professional, honest reliable guys and fantastic workmanship.",
-    author: "Sean Bergman",
-    location: "Kaapstad",
-    project: "Kabinetinstallasie"
-  }
-];
-
 export const Testimonials: React.FC = () => {
-  const { language, t } = useLanguage();
-  const list = language === 'en' ? TESTIMONIALS_EN : TESTIMONIALS_AF;
-
   return (
     <section id="testimonials-reviews-section" className="bg-white py-24 md:py-28 px-6 border-t border-stone-200/60 relative overflow-hidden">
       {/* Visual slide accents */}
@@ -80,10 +49,10 @@ export const Testimonials: React.FC = () => {
         <div className="text-center mb-14 md:mb-16">
           <RevealOnScroll duration={0.8}>
             <span className="text-[#8c6517] font-semibold tracking-[0.24em] uppercase mb-3 text-xs md:text-sm block">
-              {t.testiTitle}
+              CLIENT CORRESPONDENCE
             </span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-stone-900 leading-tight mb-5">
-              <TextReveal text={language === 'en' ? "Client Testimonials & Trust" : "Kliëntegetuienisse & Vertroue"} />
+              <TextReveal text="Client Testimonials & Trust" />
             </h2>
             <div className="w-16 h-[1.5px] bg-[#c5a059]/40 mx-auto" />
           </RevealOnScroll>
@@ -91,7 +60,7 @@ export const Testimonials: React.FC = () => {
 
         {/* Testimonials Grid Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 lg:gap-6">
-          {list.map((tItem, index) => (
+          {TESTIMONIALS.map((tItem, index) => (
             <RevealOnScroll 
               key={index} 
               duration={0.8} 
