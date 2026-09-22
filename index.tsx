@@ -2,7 +2,6 @@ import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
-import { LanguageProvider } from './components/LanguageContext';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import App from './App';
@@ -19,9 +18,7 @@ const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
     <HelmetProvider>
-      <LanguageProvider>
-        <App />
-      </LanguageProvider>
+      <App />
     </HelmetProvider>
   </React.StrictMode>
 );
