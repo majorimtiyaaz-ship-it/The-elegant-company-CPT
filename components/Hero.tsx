@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View } from '../types';
 import { gsap } from 'gsap';
-import { useLanguage } from './LanguageContext';
-import { LanguageToggle } from './LanguageToggle';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 
 interface HeroProps {
@@ -10,7 +8,6 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
-  const { language, t } = useLanguage();
   const containerRef = useRef<HTMLDivElement>(null);
   const bgImageRef = useRef<HTMLImageElement>(null);
   const eyebrowRef = useRef<HTMLDivElement>(null);
@@ -161,7 +158,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
               onClick={() => handleNavClick('home')}
               className="text-stone-200 hover:text-elegant-gold transition-colors duration-300 cursor-pointer py-1.5 relative group"
             >
-              <span>{t.navHome}</span>
+              <span>HOME</span>
               <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-elegant-gold group-hover:w-full transition-all duration-300" />
             </button>
             <button 
@@ -169,7 +166,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
               onClick={() => handleNavClick('portfolio')}
               className="text-stone-300 hover:text-elegant-gold transition-colors duration-300 cursor-pointer py-1.5 relative group"
             >
-              <span>{t.navCollection}</span>
+              <span>COLLECTION</span>
               <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-elegant-gold group-hover:w-full transition-all duration-300" />
             </button>
             <button 
@@ -177,7 +174,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
               onClick={() => handleNavClick('process')}
               className="text-stone-300 hover:text-elegant-gold transition-colors duration-300 cursor-pointer py-1.5 relative group"
             >
-              <span>{t.navProcess}</span>
+              <span>PROCESS</span>
               <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-elegant-gold group-hover:w-full transition-all duration-300" />
             </button>
             <button 
@@ -185,7 +182,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
               onClick={() => handleNavClick('testimonials')}
               className="text-stone-300 hover:text-elegant-gold transition-colors duration-300 cursor-pointer py-1.5 relative group"
             >
-              <span>{t.navTestimonials}</span>
+              <span>REVIEWS</span>
               <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-elegant-gold group-hover:w-full transition-all duration-300" />
             </button>
             <button 
@@ -193,21 +190,19 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
               onClick={() => handleNavClick('contact')}
               className="text-stone-300 hover:text-elegant-gold transition-colors duration-300 cursor-pointer py-1.5 relative group"
             >
-              <span>{t.navContact}</span>
+              <span>CONTACT</span>
               <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-elegant-gold group-hover:w-full transition-all duration-300" />
             </button>
           </nav>
 
-          {/* Right Action Group: Language Toggle + Contact Button + Mobile Toggle */}
+          {/* Right Action Group: Contact Button + Mobile Toggle */}
           <div className="flex items-center gap-3.5 sm:gap-5">
-            <LanguageToggle />
-
             <button
               id="header-cta-button"
               onClick={() => handleNavClick('contact')}
               className="hidden sm:inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#c5a059] text-white hover:bg-[#b48f48] text-[12px] font-sans font-bold uppercase tracking-[0.16em] rounded-sm transition-all duration-300 active:scale-[0.98] shadow-sm cursor-pointer"
             >
-              <span>{language === 'en' ? 'Start a Project' : 'Begin \'n Projek'}</span>
+              <span>Start a Project</span>
               <ArrowUpRight size={13} className="shrink-0" />
             </button>
 
@@ -236,38 +231,38 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
               onClick={() => handleNavClick('home')}
               className="text-left py-2.5 text-stone-200 hover:text-elegant-gold border-b border-stone-800/60 transition-colors"
             >
-              {t.navHome}
+              HOME
             </button>
             <button 
               onClick={() => handleNavClick('portfolio')}
               className="text-left py-2.5 text-stone-200 hover:text-elegant-gold border-b border-stone-800/60 transition-colors"
             >
-              {t.navCollection}
+              COLLECTION
             </button>
             <button 
               onClick={() => handleNavClick('process')}
               className="text-left py-2.5 text-stone-200 hover:text-elegant-gold border-b border-stone-800/60 transition-colors"
             >
-              {t.navProcess}
+              PROCESS
             </button>
             <button 
               onClick={() => handleNavClick('testimonials')}
               className="text-left py-2.5 text-stone-200 hover:text-elegant-gold border-b border-stone-800/60 transition-colors"
             >
-              {t.navTestimonials}
+              REVIEWS
             </button>
             <button 
               onClick={() => handleNavClick('contact')}
               className="text-left py-2.5 text-stone-200 hover:text-elegant-gold border-b border-stone-800/60 transition-colors"
             >
-              {t.navContact}
+              CONTACT
             </button>
             <div className="pt-3">
               <button
                 onClick={() => handleNavClick('contact')}
                 className="w-full py-3.5 bg-[#c5a059] text-white hover:bg-[#b48f48] text-xs font-bold uppercase tracking-[0.18em] rounded-sm transition-all text-center flex items-center justify-center gap-2"
               >
-                <span>{language === 'en' ? 'Start a Project' : 'Begin \'n Projek'}</span>
+                <span>Start a Project</span>
                 <ArrowUpRight size={14} />
               </button>
             </div>
