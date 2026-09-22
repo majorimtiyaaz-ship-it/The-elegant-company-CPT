@@ -1,26 +1,18 @@
 import React from 'react';
 import { MessageCircle } from 'lucide-react';
-import { useLanguage } from './LanguageContext';
 
 const WHATSAPP_NUMBER = '27734851573'; // 073 485 1573, international format, no leading 0
+const MESSAGE = "Hi, I'd like to enquire about a custom piece.";
 
 export const WhatsAppButton: React.FC = () => {
-  const { language } = useLanguage();
-
-  const message =
-    language === 'en'
-      ? "Hi, I'd like to enquire about a custom piece."
-      : "Hallo, ek wil graag navraag doen oor 'n pasgemaakte stuk.";
-
-  const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-  const label = language === 'en' ? 'Chat with us on WhatsApp' : 'Gesels met ons op WhatsApp';
+  const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(MESSAGE)}`;
 
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={label}
+      aria-label="Chat with us on WhatsApp"
       className="
         fixed bottom-5 right-5 md:bottom-8 md:right-8 z-[9998]
         flex items-center justify-center
