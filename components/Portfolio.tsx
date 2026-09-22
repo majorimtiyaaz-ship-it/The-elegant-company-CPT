@@ -5,7 +5,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextReveal } from './TextReveal';
 import { ScrollZoomImage } from './ScrollZoomImage';
 import { RevealOnScroll } from './RevealOnScroll';
-import { useLanguage } from './LanguageContext';
 import { X, Layers, Sparkles, ShieldCheck, ArrowRight, Eye, CheckCircle2, Sliders } from 'lucide-react';
 
 // Ensure ScrollTrigger is registered
@@ -166,7 +165,6 @@ interface PortfolioProps {
 }
 
 export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
-  const { language, t } = useLanguage();
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
   
@@ -177,12 +175,12 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
 
   const getCategoryName = (cat: string) => {
     switch (cat) {
-      case 'All': return t.portfolioFilterAll;
-      case 'Living Room': return language === 'en' ? 'LIVING ROOM' : 'LEEFKAMER';
-      case 'Dining': return language === 'en' ? 'DINING' : 'EETKAMER';
-      case 'Office': return language === 'en' ? 'OFFICE' : 'KANTOOR';
-      case 'Storage': return language === 'en' ? 'STORAGE' : 'BERGPLEK';
-      case 'Restoration': return language === 'en' ? 'RESTORATION' : 'RESTORASIE';
+      case 'All': return 'ALL WORK';
+      case 'Living Room': return 'LIVING ROOM';
+      case 'Dining': return 'DINING';
+      case 'Office': return 'OFFICE';
+      case 'Storage': return 'STORAGE';
+      case 'Restoration': return 'RESTORATION';
       default: return cat.toUpperCase();
     }
   };
@@ -331,14 +329,14 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
         <div className="text-center mb-14 md:mb-16">
           <RevealOnScroll duration={0.8}>
             <span className="text-[#8c6517] font-semibold tracking-[0.24em] uppercase mb-3 text-xs md:text-sm block">
-              {t.portfolioTitle}
+              OUR BESPOKE COLLECTION
             </span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-stone-900 mb-5 leading-tight">
-              <TextReveal text={language === 'en' ? "Mastery in Wood" : "Meesterskap in Hout"} />
+              <TextReveal text="Mastery in Wood" />
             </h2>
             <div className="w-16 h-[1.5px] bg-[#c5a059]/40 mx-auto mb-5" />
             <p className="text-stone-600 max-w-2xl mx-auto font-sans font-light text-sm sm:text-base leading-relaxed">
-              {t.portfolioSub}
+              Every piece is meticulously constructed from premium grade hardwoods, designed to blend architectural form and ultimate utility.
             </p>
           </RevealOnScroll>
           
@@ -400,7 +398,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
                 <div className="absolute top-4 right-4 z-10 opacity-90 group-hover:opacity-100 transition-opacity">
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white text-[11px] font-sans font-medium tracking-wide">
                     <Eye size={12} className="text-[#c5a059]" />
-                    <span>{language === 'en' ? 'Specs' : 'Spesifikasies'}</span>
+                    <span>Specs</span>
                   </span>
                 </div>
 
@@ -434,7 +432,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
                     
                     <div className="text-xs text-[#c5a059] uppercase tracking-wider border-t border-stone-700/80 pt-2.5 mt-1 mb-4 font-medium">
                       <span className="text-stone-400 text-[10px] block mb-0.5 uppercase tracking-widest font-normal">
-                        {language === 'en' ? 'Wood Species' : 'Houtspesie'}
+                        Wood Species
                       </span>
                       <span className="text-stone-200 text-xs truncate block font-serif">
                         {item.woodSpecies || item.materials}
@@ -451,7 +449,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
                         className="min-h-[42px] px-3 py-2.5 bg-stone-800/90 hover:bg-stone-700 text-white uppercase tracking-[0.14em] font-bold text-[11px] rounded-sm transition-all duration-300 cursor-pointer text-center flex items-center justify-center gap-1.5 border border-stone-600/70"
                       >
                         <Sliders size={13} className="text-[#c5a059]" />
-                        <span>{language === 'en' ? 'View Specs' : 'Sien Spesifikasies'}</span>
+                        <span>View Specs</span>
                       </button>
 
                       <button 
@@ -462,7 +460,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
                         }}
                         className="min-h-[42px] px-3 py-2.5 bg-[#c5a059] hover:bg-[#b48f48] text-white uppercase tracking-[0.14em] font-bold text-[11px] rounded-sm transition-all duration-300 cursor-pointer text-center flex items-center justify-center gap-1 shadow-sm"
                       >
-                        <span>{language === 'en' ? 'Inquire' : 'Navraag'}</span>
+                        <span>Inquire</span>
                         <ArrowRight size={13} />
                       </button>
                     </div>
@@ -473,16 +471,16 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
           ) : (
             <div className="col-span-1 md:col-span-2 lg:col-span-3 flex flex-col items-center justify-center text-stone-500 py-20 bg-stone-100 border border-dashed border-stone-300 rounded-sm">
                <p className="text-xl font-serif italic mb-2 text-stone-800">
-                 {language === 'en' ? 'No pieces found' : 'Geen stukke gevind nie'}
+                 No pieces found
                </p>
                <p className="text-sm text-stone-600">
-                 {language === 'en' ? 'Try adjusting your filters to see more of our collection.' : 'Pas asseblief u filters aan om meer van ons versameling te sien.'}
+                 Try adjusting your filters to see more of our collection.
                </p>
                <button 
                  onClick={() => { setActiveCategory("All"); }}
                  className="mt-6 px-6 py-2.5 bg-stone-900 text-white font-bold uppercase text-xs tracking-[0.18em] rounded-sm hover:bg-[#c5a059] transition-colors cursor-pointer"
                >
-                 {language === 'en' ? 'Clear Filters' : 'Skrap Filters'}
+                 Clear Filters
                </button>
             </div>
           )}
@@ -537,7 +535,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-[#c5a059] text-xs uppercase tracking-[0.24em] font-semibold">
-                      {language === 'en' ? 'Craftsmanship Specifications' : 'Vakmanskap Spesifikasies'}
+                      Craftsmanship Specifications
                     </span>
                   </div>
 
@@ -559,7 +557,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
                       </div>
                       <div className="min-w-0 flex-1">
                         <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#c5a059] block mb-0.5">
-                          {language === 'en' ? 'Wood Species & Grade' : 'Houtspesie & Graad'}
+                          Wood Species & Grade
                         </span>
                         <p className="text-sm font-serif font-medium text-white">
                           {selectedItem.woodSpecies || selectedItem.materials}
@@ -574,7 +572,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
                       </div>
                       <div className="min-w-0 flex-1">
                         <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#c5a059] block mb-0.5">
-                          {language === 'en' ? 'Artisan Finish & Sheen' : 'Vakmanskap Afwerking & Glans'}
+                          Artisan Finish & Sheen
                         </span>
                         <p className="text-sm text-stone-200">
                           {selectedItem.woodFinish || selectedItem.materials}
@@ -596,7 +594,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
                         </div>
                         <div className="min-w-0 flex-1">
                           <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#c5a059] block mb-0.5">
-                            {language === 'en' ? 'Joinery & Construction' : 'Laswerk & Konstruksie'}
+                            Joinery & Construction
                           </span>
                           <p className="text-xs text-stone-300 leading-relaxed font-light">
                             {selectedItem.constructionDetails}
@@ -609,7 +607,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
                     {selectedItem.careGuide && (
                       <div className="bg-stone-900/40 p-3 rounded-sm border border-stone-800/40 text-stone-400 text-xs font-light">
                         <span className="text-stone-300 font-medium block mb-0.5">
-                          {language === 'en' ? 'Maintenance Advice:' : 'Instandhoudingsadvies:'}
+                          Maintenance Advice:
                         </span>
                         {selectedItem.careGuide}
                       </div>
@@ -624,7 +622,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
                     onClick={() => handleRequestQuote(selectedItem)}
                     className="w-full sm:flex-1 py-3 px-5 bg-[#c5a059] hover:bg-[#b48f48] text-stone-950 font-bold uppercase tracking-[0.16em] text-xs rounded-sm transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 shadow-lg"
                   >
-                    <span>{language === 'en' ? 'Inquire With This Timber' : 'Doen Navraag Met Hierdie Hout'}</span>
+                    <span>Inquire With This Timber</span>
                     <ArrowRight size={14} />
                   </button>
 
@@ -633,7 +631,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
                     onClick={() => setSelectedItem(null)}
                     className="w-full sm:w-auto py-3 px-5 bg-stone-900 hover:bg-stone-800 text-stone-300 hover:text-white border border-stone-700/80 font-bold uppercase tracking-[0.14em] text-xs rounded-sm transition-colors cursor-pointer"
                   >
-                    {language === 'en' ? 'Close' : 'Maak Toe'}
+                    Close
                   </button>
                 </div>
               </div>
