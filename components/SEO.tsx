@@ -8,7 +8,6 @@ interface SEOProps {
   image?: string;
   canonical?: string;
   type?: string;
-  showSchema?: boolean;
 }
 
 export const SEO: React.FC<SEOProps> = ({
@@ -18,9 +17,9 @@ export const SEO: React.FC<SEOProps> = ({
   image = '/images/hero-kitchen.webp', // TODO: replace with a purpose-made 1200x630 social share image
   canonical,
   type = 'website',
-  showSchema = false,
 }) => {
-  const productionDomain = 'https://theelegantcompany.co.za';
+  // TODO: update to the real purchased domain once available (currently the live Vercel URL)
+  const productionDomain = 'https://the-elegant-company-cpt.vercel.app';
   
   // Resolve canonical URL: prioritize explicitly passed canonical prop, then build from current route or fallback
   const resolvedCanonical = canonical 
@@ -28,95 +27,6 @@ export const SEO: React.FC<SEOProps> = ({
     : productionDomain;
 
   const resolvedImage = image.startsWith('http') ? image : `${productionDomain}${image}`;
-
-  // Local Business JSON-LD Structured Data Markup
-  const localBusinessSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'HomeAndConstructionBusiness',
-    'name': 'The Elegant Company',
-    'description': 'Handcrafted bespoke kitchens, luxury cabinetry, custom solid wood furniture, and home improvement solutions.',
-    'url': productionDomain,
-    'telephone': '+27 73 485 1573',
-    'email': 'info@theelegantcompany.co.za', // Placeholder for email
-    'address': {
-      '@type': 'PostalAddress',
-      'streetAddress': 'Whitehall Close, Portland',
-      'addressLocality': 'Cape Town',
-      'addressRegion': 'Western Cape',
-      'postalCode': '8000',
-      'addressCountry': 'ZA'
-    },
-    'areaServed': {
-      '@type': 'AdministrativeArea',
-      'name': 'Cape Town'
-    },
-    'sameAs': [
-      'https://www.facebook.com/theelegantcompany', // Placeholder for Facebook
-      'https://www.instagram.com/theelegantcompany' // Placeholder for Instagram
-    ],
-    'hasOfferCatalog': {
-      '@type': 'OfferCatalog',
-      'name': 'Bespoke Craftsmanship Services',
-      'itemListElement': [
-        {
-          '@type': 'Offer',
-          'itemOffered': {
-            '@type': 'Service',
-            'name': 'Custom Furniture'
-          }
-        },
-        {
-          '@type': 'Offer',
-          'itemOffered': {
-            '@type': 'Service',
-            'name': 'Kitchen Installations'
-          }
-        },
-        {
-          '@type': 'Offer',
-          'itemOffered': {
-            '@type': 'Service',
-            'name': 'Built-in Cupboards'
-          }
-        },
-        {
-          '@type': 'Offer',
-          'itemOffered': {
-            '@type': 'Service',
-            'name': 'Bedroom Cabinets'
-          }
-        },
-        {
-          '@type': 'Offer',
-          'itemOffered': {
-            '@type': 'Service',
-            'name': 'TV Units'
-          }
-        },
-        {
-          '@type': 'Offer',
-          'itemOffered': {
-            '@type': 'Service',
-            'name': 'Wardrobes'
-          }
-        },
-        {
-          '@type': 'Offer',
-          'itemOffered': {
-            '@type': 'Service',
-            'name': 'Furniture Restoration'
-          }
-        },
-        {
-          '@type': 'Offer',
-          'itemOffered': {
-            '@type': 'Service',
-            'name': 'Home Improvements'
-          }
-        }
-      ]
-    }
-  };
 
   return (
     <Helmet htmlAttributes={{ lang: 'en' }}>
@@ -149,13 +59,6 @@ export const SEO: React.FC<SEOProps> = ({
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={resolvedImage} />
-
-      {/* 7. Local Business Structured Data (JSON-LD) */}
-      {showSchema && (
-        <script type="application/ld+json">
-          {JSON.stringify(localBusinessSchema)}
-        </script>
-      )}
     </Helmet>
   );
 };
