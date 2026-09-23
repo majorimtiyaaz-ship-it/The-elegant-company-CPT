@@ -261,16 +261,14 @@ function App() {
           title: "Bespoke Furniture Collection | The Elegant Company Cape Town",
           description: "Browse our showcase of premium custom built-in cupboards, luxury kitchens, bedroom cabinets, wardrobes, and handcrafted wood creations across Cape Town.",
           keywords: "custom furniture collection Cape Town, bespoke kitchens portfolio, custom wardrobes Cape Town, built in cupboards Cape Town",
-          canonical: "/#portfolio",
-          showSchema: false
+          canonical: "/#portfolio"
         };
       case 'contact':
         return {
           title: "Contact Us & Get a Free Quotation | The Elegant Company Cape Town",
           description: "Contact The Elegant Company in Cape Town for bespoke furniture design, luxury kitchen installations, or to get a free custom cupboards quotation today.",
           keywords: "contact custom furniture Cape Town, kitchen installation quote Cape Town, built in cupboards quotation Cape Town, free carpentry consultation",
-          canonical: "/#contact",
-          showSchema: false
+          canonical: "/#contact"
         };
       case 'home':
       default:
@@ -278,8 +276,7 @@ function App() {
           title: "The Elegant Company | Custom Furniture & Kitchen Installations Cape Town",
           description: "The Elegant Company designs and installs custom furniture, built-in cupboards, kitchens, wardrobes, bedroom cabinets, TV units, and home improvement solutions across Cape Town. Get a free quotation today.",
           keywords: "custom furniture Cape Town, kitchen installations Cape Town, built in cupboards Cape Town, bespoke furniture Cape Town, bedroom cupboards Cape Town, TV units Cape Town, wardrobes Cape Town, cabinet makers Cape Town, home improvement Cape Town, custom kitchens Cape Town, furniture restoration Cape Town",
-          canonical: "/",
-          showSchema: true
+          canonical: "/"
         };
     }
   };
