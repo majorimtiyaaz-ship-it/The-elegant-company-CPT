@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 
-const WHATSAPP_NUMBER = '27734851573';
+const WHATSAPP_NUMBER = '27638980781';
 
 type Source = 'sticky' | 'gallery';
 

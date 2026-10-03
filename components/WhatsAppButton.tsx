@@ -2,7 +2,7 @@ import React from 'react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { useBookBarVisible } from './BookCTA';
 
-const WHATSAPP_NUMBER = '27734851573'; // 073 485 1573, international format, no leading 0
+const WHATSAPP_NUMBER = '27638980781'; // 063 898 0781, international format, no leading 0
 const MESSAGE = "Hi, I'd like to enquire about a custom piece.";
 
 export const WhatsAppButton: React.FC = () => {
