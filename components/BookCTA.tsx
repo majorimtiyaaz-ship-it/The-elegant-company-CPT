@@ -3,14 +3,14 @@ import { WhatsAppIcon } from './WhatsAppIcon';
 
 const WHATSAPP_NUMBER = '27638980781';
 
-type Source = 'sticky' | 'gallery';
+export type Source = 'sticky' | 'gallery' | 'hero';
 
-function bookUrl(source: Source) {
+export function bookUrl(source: Source) {
   const text = `Hi, I'd like to book a free consultation. (via website: ${source})`;
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 }
 
-function track(source: Source) {
+export function track(source: Source) {
   const w = window as any;
   if (typeof w.gtag === 'function') {
     w.gtag('event', 'book_click', { source });

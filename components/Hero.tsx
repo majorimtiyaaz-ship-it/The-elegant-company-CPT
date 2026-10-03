@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View } from '../types';
 import { gsap } from 'gsap';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
+import { WhatsAppIcon } from './WhatsAppIcon';
+import { bookUrl, track } from './BookCTA';
 
 interface HeroProps {
   onNavigate: (view: View, sectionId?: string) => void;
@@ -335,19 +337,37 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
               Bespoke kitchens, custom cabinetry and considered interiors, handcrafted in Cape Town.
             </p>
 
-            {/* CTA Composition: ONE refined gold button + ONE quiet text link */}
+            {/* CTA Composition: free quote + one-tap WhatsApp, then a quiet text link */}
             <div 
               ref={buttonsRef}
-              className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-7"
+              className="flex flex-col items-start gap-4"
             >
-              <button
-                id="hero-primary-cta"
-                onClick={() => onNavigate(View.HOME, 'contact')}
-                className="h-[48px] px-8 bg-[#c5a059] text-white font-sans font-semibold text-[12px] sm:text-[13px] tracking-[0.18em] uppercase rounded-sm hover:bg-[#b48f48] active:scale-[0.98] transition-all duration-300 cursor-pointer flex items-center justify-center gap-2"
-              >
-                <span>START A PROJECT</span>
-                <ArrowUpRight size={15} className="shrink-0" />
-              </button>
+              <div className="flex w-full flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+                <button
+                  id="hero-primary-cta"
+                  onClick={() => onNavigate(View.HOME, 'contact')}
+                  className="h-[48px] px-8 bg-[#c5a059] text-white font-sans font-semibold text-[12px] sm:text-[13px] tracking-[0.18em] uppercase rounded-sm hover:bg-[#b48f48] active:scale-[0.98] transition-all duration-300 cursor-pointer flex items-center justify-center gap-2"
+                >
+                  <span>Get a free quote</span>
+                  <ArrowUpRight size={15} className="shrink-0" />
+                </button>
+
+                <a
+                  id="hero-whatsapp-cta"
+                  href={bookUrl('hero')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => track('hero')}
+                  className="h-[48px] px-7 bg-white text-[#1a1a1a] font-sans font-semibold text-[12px] sm:text-[13px] tracking-[0.18em] uppercase rounded-sm hover:bg-[#f5efe3] active:scale-[0.98] transition-all duration-300 cursor-pointer flex items-center justify-center gap-2.5"
+                >
+                  <WhatsAppIcon className="h-5 w-5 shrink-0" />
+                  <span>WhatsApp us</span>
+                </a>
+              </div>
+
+              <p className="m-0 text-[12px] sm:text-[13px] tracking-wide text-stone-300 font-light">
+                Free quote, no obligation. We reply within 24 hours.
+              </p>
 
               <button
                 id="hero-secondary-cta"
