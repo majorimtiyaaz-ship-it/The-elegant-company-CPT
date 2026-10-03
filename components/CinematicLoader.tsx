@@ -10,7 +10,15 @@ export const CinematicLoader: React.FC<CinematicLoaderProps> = ({
   onComplete,
   heroImageUrl = '/images/hero-kitchen.webp',
 }) => {
-  const [isDismissed, setIsDismissed] = useState(false);
+  // Show the cinematic intro once per session; repeat views load instantly.
+  const alreadySeen = (() => {
+    try {
+      return sessionStorage.getItem('ec_intro_seen') === '1';
+    } catch {
+      return false;
+    }
+  })();
+  const [isDismissed, setIsDismissed] = useState(alreadySeen);
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const wordmarkRef = useRef<HTMLHeadingElement>(null);
@@ -19,6 +27,12 @@ export const CinematicLoader: React.FC<CinematicLoaderProps> = ({
   const progressBarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (alreadySeen) return;
+    try {
+      sessionStorage.setItem('ec_intro_seen', '1');
+    } catch {
+      /* storage unavailable: intro simply shows again next time */
+    }
     // Check for prefers-reduced-motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -66,12 +80,12 @@ export const CinematicLoader: React.FC<CinematicLoaderProps> = ({
       };
     }
 
-    // Absolute failsafe timeout (2.2s maximum) so loader NEVER gets stuck
+    // Absolute failsafe timeout (1.6s maximum) so loader NEVER gets stuck
     const failsafeTimer = setTimeout(() => {
       heroImageReady = true;
       fontsReady = true;
       checkAndTriggerExit(true);
-    }, 2200);
+    }, 1600);
 
     const checkAndTriggerExit = (force = false) => {
       if (!isMounted || exitTriggered) return;

@@ -293,6 +293,7 @@ export const Process: React.FC = () => {
         <img
           ref={bgParallaxImgRef}
           src="/images/1770565768335~2.webp"
+          loading="lazy"
           alt=""
           role="presentation"
           aria-hidden="true"
@@ -426,6 +427,7 @@ export const Process: React.FC = () => {
               <img
                 ref={bannerBgRef}
                 src="/images/coffee-table-after-2.webp"
+          loading="lazy"
                 alt=""
                 role="presentation"
                 aria-hidden="true"

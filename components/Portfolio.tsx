@@ -308,6 +308,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
         <img
           ref={bgParallaxImgRef}
           src="/images/coffee-table-raw.webp"
+          loading="lazy"
           alt=""
           role="presentation"
           aria-hidden="true"
