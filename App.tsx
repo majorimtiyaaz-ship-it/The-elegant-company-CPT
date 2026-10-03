@@ -8,6 +8,7 @@ import { Testimonials } from './components/Testimonials';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { WhatsAppButton } from './components/WhatsAppButton';
+import { StickyBookBar, GalleryCTA } from './components/BookCTA';
 import { CustomCursor } from './components/CustomCursor';
 import { SEO } from './components/SEO';
 import { CinematicLoader } from './components/CinematicLoader';
@@ -239,6 +240,7 @@ function App() {
             <div id="portfolio" className="scroll-mt-20">
               <Portfolio onNavigate={handleNavigate} />
             </div>
+            <GalleryCTA />
             <div id="process" className="scroll-mt-20">
               <Process />
             </div>
@@ -294,10 +296,13 @@ function App() {
       />
       <CustomCursor />
       <WhatsAppButton />
+      <StickyBookBar />
       <main className="flex-grow">
         {renderView()}
       </main>
-      <Footer />
+      <div id="site-footer">
+        <Footer />
+      </div>
     </div>
   );
 }
