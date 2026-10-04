@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View } from './types';
 import { Hero } from './components/Hero';
 import { StatsCounter } from './components/StatsCounter';
+import { Awards } from './components/Awards';
 import { Portfolio } from './components/Portfolio';
 import { Process } from './components/Process';
 import { Testimonials } from './components/Testimonials';
@@ -237,6 +238,7 @@ function App() {
               <Hero onNavigate={handleNavigate} />
             </div>
             <StatsCounter />
+            <Awards />
             <div id="portfolio" className="scroll-mt-20">
               <Portfolio onNavigate={handleNavigate} />
             </div>
