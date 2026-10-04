@@ -3,7 +3,7 @@ import { WhatsAppIcon } from './WhatsAppIcon';
 
 const WHATSAPP_NUMBER = '27638980781';
 
-export type Source = 'sticky' | 'gallery' | 'hero';
+export type Source = 'sticky' | 'gallery' | 'hero' | 'table';
 
 export function bookUrl(source: Source) {
   const text = `Hi, I'd like to book a free consultation. (via website: ${source})`;
@@ -51,7 +51,7 @@ export function useBookBarVisible() {
       });
       setAtEnd(visible.size > 0);
     });
-    ['contact', 'site-footer'].forEach((id) => {
+    ['contact', 'site-footer', 'table-story'].forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });

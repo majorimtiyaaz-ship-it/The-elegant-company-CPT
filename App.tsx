@@ -3,6 +3,7 @@ import { View } from './types';
 import { Hero } from './components/Hero';
 import { StatsCounter } from './components/StatsCounter';
 import { Awards } from './components/Awards';
+import { TableStory } from './components/TableStory';
 import { Portfolio } from './components/Portfolio';
 import { Process } from './components/Process';
 import { Testimonials } from './components/Testimonials';
@@ -246,6 +247,7 @@ function App() {
             <div id="process" className="scroll-mt-20">
               <Process />
             </div>
+            <TableStory />
             <div id="testimonials" className="scroll-mt-20">
               <Testimonials />
             </div>
