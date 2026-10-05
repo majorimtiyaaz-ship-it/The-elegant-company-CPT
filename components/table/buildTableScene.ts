@@ -106,27 +106,27 @@ export function createTableRig(width: number, height: number): TableRig {
   const camera = new THREE.PerspectiveCamera(32, width / height, 0.1, 50);
 
   // Lighting: warm key, gold rim, soft fill. No shadow maps (keeps it fast).
-  scene.add(new THREE.HemisphereLight(0xfff0dc, 0x2a1d12, 1.0));
-  const key = new THREE.DirectionalLight(0xffe2b8, 2.6);
-  key.position.set(3, 5, 2.5);
+  scene.add(new THREE.HemisphereLight(0xfff0dc, 0x2a1d12, 0.8));
+  const key = new THREE.DirectionalLight(0xffe2b8, 2.7);
+  key.position.set(3.5, 3.2, 3.2);
   scene.add(key);
-  const rim = new THREE.DirectionalLight(0xc5a059, 1.6);
-  rim.position.set(-3.5, 2.2, -3);
+  const rim = new THREE.DirectionalLight(0xc5a059, 1.1);
+  rim.position.set(-2.5, 5, -3);
   scene.add(rim);
 
   // Materials
-  const texTop = makeWoodTexture('#5b3a22', '#a9794a', 7, false);
-  const texCap = makeWoodTexture('#47301d', '#8a5f3a', 31, true);
+  const texTop = makeWoodTexture('#472b18', '#855a34', 7, false);
+  const texCap = makeWoodTexture('#3b2515', '#6f4a2c', 31, true);
   const texLeg = makeWoodTexture('#52341f', '#9c6d42', 53, true);
   const texApr = makeWoodTexture('#563720', '#9a6b40', 91, false);
 
   const mat = (map: THREE.Texture) =>
     new THREE.MeshPhysicalMaterial({
       map,
-      roughness: 0.52,
+      roughness: 0.62,
       metalness: 0,
-      clearcoat: 0.35,
-      clearcoatRoughness: 0.4,
+      clearcoat: 0.1,
+      clearcoatRoughness: 0.55,
     });
   const mTop = mat(texTop);
   const mCap = mat(texCap);
@@ -301,7 +301,7 @@ export function buildTableScene(canvas: HTMLCanvasElement, width: number, height
   renderer.setSize(width, height, false);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.15;
+  renderer.toneMappingExposure = 1.1;
 
   const rig = createTableRig(width, height);
 

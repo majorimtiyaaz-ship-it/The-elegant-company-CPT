@@ -82,11 +82,11 @@ export const TableStory: React.FC = () => {
 
     const updateUI = (p: number) => {
       // Stage 1: "Every piece starts alone"
-      const o1 = seg(p, 0.02, 0.08) * (1 - seg(p, 0.26, 0.34));
-      fade(s1.current, o1, (1 - seg(p, 0.02, 0.08)) * 16 - seg(p, 0.26, 0.34) * 10);
+      const o1 = seg(p, 0.02, 0.08) * (1 - seg(p, 0.3, 0.37));
+      fade(s1.current, o1, (1 - seg(p, 0.02, 0.08)) * 16 - seg(p, 0.3, 0.37) * 10);
       // Stage 2: "Joined by hand"
-      const o2 = seg(p, 0.34, 0.42) * (1 - seg(p, 0.62, 0.7));
-      fade(s2.current, o2, (1 - seg(p, 0.34, 0.42)) * 16 - seg(p, 0.62, 0.7) * 10);
+      const o2 = seg(p, 0.37, 0.44) * (1 - seg(p, 0.67, 0.74));
+      fade(s2.current, o2, (1 - seg(p, 0.37, 0.44)) * 16 - seg(p, 0.67, 0.74) * 10);
       // Stage 3: "Made for your home" + CTA
       const o3 = seg(p, 0.76, 0.88);
       fade(s3.current, o3, (1 - o3) * 18);
