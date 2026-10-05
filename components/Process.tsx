@@ -88,8 +88,8 @@ const RESTORATION_STEPS: ProcessStep[] = [
     id: 2,
     num: "02",
     title: "On-Site Cape Town Collection",
-    subtitle: "Pickup Logistics & R500 Fee",
-    description: "For deep restoration, we transport safety blankets to your door. Our heavy lifting team carries the piece from Cape Town premises to our workshop (standard call-out fee of R500 applies).",
+    subtitle: "Pickup & Delivery · R600",
+    description: "For restoration, our team collects the piece from your Cape Town home, protected and padded, and brings it to our workshop. A fixed R600 covers pickup and delivery back to you once it is finished.",
     icon: <Compass size={24} className="text-elegant-gold" />
   },
   {
@@ -131,8 +131,8 @@ const INSTALLATION_STEPS: ProcessStep[] = [
     id: 1,
     num: "01",
     title: "Cape Town Laser Mapping Visit",
-    subtitle: "Site Audit & R500 Call-out Fee",
-    description: "Our fitting lead visits your Cape Town site to scan wall plumb-lines, skirting offsets, and utility pipelines. This essential onsite blueprint scan costs R500.",
+    subtitle: "Site Audit & R550 Call-out Fee",
+    description: "Our fitting lead visits your Cape Town site to scan wall plumb-lines, skirting offsets, and utility pipelines. This essential onsite blueprint scan costs R550.",
     icon: <Ruler size={24} className="text-elegant-gold" />
   },
   {
@@ -457,14 +457,14 @@ export const Process: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <Coins size={16} className="text-[#c5a059] shrink-0" />
                   <span className="text-xs uppercase tracking-[0.18em] text-[#c5a059] font-bold">
-                    R500 Call-Out
+                    R550 Call-Out
                   </span>
                 </div>
                 <h4 className="text-sm font-serif font-semibold text-white">
                   Site Audit & Laser Scan
                 </h4>
                 <p className="text-xs text-stone-300 leading-relaxed font-light">
-                  A standard R500 fee applies for physical Cape Town site visits (laser-mapping spaces, wood patina matching, taking exact measurements).
+                  A standard R550 fee applies for physical Cape Town site visits (laser-mapping spaces, wood patina matching, taking exact measurements).
                 </p>
               </div>
 

@@ -232,7 +232,7 @@ export function createTableRig(width: number, height: number): TableRig {
     const portrait = aspect < 0.85;
     const base = portrait ? Math.min(11.5, Math.max(7.2, 4.9 / aspect)) : Math.max(6, 9 / aspect);
     // Once assembled, ease in a little so the finished table feels present
-    const dist = base * (1 - (portrait ? 0.08 : 0.17) * easeInOut(seg(p, 0.6, 0.92)));
+    const dist = base * (1 - (portrait ? 0.12 : 0.17) * easeInOut(seg(p, 0.6, 0.92)));
     // Orbit: starts right-front, ends slightly left-front; settles in the last 20%
     const a0 = portrait ? 1.05 : 0.75;
     const a1 = portrait ? 0.8 : -0.5;

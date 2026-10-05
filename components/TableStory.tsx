@@ -9,6 +9,8 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+// Share of the scroll distance used by the animation (the remainder is the CTA hold)
+const ANIM_END = 0.7;
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const seg = (p: number, a: number, b: number) => clamp01((p - a) / (b - a));
 
@@ -115,7 +117,8 @@ export const TableStory: React.FC = () => {
       start: 'top top',
       end: 'bottom bottom',
       onUpdate: (self) => {
-        target = self.progress;
+        // Animation completes at ANIM_END; the rest of the scroll holds the booking button on screen
+        target = Math.min(1, self.progress / ANIM_END);
         updateUI(target);
       },
     });
@@ -130,18 +133,28 @@ export const TableStory: React.FC = () => {
       if (disposed) return;
       const r = sticky.getBoundingClientRect();
       scene = buildTableScene(canvas, Math.max(1, r.width), Math.max(1, r.height));
-      target = cur = st.progress;
+      target = cur = Math.min(1, st.progress / ANIM_END);
       scene.setProgress(cur);
       scene.render();
       lastRendered = cur;
       updateUI(target);
     };
 
+    // Start loading in the background once the page has settled, so the table is
+    // already built long before anyone scrolls to it. Safety net: also load when
+    // the section is within three screens.
+    const idle = (window as any).requestIdleCallback as undefined | ((cb: () => void, o?: { timeout: number }) => number);
+    const startPreload = () => (idle ? idle(() => loadScene(), { timeout: 3000 }) : window.setTimeout(loadScene, 1500));
+    let preloadTimer: number | undefined;
+    const onReady = () => { preloadTimer = startPreload() as number; };
+    if (document.readyState === 'complete') onReady();
+    else window.addEventListener('load', onReady, { once: true });
+
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) loadScene();
       },
-      { rootMargin: '100% 0px 100% 0px' }
+      { rootMargin: '300% 0px 300% 0px' }
     );
     io.observe(outer);
 
@@ -166,6 +179,12 @@ export const TableStory: React.FC = () => {
     return () => {
       disposed = true;
       gsap.ticker.remove(tick);
+      window.removeEventListener('load', onReady);
+      if (preloadTimer !== undefined) {
+        const cancel = (window as any).cancelIdleCallback as undefined | ((id: number) => void);
+        if (cancel) cancel(preloadTimer);
+        window.clearTimeout(preloadTimer);
+      }
       st.kill();
       io.disconnect();
       vis.disconnect();
@@ -217,7 +236,7 @@ export const TableStory: React.FC = () => {
       id="table-story"
       ref={outerRef}
       aria-label="Watch a handcrafted walnut table come together"
-      className="relative w-full bg-[#0d0c0b] h-[380vh] md:h-[420vh]"
+      className="relative w-full bg-[#0d0c0b] h-[420vh] md:h-[460vh]"
     >
       <div ref={stickyRef} className="sticky top-0 h-[100svh] w-full overflow-hidden">
         {/* Warm backdrop glow */}
