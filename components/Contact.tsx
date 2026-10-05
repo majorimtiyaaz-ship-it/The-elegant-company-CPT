@@ -76,7 +76,7 @@ export const Contact: React.FC<ContactProps> = ({ prefillData }) => {
               </h2>
               <div className="w-16 h-[1.5px] bg-[#c5a059]/40 mb-5" />
               <p className="text-stone-600 text-sm sm:text-base mb-8 leading-relaxed font-light">
-                Let us elevate your home. Contact us for a complimentary professional design consultation and detailed quotation.
+                Let us elevate your home. Contact us for a professional design consultation and a free, detailed quotation.
               </p>
 
               {/* Disclaimer */}

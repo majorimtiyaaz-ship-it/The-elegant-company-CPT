@@ -273,7 +273,7 @@ function App() {
         return {
           title: "Contact Us & Get a Free Quotation | The Elegant Company Cape Town",
           description: "Contact The Elegant Company in Cape Town for bespoke furniture design, luxury kitchen installations, or to get a free custom cupboards quotation today.",
-          keywords: "contact custom furniture Cape Town, kitchen installation quote Cape Town, built in cupboards quotation Cape Town, free carpentry consultation",
+          keywords: "contact custom furniture Cape Town, kitchen installation quote Cape Town, built in cupboards quotation Cape Town, carpentry consultation Cape Town",
           canonical: "/#contact"
         };
       case 'home':
