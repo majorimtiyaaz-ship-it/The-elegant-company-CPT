@@ -6,7 +6,7 @@ const WHATSAPP_NUMBER = '27638980781';
 export type Source = 'sticky' | 'gallery' | 'hero' | 'table';
 
 export function bookUrl(source: Source) {
-  const text = `Hi, I'd like to book a free consultation. (via website: ${source})`;
+  const text = `Hi, I'd like to book a call-out. (via website: ${source})`;
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 }
 

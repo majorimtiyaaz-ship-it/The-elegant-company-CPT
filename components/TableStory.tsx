@@ -35,7 +35,7 @@ const Cta: React.FC<{ linkRef?: React.Ref<HTMLAnchorElement>; interactive?: bool
     className="mt-7 inline-flex min-h-[54px] w-full max-w-sm items-center justify-center gap-3 rounded-sm bg-white px-8 text-xs font-bold uppercase tracking-[0.2em] text-[#1a1a1a] shadow-[0_14px_40px_rgba(197,160,89,0.25)] transition-colors duration-300 hover:bg-[#f5efe3] active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c5a059] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d0c0b] md:w-auto"
   >
     <WhatsAppIcon className="h-6 w-6 shrink-0" />
-    Book a free consultation
+    Book a call-out
   </a>
 );
 
@@ -182,7 +182,7 @@ export const TableStory: React.FC = () => {
     h2: 'Each joint fitted by hand, one at a time.',
     k3: '03 — Made for your home',
     h3: 'Tell us what you have in mind. We\u2019ll design and build it with you.',
-    sub: 'Free quote, no obligation. We reply within 24 hours.',
+    sub: 'Message us on WhatsApp. We reply within 24 hours.',
   };
 
   // Fallback: reduced motion or no WebGL. Static, light, still ends in the CTA.
