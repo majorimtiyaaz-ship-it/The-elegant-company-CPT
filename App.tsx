@@ -4,6 +4,7 @@ import { Hero } from './components/Hero';
 import { StatsCounter } from './components/StatsCounter';
 import { Awards } from './components/Awards';
 import { TableStory } from './components/TableStory';
+import { DesignYourPiece } from './components/DesignYourPiece';
 import { Portfolio } from './components/Portfolio';
 import { Process } from './components/Process';
 import { Testimonials } from './components/Testimonials';
@@ -251,6 +252,7 @@ function App() {
             <div id="testimonials" className="scroll-mt-20">
               <Testimonials />
             </div>
+            <DesignYourPiece />
             <div id="contact" className="scroll-mt-20">
               <Contact prefillData={contactPrefill} />
             </div>

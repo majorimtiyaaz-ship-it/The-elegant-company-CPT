@@ -3,11 +3,14 @@ import { WhatsAppIcon } from './WhatsAppIcon';
 
 const WHATSAPP_NUMBER = '27638980781';
 
-export type Source = 'sticky' | 'gallery' | 'hero' | 'table';
+export type Source = 'sticky' | 'gallery' | 'hero' | 'table' | 'design';
+
+export function whatsappUrl(text: string) {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+}
 
 export function bookUrl(source: Source) {
-  const text = `Hi, I'd like to book a call-out. (via website: ${source})`;
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+  return whatsappUrl(`Hi, I'd like to book a call-out. (via website: ${source})`);
 }
 
 export function track(source: Source) {
@@ -51,7 +54,7 @@ export function useBookBarVisible() {
       });
       setAtEnd(visible.size > 0);
     });
-    ['contact', 'site-footer', 'table-story'].forEach((id) => {
+    ['contact', 'site-footer', 'table-story', 'design-your-piece'].forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
