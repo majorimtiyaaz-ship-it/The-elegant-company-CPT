@@ -65,7 +65,7 @@ export const Testimonials: React.FC = () => {
               key={index} 
               duration={0.8} 
               delay={0.08 * index}
-              className="bg-[#faf8f5] p-7 sm:p-8 rounded-sm shadow-sm hover:shadow-xl border border-stone-200 hover:border-[#c5a059] transition-all duration-400 flex flex-col justify-between"
+              className="bg-[#faf8f5] p-7 sm:p-8 rounded-sm shadow-sm hover:shadow-xl hover:-translate-y-1.5 border border-stone-200 hover:border-[#c5a059] transition-all duration-500 ease-out flex flex-col justify-between"
             >
               <div>
                 <Quote size={28} className="text-[#c5a059]/50 mb-5" />

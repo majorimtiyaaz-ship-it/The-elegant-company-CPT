@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextReveal } from './TextReveal';
 import { ScrollZoomImage } from './ScrollZoomImage';
 import { RevealOnScroll } from './RevealOnScroll';
+import { StaggerText } from './motion/StaggerText';
 import { X, Layers, Sparkles, ShieldCheck, ArrowRight, Eye, CheckCircle2, Sliders } from 'lucide-react';
 
 // Ensure ScrollTrigger is registered
@@ -214,6 +215,39 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
     };
   }, [selectedItem]);
 
+  // Filter change: cards rise in one after another instead of snapping into place.
+  // (The first appearance is handled by the section reveal, so skip the first run.)
+  const filterMountedRef = useRef(false);
+  useEffect(() => {
+    if (!filterMountedRef.current) {
+      filterMountedRef.current = true;
+      return;
+    }
+    const section = sectionRef.current;
+    if (!section) return;
+    const mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      const cards = section.querySelectorAll('.portfolio-card');
+      if (!cards.length) return;
+      gsap.set(cards, { transition: 'none' }); // cards carry `transition-all`; it would smear the tween
+      gsap.fromTo(
+        cards,
+        { opacity: 0, y: 28, scale: 0.97 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.75,
+          ease: 'power3.out',
+          stagger: 0.06,
+          overwrite: 'auto',
+          clearProps: 'opacity,transform,transition',
+        }
+      );
+    });
+    return () => mm.revert();
+  }, [activeCategory]);
+
   // Modal entrance animation
   useEffect(() => {
     if (selectedItem && modalRef.current) {
@@ -336,9 +370,10 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
               <TextReveal text="Mastery in Wood" />
             </h2>
             <div className="w-16 h-[1.5px] bg-[#c5a059]/40 mx-auto mb-5" />
-            <p className="text-stone-600 max-w-2xl mx-auto font-sans font-light text-sm sm:text-base leading-relaxed">
-              Every piece is meticulously constructed from premium grade hardwoods, designed to blend architectural form and ultimate utility.
-            </p>
+            <StaggerText
+              className="text-stone-600 max-w-2xl mx-auto font-sans font-light text-sm sm:text-base leading-relaxed"
+              text="Every piece is meticulously constructed from premium grade hardwoods, designed to blend architectural form and ultimate utility."
+            />
           </RevealOnScroll>
           
           <RevealOnScroll duration={1.0} delay={0.15}>
@@ -392,6 +427,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
                   <ScrollZoomImage 
                     src={item.imageUrl} 
                     alt={`${item.title} - Bespoke ${item.category} crafted by The Elegant Company`} 
+                    parallax
                   />
                 </div>
                 

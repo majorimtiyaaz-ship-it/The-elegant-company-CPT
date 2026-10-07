@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextReveal } from './TextReveal';
 import { RevealOnScroll } from './RevealOnScroll';
+import { StaggerText } from './motion/StaggerText';
 
 // Ensure ScrollTrigger is registered
 if (typeof window !== 'undefined') {
@@ -323,9 +324,10 @@ export const Process: React.FC = () => {
               <TextReveal text="Our Bespoke Method" />
             </h2>
             <div className="w-16 h-[1.5px] bg-[#c5a059]/40 mx-auto mb-5" />
-            <p className="text-stone-600 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed font-light">
-              Our meticulous design and manufacturing process guarantees exceptional results from initial concept to master installation.
-            </p>
+            <StaggerText
+              className="text-stone-600 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed font-light"
+              text="Our meticulous design and manufacturing process guarantees exceptional results from initial concept to master installation."
+            />
           </div>
         </RevealOnScroll>
 
@@ -386,7 +388,7 @@ export const Process: React.FC = () => {
               key={step.id} 
               duration={0.8}
               delay={0.08 * index}
-              className="process-step-premium-card group bg-white p-7 sm:p-8 rounded-sm shadow-sm hover:shadow-xl border border-stone-200 hover:border-[#c5a059] transition-all duration-400 relative cursor-default flex flex-col justify-between min-h-[320px]"
+              className="process-step-premium-card group bg-white p-7 sm:p-8 rounded-sm shadow-sm hover:shadow-xl hover:-translate-y-1.5 border border-stone-200 hover:border-[#c5a059] transition-all duration-500 ease-out relative cursor-default flex flex-col justify-between min-h-[320px]"
             >
               <div>
                 {/* Floating behind-number watermarked */}

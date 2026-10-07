@@ -292,7 +292,7 @@ export const Contact: React.FC<ContactProps> = ({ prefillData }) => {
                     id="contact-submit-button"
                     type="submit"
                     disabled={status === 'submitting'}
-                    className={`w-full min-h-[50px] py-4 uppercase tracking-[0.18em] text-xs sm:text-[13px] font-bold rounded-sm shadow-md transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer active:scale-[0.98] ${
+                    className={`btn-sheen w-full min-h-[50px] py-4 uppercase tracking-[0.18em] text-xs sm:text-[13px] font-bold rounded-sm shadow-md transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer active:scale-[0.98] ${
                       status === 'submitting' 
                         ? 'bg-[#c5a059] text-white opacity-85 cursor-wait' 
                         : 'bg-stone-950 text-white hover:bg-[#c5a059]'

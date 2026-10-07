@@ -105,7 +105,7 @@ export const GalleryCTA: React.FC = () => (
         target="_blank"
         rel="noopener noreferrer"
         onClick={() => track('gallery')}
-        className="mt-8 inline-flex min-h-[54px] w-full max-w-sm items-center justify-center gap-3 rounded-sm bg-white px-8 text-xs font-bold uppercase tracking-[0.2em] text-[#1a1a1a] transition-all duration-300 hover:bg-[#f5efe3] active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c5a059] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a] md:w-auto"
+        className="btn-sheen btn-sheen-gold mt-8 inline-flex min-h-[54px] w-full max-w-sm items-center justify-center gap-3 rounded-sm bg-white px-8 text-xs font-bold uppercase tracking-[0.2em] text-[#1a1a1a] transition-all duration-300 hover:bg-[#f5efe3] active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c5a059] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a1a] md:w-auto"
       >
         <WhatsAppIcon className="h-6 w-6 shrink-0" />
         Book on WhatsApp

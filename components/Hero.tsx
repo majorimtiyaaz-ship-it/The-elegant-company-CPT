@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View } from '../types';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useMagnetic } from './motion/useMagnetic';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { bookUrl, track } from './BookCTA';
@@ -16,6 +18,15 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const subheadingRef = useRef<HTMLParagraphElement>(null);
   const buttonsRef = useRef<HTMLDivElement>(null);
+  const bgWrapRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const primaryCtaRef = useRef<HTMLButtonElement>(null);
+  const whatsappCtaRef = useRef<HTMLAnchorElement>(null);
+  const headerCtaRef = useRef<HTMLButtonElement>(null);
+
+  useMagnetic(primaryCtaRef);
+  useMagnetic(whatsappCtaRef);
+  useMagnetic(headerCtaRef, { strength: 0.18, max: 6 });
 
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -55,6 +66,25 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
       document.body.style.overflow = '';
     };
   }, [mobileMenuOpen]);
+
+  // 1b. Scroll parallax: the photo drifts and eases in slower than the page while the
+  // headline block lifts and fades. At scroll 0 nothing is changed, so the entrance
+  // timeline below looks exactly as before.
+  useEffect(() => {
+    const section = containerRef.current;
+    if (!section) return;
+    gsap.registerPlugin(ScrollTrigger);
+    const mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      const tl = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: { trigger: section, start: 'top top', end: 'bottom top', scrub: true },
+      });
+      if (bgWrapRef.current) tl.to(bgWrapRef.current, { yPercent: 7, scale: 1.1, duration: 1 }, 0);
+      if (contentRef.current) tl.to(contentRef.current, { y: -64, opacity: 0, duration: 0.7 }, 0);
+    });
+    return () => mm.revert();
+  }, []);
 
   // 2. Subtle Cinematic GSAP Entrance Timeline (No ScrollTrigger)
   useEffect(() => {
@@ -201,8 +231,9 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
           <div className="flex items-center gap-3.5 sm:gap-5">
             <button
               id="header-cta-button"
+              ref={headerCtaRef}
               onClick={() => handleNavClick('contact')}
-              className="hidden sm:inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#c5a059] text-white hover:bg-[#b48f48] text-[12px] font-sans font-bold uppercase tracking-[0.16em] rounded-sm transition-all duration-300 active:scale-[0.98] shadow-sm cursor-pointer"
+              className="btn-sheen hidden sm:inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#c5a059] text-white hover:bg-[#b48f48] text-[12px] font-sans font-bold uppercase tracking-[0.16em] rounded-sm transition-all duration-300 active:scale-[0.98] shadow-sm cursor-pointer"
             >
               <span>Start a Project</span>
               <ArrowUpRight size={13} className="shrink-0" />
@@ -279,7 +310,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         className="relative w-full min-h-[100svh] h-[100svh] overflow-hidden select-none bg-[#0a0a0a]"
       >
         {/* Dominant Full-Screen Photography (Focal positioning on architectural cabinetry) */}
-        <div className="absolute inset-0 w-full h-full overflow-hidden">
+        <div ref={bgWrapRef} className="absolute inset-0 w-full h-full overflow-hidden will-change-transform">
           <img 
             ref={bgImageRef}
             src="/images/hero-kitchen.webp"
@@ -308,7 +339,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         />
 
         {/* Uninterrupted Photography Stage: Content positioned at Lower Left (7vw, 10vh) with Deliberate Vertical Rhythm */}
-        <div className="absolute inset-0 z-10 flex flex-col justify-end pointer-events-none pb-[9vh] sm:pb-[11vh] pl-[6vw] sm:pl-[7vw] pr-6 md:pr-12">
+        <div ref={contentRef} className="absolute inset-0 z-10 flex flex-col justify-end pointer-events-none pb-[9vh] sm:pb-[11vh] pl-[6vw] sm:pl-[7vw] pr-6 md:pr-12">
           <div className="pointer-events-auto max-w-[620px] w-full flex flex-col items-start">
             
             {/* Eyebrow */}
@@ -345,8 +376,9 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
               <div className="flex w-full flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
                 <button
                   id="hero-primary-cta"
+                  ref={primaryCtaRef}
                   onClick={() => onNavigate(View.HOME, 'contact')}
-                  className="h-[48px] px-8 bg-[#c5a059] text-white font-sans font-semibold text-[12px] sm:text-[13px] tracking-[0.18em] uppercase rounded-sm hover:bg-[#b48f48] active:scale-[0.98] transition-all duration-300 cursor-pointer flex items-center justify-center gap-2"
+                  className="btn-sheen h-[48px] px-8 bg-[#c5a059] text-white font-sans font-semibold text-[12px] sm:text-[13px] tracking-[0.18em] uppercase rounded-sm hover:bg-[#b48f48] active:scale-[0.98] transition-all duration-300 cursor-pointer flex items-center justify-center gap-2"
                 >
                   <span>Get a free quote</span>
                   <ArrowUpRight size={15} className="shrink-0" />
@@ -354,11 +386,12 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
 
                 <a
                   id="hero-whatsapp-cta"
+                  ref={whatsappCtaRef}
                   href={bookUrl('hero')}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => track('hero')}
-                  className="h-[48px] px-7 bg-white text-[#1a1a1a] font-sans font-semibold text-[12px] sm:text-[13px] tracking-[0.18em] uppercase rounded-sm hover:bg-[#f5efe3] active:scale-[0.98] transition-all duration-300 cursor-pointer flex items-center justify-center gap-2.5"
+                  className="btn-sheen btn-sheen-gold h-[48px] px-7 bg-white text-[#1a1a1a] font-sans font-semibold text-[12px] sm:text-[13px] tracking-[0.18em] uppercase rounded-sm hover:bg-[#f5efe3] active:scale-[0.98] transition-all duration-300 cursor-pointer flex items-center justify-center gap-2.5"
                 >
                   <WhatsAppIcon className="h-5 w-5 shrink-0" />
                   <span>WhatsApp us</span>

@@ -188,9 +188,10 @@ function App() {
         if (sectionId) {
           const destSection = document.getElementById(sectionId);
           if (destSection) {
+            // Transform-only (no filter): filters repaint the whole section and can stutter on phones
             gsap.fromTo(destSection,
-              { scale: 0.985, filter: "brightness(1.04)" },
-              { scale: 1, filter: "brightness(1)", duration: 0.8, ease: "power2.out" }
+              { scale: 0.985 },
+              { scale: 1, duration: 0.9, ease: "expo.out" }
             );
           }
         }

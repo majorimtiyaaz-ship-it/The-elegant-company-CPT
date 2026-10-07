@@ -8,3 +8,32 @@
   --color-elegant-dark: #1a1a1a;
   --color-elegant-gray: #f4f4f4;
 }
+
+/* ---------- Motion polish: hover interactions ---------- */
+
+/* Light sweep across a button on hover. Colour via --sheen. Only on real hover devices. */
+.btn-sheen {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  --sheen: rgba(255, 255, 255, 0.38);
+}
+.btn-sheen.btn-sheen-gold {
+  --sheen: rgba(197, 160, 89, 0.45);
+}
+.btn-sheen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 38%, var(--sheen) 50%, transparent 62%);
+  transform: translateX(-130%);
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .btn-sheen::after {
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-sheen:hover::after {
+    transform: translateX(130%);
+  }
+}
