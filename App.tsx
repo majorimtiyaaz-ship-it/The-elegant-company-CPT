@@ -3,6 +3,7 @@ import { View } from './types';
 import { Hero } from './components/Hero';
 import { StatsCounter } from './components/StatsCounter';
 import { Awards } from './components/Awards';
+import { Services } from './components/Services';
 import { TableStory } from './components/TableStory';
 import { Portfolio } from './components/Portfolio';
 import { Process } from './components/Process';
@@ -239,6 +240,7 @@ function App() {
             <div id="home" className="scroll-mt-0">
               <Hero onNavigate={handleNavigate} />
             </div>
+            <Services />
             <StatsCounter />
             <Awards />
             <div id="portfolio" className="scroll-mt-20">
@@ -280,8 +282,8 @@ function App() {
       case 'home':
       default:
         return {
-          title: "The Elegant Company | Custom Furniture & Kitchen Installations Cape Town",
-          description: "The Elegant Company designs and installs custom furniture, built-in cupboards, kitchens, wardrobes, bedroom cabinets, TV units, and home improvement solutions across Cape Town. Get a free quotation today.",
+          title: "Custom Furniture & Kitchens Cape Town | The Elegant Company",
+          description: "Handcrafted custom furniture, kitchen installations, bedroom and built-in cabinets, and furniture restoration in Cape Town. Free quotes on WhatsApp.",
           keywords: "custom furniture Cape Town, kitchen installations Cape Town, built in cupboards Cape Town, bespoke furniture Cape Town, bedroom cupboards Cape Town, TV units Cape Town, wardrobes Cape Town, cabinet makers Cape Town, home improvement Cape Town, custom kitchens Cape Town, furniture restoration Cape Town",
           canonical: "/"
         };

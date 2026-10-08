@@ -2,6 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Mail, Phone, MapPin, AlertCircle } from 'lucide-react';
 import { TextReveal } from './TextReveal';
 import { RevealOnScroll } from './RevealOnScroll';
+import { WhatsAppIcon } from './WhatsAppIcon';
+import { whatsappUrl, track } from './BookCTA';
+
+// 16px text on phones stops iOS Safari zooming the page when a field is focused
+const fieldCls =
+  'w-full px-4 py-3 border border-stone-300 rounded-sm text-stone-900 text-base sm:text-sm bg-white focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-colors';
+const labelCls = 'block text-xs font-bold text-stone-700 uppercase tracking-[0.14em] mb-1.5';
 
 interface ContactProps {
   prefillData?: { details?: string };
@@ -43,6 +50,7 @@ export const Contact: React.FC<ContactProps> = ({ prefillData }) => {
       });
 
       if (response.ok) {
+        track('form', 'lead_form_submit');
         setStatus('succeeded');
         form.reset();
         setDetails('');
@@ -147,6 +155,16 @@ export const Contact: React.FC<ContactProps> = ({ prefillData }) => {
                   <p className="text-xs uppercase tracking-[0.2em] font-bold text-[#8c6517]">
                     “We respond within 24 hours”
                   </p>
+                  <a
+                    href={whatsappUrl('Hi, I just sent a quote request through your website and would like to send photos.')}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => track('form', 'book_click')}
+                    className="btn-sheen mt-7 inline-flex min-h-[50px] items-center justify-center gap-3 rounded-sm bg-[#1a1a1a] px-7 text-xs font-bold uppercase tracking-[0.18em] text-white transition-colors hover:bg-black"
+                  >
+                    <WhatsAppIcon className="h-5 w-5 shrink-0" />
+                    Send photos on WhatsApp
+                  </a>
                   <button 
                     onClick={() => setStatus('idle')}
                     className="mt-8 px-6 py-3 text-xs uppercase tracking-[0.18em] font-bold border border-stone-300 text-stone-700 hover:text-stone-900 hover:border-stone-900 transition-all duration-300 rounded-sm cursor-pointer"
@@ -163,130 +181,80 @@ export const Contact: React.FC<ContactProps> = ({ prefillData }) => {
                     </div>
                   )}
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div>
-                      <label htmlFor="firstName" className="block text-xs font-bold text-stone-700 uppercase tracking-[0.14em] mb-1.5">
-                        First Name *
-                      </label>
-                      <input 
-                        id="firstName"
-                        name="firstName" 
-                        type="text" 
-                        required 
-                        placeholder="e.g. Eleanor"
-                        className="w-full px-4 py-3 border border-stone-300 rounded-sm text-stone-900 text-sm focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-colors" 
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="lastName" className="block text-xs font-bold text-stone-700 uppercase tracking-[0.14em] mb-1.5">
-                        Last Name *
-                      </label>
-                      <input 
-                        id="lastName"
-                        name="lastName" 
-                        type="text" 
-                        required 
-                        placeholder="e.g. Vance"
-                        className="w-full px-4 py-3 border border-stone-300 rounded-sm text-stone-900 text-sm focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-colors" 
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div>
-                      <label htmlFor="email" className="block text-xs font-bold text-stone-700 uppercase tracking-[0.14em] mb-1.5">
-                        Email Address *
-                      </label>
-                      <input 
-                        id="email"
-                        name="email" 
-                        type="email" 
-                        required 
-                        placeholder="name@example.com"
-                        className="w-full px-4 py-3 border border-stone-300 rounded-sm text-stone-900 text-sm focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-colors" 
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="phone" className="block text-xs font-bold text-stone-700 uppercase tracking-[0.14em] mb-1.5">
-                        Phone / WhatsApp *
-                      </label>
-                      <input 
-                        id="phone"
-                        name="phone" 
-                        type="tel" 
-                        required 
-                        placeholder="073 000 0000"
-                        className="w-full px-4 py-3 border border-stone-300 rounded-sm text-stone-900 text-sm focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-colors" 
-                      />
-                    </div>
-                  </div>
+                  {/* Spam trap (hidden) and an email subject that is easy to spot */}
+                  <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+                  <input type="hidden" name="_subject" value="New quote request - The Elegant Company website" />
 
-                  <div>
-                    <label htmlFor="type" className="block text-xs font-bold text-stone-700 uppercase tracking-[0.14em] mb-1.5">
-                      Commission Category *
-                    </label>
-                    <select 
-                      id="type"
-                      name="type" 
-                      required 
-                      className="w-full px-4 py-3 border border-stone-300 rounded-sm text-stone-900 text-sm focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none bg-white transition-colors cursor-pointer"
-                    >
-                      <option value="">Select project type...</option>
-                      <option value="cupboards">Built-in Cupboards & Wardrobes</option>
-                      <option value="kitchen">Custom Kitchen Installation</option>
-                      <option value="table">Solid Hardwood Dining / Coffee Table</option>
-                      <option value="bench">Custom Wooden Bench</option>
-                      <option value="restoration">Antique Furniture Restoration</option>
-                      <option value="other">Other Bespoke Wood Creation</option>
-                    </select>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                      <label htmlFor="name" className={labelCls}>Your Name *</label>
+                      <input id="name" name="name" type="text" required autoComplete="name" placeholder="Your name" className={fieldCls} />
+                    </div>
+                    <div>
+                      <label htmlFor="phone" className={labelCls}>Phone / WhatsApp *</label>
+                      <input id="phone" name="phone" type="tel" inputMode="tel" required autoComplete="tel" placeholder="073 000 0000" className={fieldCls} />
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
-                      <label htmlFor="dimensions" className="block text-xs font-bold text-stone-700 uppercase tracking-[0.14em] mb-1.5">
-                        Approx. Dimensions
-                      </label>
-                      <input 
-                        id="dimensions"
-                        name="dimensions" 
-                        type="text" 
-                        placeholder="e.g. 2.4m x 1.0m or room size" 
-                        className="w-full px-4 py-3 border border-stone-300 rounded-sm text-stone-900 text-sm focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none transition-colors" 
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="finish" className="block text-xs font-bold text-stone-700 uppercase tracking-[0.14em] mb-1.5">
-                        Wood / Finish Choice
-                      </label>
-                      <select 
-                        id="finish"
-                        name="finish" 
-                        className="w-full px-4 py-3 border border-stone-300 rounded-sm text-stone-900 text-sm focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none bg-white transition-colors cursor-pointer"
-                      >
-                        <option value="">Select Preferred Finish...</option>
-                        <option value="walnut">American Walnut (Natural Satin)</option>
-                        <option value="french-oak">French Oak (Warm Honey)</option>
-                        <option value="nordic-ash">Nordic Ash (Pale Linen)</option>
-                        <option value="teak">Burmese Teak (Golden Amber)</option>
-                        <option value="other">Other / Undecided</option>
+                      <label htmlFor="type" className={labelCls}>What do you need? *</label>
+                      <select id="type" name="type" required className={fieldCls}>
+                        <option value="">Select project type...</option>
+                        <option value="cupboards">Built-in Cupboards & Wardrobes</option>
+                        <option value="kitchen">Custom Kitchen Installation</option>
+                        <option value="table">Solid Hardwood Dining / Coffee Table</option>
+                        <option value="bench">Custom Wooden Bench</option>
+                        <option value="restoration">Antique Furniture Restoration</option>
+                        <option value="other">Other Bespoke Wood Creation</option>
                       </select>
                     </div>
+                    <div>
+                      <label htmlFor="area" className={labelCls}>Suburb / Area</label>
+                      <input id="area" name="area" type="text" autoComplete="off" placeholder="e.g. Mitchells Plain" className={fieldCls} />
+                    </div>
                   </div>
 
                   <div>
-                    <label htmlFor="details" className="block text-xs font-bold text-stone-700 uppercase tracking-[0.14em] mb-1.5">
-                      Project Vision & Space Details
-                    </label>
-                    <textarea 
+                    <label htmlFor="details" className={labelCls}>Tell us about your project</label>
+                    <textarea
                       id="details"
-                      name="details" 
-                      rows={4}
+                      name="details"
+                      rows={3}
                       value={details}
                       onChange={(e) => setDetails(e.target.value)}
-                      placeholder="Describe your room, aesthetic preferences, special requirements, or inspiration..." 
-                      className="w-full px-4 py-3 border border-stone-300 rounded-sm text-stone-900 text-sm focus:border-[#c5a059] focus:ring-1 focus:ring-[#c5a059] outline-none resize-none transition-colors"
+                      placeholder="What would you like built or restored? You can send photos on WhatsApp afterwards."
+                      className={`${fieldCls} resize-none`}
                     />
                   </div>
+
+                  <div>
+                    <label htmlFor="email" className={labelCls}>Email (optional)</label>
+                    <input id="email" name="email" type="email" autoComplete="email" placeholder="name@example.com" className={fieldCls} />
+                  </div>
+
+                  <details className="group rounded-sm border border-stone-200 bg-[#faf8f5] px-4 py-3">
+                    <summary className="cursor-pointer select-none text-xs font-bold uppercase tracking-[0.14em] text-stone-700">
+                      Add size or finish (optional)
+                    </summary>
+                    <div className="mt-4 grid grid-cols-1 gap-5 md:grid-cols-2">
+                      <div>
+                        <label htmlFor="dimensions" className={labelCls}>Approx. Dimensions</label>
+                        <input id="dimensions" name="dimensions" type="text" placeholder="e.g. 2.4m x 1.0m or room size" className={fieldCls} />
+                      </div>
+                      <div>
+                        <label htmlFor="finish" className={labelCls}>Wood / Finish Choice</label>
+                        <select id="finish" name="finish" className={fieldCls}>
+                          <option value="">Select Preferred Finish...</option>
+                          <option value="walnut">American Walnut (Natural Satin)</option>
+                          <option value="french-oak">French Oak (Warm Honey)</option>
+                          <option value="nordic-ash">Nordic Ash (Pale Linen)</option>
+                          <option value="teak">Burmese Teak (Golden Amber)</option>
+                          <option value="other">Other / Undecided</option>
+                        </select>
+                      </div>
+                    </div>
+                  </details>
 
                   <button 
                     id="contact-submit-button"
@@ -307,7 +275,7 @@ export const Contact: React.FC<ContactProps> = ({ prefillData }) => {
                         <span>Transmitting Request...</span>
                       </>
                     ) : (
-                      <span>Submit Commission Request &rarr;</span>
+                      <span>Request my quote &rarr;</span>
                     )}
                   </button>
                 </form>

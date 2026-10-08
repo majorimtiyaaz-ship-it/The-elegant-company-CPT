@@ -1,19 +1,31 @@
 import React, { useEffect, useState } from 'react';
+import { Phone } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 
 const WHATSAPP_NUMBER = '27638980781';
 
-export type Source = 'sticky' | 'gallery' | 'hero' | 'table';
+export type Source = 'sticky' | 'gallery' | 'hero' | 'table' | 'services' | 'call' | 'form';
 
-export function bookUrl(source: Source) {
-  const text = `Hi, I'd like to book a call-out. (via website: ${source})`;
+export const PHONE_TEL = 'tel:0734851573';
+
+export function whatsappUrl(text: string) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 }
 
-export function track(source: Source) {
+// The table section's button says "call-out", so its message does too. Everywhere else the
+// page promises a free quote, so the pre-filled message asks for one (not the paid call-out).
+export function bookUrl(source: Source) {
+  const text =
+    source === 'table'
+      ? `Hi, I'd like to book a call-out. (via website: ${source})`
+      : `Hi, I'd like a quote for a project. (via website: ${source})`;
+  return whatsappUrl(text);
+}
+
+export function track(source: Source, event = 'book_click') {
   const w = window as any;
   if (typeof w.gtag === 'function') {
-    w.gtag('event', 'book_click', { source });
+    w.gtag('event', event, { source });
   }
 }
 
@@ -75,17 +87,28 @@ export const StickyBookBar: React.FC = () => {
       }`}
       style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
     >
+      <div className="mx-auto flex w-full max-w-md items-stretch gap-2">
       <a
         href={bookUrl('sticky')}
         target="_blank"
         rel="noopener noreferrer"
         onClick={() => track('sticky')}
         tabIndex={show ? 0 : -1}
-        className="mx-auto flex min-h-[52px] w-full max-w-md items-center justify-center gap-3 rounded-sm border border-[#c5a059] bg-[#1a1a1a] px-6 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-[0_12px_32px_rgba(0,0,0,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c5a059] focus-visible:ring-offset-2"
+        className="flex min-h-[52px] min-w-0 flex-1 items-center justify-center gap-3 rounded-sm border border-[#c5a059] bg-[#1a1a1a] px-6 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-[0_12px_32px_rgba(0,0,0,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c5a059] focus-visible:ring-offset-2"
       >
         <WhatsAppIcon className="h-6 w-6 shrink-0" />
         Book on WhatsApp
       </a>
+        <a
+          href={PHONE_TEL}
+          onClick={() => track('call', 'call_click')}
+          tabIndex={show ? 0 : -1}
+          aria-label="Call The Elegant Company"
+          className="flex min-h-[52px] w-[56px] shrink-0 items-center justify-center rounded-sm border border-[#c5a059] bg-white text-[#1a1a1a] shadow-[0_12px_32px_rgba(0,0,0,0.35)] transition-transform duration-200 active:scale-[0.96]"
+        >
+          <Phone className="h-5 w-5" aria-hidden="true" />
+        </a>
+      </div>
     </div>
   );
 };
