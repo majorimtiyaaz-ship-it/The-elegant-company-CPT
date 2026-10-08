@@ -4,7 +4,7 @@ import { WhatsAppIcon } from './WhatsAppIcon';
 
 const WHATSAPP_NUMBER = '27638980781';
 
-export type Source = 'sticky' | 'gallery' | 'hero' | 'table' | 'services' | 'call' | 'form';
+export type Source = 'sticky' | 'gallery' | 'hero' | 'table' | 'services' | 'call' | 'form' | 'contact';
 
 export const PHONE_TEL = 'tel:0734851573';
 

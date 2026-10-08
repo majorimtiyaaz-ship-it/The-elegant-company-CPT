@@ -122,13 +122,33 @@ export const Contact: React.FC<ContactProps> = ({ prefillData }) => {
 
                 <div className="flex items-start gap-4 p-4 bg-white border border-stone-200/80 rounded-sm shadow-sm">
                   <div className="w-10 h-10 rounded-sm bg-[#faf8f5] flex items-center justify-center text-[#8c6517] shrink-0 border border-stone-200">
+                    <WhatsAppIcon className="h-[18px] w-[18px]" />
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-base text-stone-900 font-semibold">WhatsApp</h3>
+                    <a
+                      href={whatsappUrl("Hi, I'd like a quote for a project. (via website: contact)")}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => track('contact')}
+                      className="text-stone-600 hover:text-[#8c6517] text-xs sm:text-sm mt-0.5 block transition-colors"
+                    >
+                      063 898 0781
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 p-4 bg-white border border-stone-200/80 rounded-sm shadow-sm">
+                  <div className="w-10 h-10 rounded-sm bg-[#faf8f5] flex items-center justify-center text-[#8c6517] shrink-0 border border-stone-200">
                     <Phone size={18} />
                   </div>
                   <div>
-                    <h3 className="font-serif text-base text-stone-900 font-semibold">
-                      Phone & WhatsApp
-                    </h3>
-                    <a href="tel:0734851573" className="text-stone-600 hover:text-[#8c6517] text-xs sm:text-sm mt-0.5 block transition-colors">
+                    <h3 className="font-serif text-base text-stone-900 font-semibold">Phone</h3>
+                    <a
+                      href="tel:0734851573"
+                      onClick={() => track('call', 'call_click')}
+                      className="text-stone-600 hover:text-[#8c6517] text-xs sm:text-sm mt-0.5 block transition-colors"
+                    >
                       073 485 1573
                     </a>
                   </div>
