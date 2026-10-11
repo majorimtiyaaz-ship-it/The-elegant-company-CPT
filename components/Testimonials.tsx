@@ -103,7 +103,7 @@ export const Testimonials: React.FC = () => {
             className="inline-flex min-h-[44px] items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#8c6517] transition-colors hover:text-stone-900"
           >
             See our reviews on Google
-            <ArrowUpRight size=14 aria-hidden="true" />
+            <ArrowUpRight size={14} aria-hidden="true" />
           </a>
         </div>
 
