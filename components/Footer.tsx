@@ -55,19 +55,19 @@ export const Footer: React.FC = () => {
           </p>
           <div className="flex gap-4">
             <a 
-              href="https://instagram.com" 
+              href="https://www.instagram.com/the_elegant_company/" 
               target="_blank" 
               rel="noreferrer" 
-              aria-label="Instagram"
+              aria-label="The Elegant Company on Instagram"
               className="footer-animate-item w-10 h-10 rounded-sm bg-stone-900 border border-stone-800 flex items-center justify-center text-stone-400 hover:text-[#c5a059] hover:border-[#c5a059] transition-all"
             >
               <Instagram size={18} />
             </a>
             <a 
-              href="https://facebook.com" 
+              href="https://www.facebook.com/profile.php?id=100076119347344" 
               target="_blank" 
               rel="noreferrer" 
-              aria-label="Facebook"
+              aria-label="The Elegant Company on Facebook"
               className="footer-animate-item w-10 h-10 rounded-sm bg-stone-900 border border-stone-800 flex items-center justify-center text-stone-400 hover:text-[#c5a059] hover:border-[#c5a059] transition-all"
             >
               <Facebook size={18} />
