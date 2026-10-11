@@ -1,5 +1,5 @@
 import React from 'react';
-import { Quote, Star } from 'lucide-react';
+import { Quote, Star, ArrowUpRight } from 'lucide-react';
 import { RevealOnScroll } from './RevealOnScroll';
 import { TextReveal } from './TextReveal';
 
@@ -93,6 +93,18 @@ export const Testimonials: React.FC = () => {
               </div>
             </RevealOnScroll>
           ))}
+        </div>
+
+        <div className="mt-10 text-center">
+          <a
+            href="https://maps.app.goo.gl/yeFH5gA9Yd3FA6M89"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-[44px] items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#8c6517] transition-colors hover:text-stone-900"
+          >
+            See our reviews on Google
+            <ArrowUpRight size=14 aria-hidden="true" />
+          </a>
         </div>
 
       </div>
