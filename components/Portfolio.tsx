@@ -186,6 +186,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
   const zoomRef = useRef<HTMLDivElement>(null);
   const specsRef = useRef<HTMLDivElement>(null);
   const panelTextRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const sheenRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const glideRef = useRef<gsap.core.Timeline | null>(null);
   const preloadedRef = useRef<Map<string, HTMLImageElement>>(new Map());
@@ -289,6 +291,37 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
     glideRef.current = tl;
     return () => { tl.kill(); };
   }, [selectedItem?.id]);
+
+  // Desktop hover: a gentle scale on the photograph and a single glass highlight sweep.
+  // Only for fine pointers with hover, and never for visitors who prefer reduced motion.
+  useEffect(() => {
+    if (!isOpen) return;
+    const stage = stageRef.current;
+    if (!stage) return;
+    const mm = gsap.matchMedia();
+    mm.add('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)', () => {
+      const onEnter = () => {
+        if (zoomRef.current) gsap.to(zoomRef.current, { scale: 1.03, duration: 0.6, ease: 'power2.out', overwrite: 'auto' });
+        const sheen = sheenRef.current;
+        if (sheen) {
+          gsap.killTweensOf(sheen);
+          gsap.fromTo(sheen, { xPercent: 0, opacity: 1 }, { xPercent: 320, duration: 0.9, ease: 'power2.inOut', onComplete: () => { gsap.set(sheen, { opacity: 0 }); } });
+        }
+      };
+      const onLeave = () => {
+        if (zoomRef.current) gsap.to(zoomRef.current, { scale: 1, duration: 0.6, ease: 'power2.out', overwrite: 'auto' });
+      };
+      stage.addEventListener('mouseenter', onEnter);
+      stage.addEventListener('mouseleave', onLeave);
+      return () => {
+        stage.removeEventListener('mouseenter', onEnter);
+        stage.removeEventListener('mouseleave', onLeave);
+        if (zoomRef.current) gsap.set(zoomRef.current, { scale: 1 });
+        if (sheenRef.current) { gsap.killTweensOf(sheenRef.current); gsap.set(sheenRef.current, { opacity: 0 }); }
+      };
+    });
+    return () => { mm.revert(); };
+  }, [isOpen]);
 
   // Warm the cache for the neighbouring projects while the browser is idle.
   useEffect(() => {
@@ -670,7 +703,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
 
             <div ref={gridRef} className="grid grid-cols-1 lg:grid-cols-12 max-h-[85vh] overflow-y-auto">
               {/* Left Column: Piece Image */}
-              <div className="lg:col-span-5 relative bg-stone-900 h-[300px] sm:h-[360px] lg:h-auto lg:min-h-[480px] overflow-hidden">
+              <div ref={stageRef} className="lg:col-span-5 relative bg-stone-900 h-[300px] sm:h-[360px] lg:h-auto lg:min-h-[480px] overflow-hidden">
                 {outgoing && (
                   <div ref={outgoingRef} className="absolute inset-0">
                     <img src={outgoing.src} alt="" aria-hidden="true" className="w-full h-full object-cover" />
@@ -686,6 +719,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
                     />
                   </div>
                 </div>
+                <div ref={sheenRef} aria-hidden="true" className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/2 -skew-x-12 opacity-0 z-[5] bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
                 <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-transparent to-transparent lg:hidden" />
                 {/* Glass information panel: a "faux frost" (translucent gradient, gold hairline, inner highlight)
                     with no backdrop-filter, so it stays cheap on phones and low-powered devices. */}
