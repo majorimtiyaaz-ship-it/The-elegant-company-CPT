@@ -261,6 +261,37 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
   const goToProjectRef = useRef(goToProject);
   goToProjectRef.current = goToProject;
 
+  // Swipe between projects (touch/pen only). The stage uses `touch-action: pan-y`, so vertical drags stay
+  // native scrolling; we only react to a clearly horizontal gesture and never call preventDefault.
+  const swipeRef = useRef<{ id: number; x: number; y: number; t: number; decided: boolean; horizontal: boolean } | null>(null);
+  const handleStagePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === 'mouse' || !canNavigate) return;
+    if ((e.target as HTMLElement).closest('button')) return;
+    swipeRef.current = { id: e.pointerId, x: e.clientX, y: e.clientY, t: performance.now(), decided: false, horizontal: false };
+  };
+  const handleStagePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const g = swipeRef.current;
+    if (!g || g.id !== e.pointerId || g.decided) return;
+    const dx = e.clientX - g.x;
+    const dy = e.clientY - g.y;
+    if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
+      g.decided = true;
+      g.horizontal = Math.abs(dx) > Math.abs(dy) * 1.5;
+      if (!g.horizontal) swipeRef.current = null; // vertical intent: leave it to native scrolling
+    }
+  };
+  const handleStagePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    const g = swipeRef.current;
+    swipeRef.current = null;
+    if (!g || g.id !== e.pointerId || !g.horizontal) return;
+    const dx = e.clientX - g.x;
+    const speed = Math.abs(dx) / Math.max(performance.now() - g.t, 1); // px per ms
+    if (Math.abs(dx) >= 40 || (Math.abs(dx) > 24 && speed > 0.5)) {
+      goToProject(dx < 0 ? 1 : -1);
+    }
+  };
+  const handleStagePointerCancel = () => { swipeRef.current = null; };
+
   const handleRequestQuote = (item: PortfolioItem) => {
     const details = `I am interested in a piece similar to the "${item.title}" from your portfolio.\n\nCategory: ${item.category}\nWood Species: ${item.woodSpecies || item.materials}\nFinish: ${item.woodFinish || item.materials}\nFinish Type: ${item.finishType || 'Standard'}\n\nAdditional requirements: `;
     setSelectedItem(null);
@@ -703,7 +734,14 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
 
             <div ref={gridRef} className="grid grid-cols-1 lg:grid-cols-12 max-h-[85vh] overflow-y-auto">
               {/* Left Column: Piece Image */}
-              <div ref={stageRef} className="lg:col-span-5 relative bg-stone-900 h-[300px] sm:h-[360px] lg:h-auto lg:min-h-[480px] overflow-hidden">
+              <div
+                ref={stageRef}
+                onPointerDown={handleStagePointerDown}
+                onPointerMove={handleStagePointerMove}
+                onPointerUp={handleStagePointerUp}
+                onPointerCancel={handleStagePointerCancel}
+                className="lg:col-span-5 relative bg-stone-900 h-[300px] sm:h-[360px] lg:h-auto lg:min-h-[480px] overflow-hidden touch-pan-y"
+              >
                 {outgoing && (
                   <div ref={outgoingRef} className="absolute inset-0">
                     <img src={outgoing.src} alt="" aria-hidden="true" className="w-full h-full object-cover" />
