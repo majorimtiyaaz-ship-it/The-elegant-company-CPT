@@ -178,6 +178,16 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
   const [announcement, setAnnouncement] = useState('');
   // Direction of the most recent project change (1 = next, -1 = previous, 0 = modal just opened).
   const navDirRef = useRef<0 | 1 | -1>(0);
+  // Viewer stage: the outgoing image stays mounted only while a glide is running.
+  const [outgoing, setOutgoing] = useState<{ src: string } | null>(null);
+  const incomingRef = useRef<HTMLDivElement>(null);
+  const outgoingRef = useRef<HTMLDivElement>(null);
+  const zoomRef = useRef<HTMLDivElement>(null);
+  const specsRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const glideRef = useRef<gsap.core.Timeline | null>(null);
+  const preloadedRef = useRef<Map<string, HTMLImageElement>>(new Map());
+  const navTokenRef = useRef(0);
 
   const getCategoryName = (cat: string) => {
     switch (cat) {
@@ -200,13 +210,48 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
   const viewerTotal = filteredItems.length;
   const canNavigate = viewerIndex !== -1 && viewerTotal > 1;
 
+  const preloadImage = (url: string) => {
+    let img = preloadedRef.current.get(url);
+    if (!img) {
+      img = new Image();
+      img.decoding = 'async';
+      img.src = url;
+      preloadedRef.current.set(url, img);
+    }
+    return img;
+  };
+
   const goToProject = (direction: 1 | -1) => {
-    if (!canNavigate) return;
+    if (!canNavigate || !selectedItem) return;
     const nextIndex = (viewerIndex + direction + viewerTotal) % viewerTotal;
     const next = filteredItems[nextIndex];
-    navDirRef.current = direction;
-    setAnnouncement(`Project ${nextIndex + 1} of ${viewerTotal}: ${next.title}`);
-    setSelectedItem(next);
+    const currentSrc = selectedItem.imageUrl;
+
+    const proceed = () => {
+      // A press during a glide finishes that glide instantly, so the viewer never makes anyone wait.
+      glideRef.current?.progress(1);
+      navDirRef.current = direction;
+      setOutgoing({ src: currentSrc });
+      setAnnouncement(`Project ${nextIndex + 1} of ${viewerTotal}: ${next.title}`);
+      setSelectedItem(next);
+    };
+
+    // Neighbours are preloaded when idle; if this one is not ready yet, wait briefly (max 350 ms).
+    const img = preloadImage(next.imageUrl);
+    if (img.complete) {
+      proceed();
+      return;
+    }
+    const token = ++navTokenRef.current;
+    let fired = false;
+    const go = () => {
+      if (fired || navTokenRef.current !== token) return;
+      fired = true;
+      proceed();
+    };
+    img.addEventListener('load', go, { once: true });
+    img.addEventListener('error', go, { once: true });
+    window.setTimeout(go, 350);
   };
   // Always-current reference so the long-lived key handler never uses stale state.
   const goToProjectRef = useRef(goToProject);
@@ -217,6 +262,40 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
     setSelectedItem(null);
     onNavigate(View.HOME, 'contact', { details });
   };
+
+  // Horizontal glide between projects. Runs only on project changes (direction !== 0), never on open.
+  useLayoutEffect(() => {
+    const dir = navDirRef.current;
+    if (!selectedItem || dir === 0) return;
+    const incoming = incomingRef.current;
+    if (!incoming) return;
+    if (gridRef.current) gridRef.current.scrollTop = 0;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const fade = gsap.fromTo(incoming, { opacity: 0 }, { opacity: 1, duration: 0.15, ease: 'none', onComplete: () => setOutgoing(null) });
+      return () => { fade.kill(); };
+    }
+
+    const out = outgoingRef.current;
+    // ~0.9 s starting point: moves immediately, settles gently (95% of travel by about 0.55 s).
+    const tl = gsap.timeline({ defaults: { ease: 'power2.out' }, onComplete: () => setOutgoing(null) });
+    tl.fromTo(incoming, { xPercent: dir * 100 }, { xPercent: 0, duration: 0.9 }, 0);
+    if (out) tl.fromTo(out, { xPercent: 0 }, { xPercent: -dir * 100, duration: 0.9 }, 0);
+    if (zoomRef.current) tl.fromTo(zoomRef.current, { xPercent: dir * 10 }, { xPercent: 0, duration: 1 }, 0);
+    if (specsRef.current) tl.fromTo(specsRef.current, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 0.1);
+    glideRef.current = tl;
+    return () => { tl.kill(); };
+  }, [selectedItem?.id]);
+
+  // Warm the cache for the neighbouring projects while the browser is idle.
+  useEffect(() => {
+    if (!canNavigate) return;
+    const urls = [1, -1].map(d => filteredItems[(viewerIndex + d + viewerTotal) % viewerTotal].imageUrl);
+    const w = window as any;
+    const run = () => urls.forEach(preloadImage);
+    const handle = w.requestIdleCallback ? w.requestIdleCallback(run) : window.setTimeout(run, 200);
+    return () => { w.cancelIdleCallback ? w.cancelIdleCallback(handle) : window.clearTimeout(handle); };
+  }, [selectedItem?.id]);
 
   // Close modal on Escape key
   useEffect(() => {
@@ -279,6 +358,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
     if (!isOpen) {
       navDirRef.current = 0;
       setAnnouncement('');
+      setOutgoing(null);
       return;
     }
     if (!modalRef.current) return;
@@ -583,14 +663,24 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
               <X size={18} />
             </button>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 max-h-[85vh] overflow-y-auto">
+            <div ref={gridRef} className="grid grid-cols-1 lg:grid-cols-12 max-h-[85vh] overflow-y-auto">
               {/* Left Column: Piece Image */}
-              <div className="lg:col-span-5 relative bg-stone-900 min-h-[280px] lg:min-h-full overflow-hidden flex items-center justify-center">
-                <img 
-                  src={selectedItem.imageUrl} 
-                  alt={selectedItem.title}
-                  className="w-full h-full object-cover max-h-[380px] lg:max-h-full"
-                />
+              <div className="lg:col-span-5 relative bg-stone-900 h-[300px] sm:h-[360px] lg:h-auto lg:min-h-[480px] overflow-hidden">
+                {outgoing && (
+                  <div ref={outgoingRef} className="absolute inset-0">
+                    <img src={outgoing.src} alt="" aria-hidden="true" className="w-full h-full object-cover" />
+                  </div>
+                )}
+                <div ref={incomingRef} className="absolute inset-0">
+                  <div ref={zoomRef} className="w-full h-full">
+                    <img
+                      src={selectedItem.imageUrl}
+                      alt={selectedItem.title}
+                      decoding="async"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-transparent to-transparent lg:hidden" />
                 <div className="absolute bottom-4 left-4 z-10">
                   <span className="inline-block px-3 py-1 bg-[#c5a059] text-stone-950 text-[10px] font-bold uppercase tracking-[0.2em] rounded-xs shadow-sm">
@@ -600,7 +690,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
               </div>
 
               {/* Right Column: Wood Types & Finish Specifications */}
-              <div className="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between space-y-6">
+              <div ref={specsRef} className="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between space-y-6">
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-[#c5a059] text-xs uppercase tracking-[0.24em] font-semibold">
