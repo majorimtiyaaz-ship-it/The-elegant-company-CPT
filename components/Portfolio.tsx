@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { PortfolioItem, View } from '../types';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -6,7 +6,7 @@ import { TextReveal } from './TextReveal';
 import { ScrollZoomImage } from './ScrollZoomImage';
 import { RevealOnScroll } from './RevealOnScroll';
 import { StaggerText } from './motion/StaggerText';
-import { X, Layers, Sparkles, ShieldCheck, ArrowRight, Eye, CheckCircle2, Sliders } from 'lucide-react';
+import { X, Layers, Sparkles, ShieldCheck, ArrowRight, Eye, CheckCircle2, Sliders, ChevronLeft, ChevronRight } from 'lucide-react';
 
 // Ensure ScrollTrigger is registered
 if (typeof window !== 'undefined') {
@@ -173,6 +173,11 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
   const bgParallaxImgRef = useRef<HTMLImageElement>(null);
   const ambientAccentsRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+  const isOpen = selectedItem !== null;
+  // Screen-reader announcement for project changes inside the viewer.
+  const [announcement, setAnnouncement] = useState('');
+  // Direction of the most recent project change (1 = next, -1 = previous, 0 = modal just opened).
+  const navDirRef = useRef<0 | 1 | -1>(0);
 
   const getCategoryName = (cat: string) => {
     switch (cat) {
@@ -190,6 +195,23 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
     return activeCategory === "All" || item.category === activeCategory;
   });
 
+  // --- Project viewer: step through the currently filtered projects (wraps around) ---
+  const viewerIndex = selectedItem ? filteredItems.findIndex(i => i.id === selectedItem.id) : -1;
+  const viewerTotal = filteredItems.length;
+  const canNavigate = viewerIndex !== -1 && viewerTotal > 1;
+
+  const goToProject = (direction: 1 | -1) => {
+    if (!canNavigate) return;
+    const nextIndex = (viewerIndex + direction + viewerTotal) % viewerTotal;
+    const next = filteredItems[nextIndex];
+    navDirRef.current = direction;
+    setAnnouncement(`Project ${nextIndex + 1} of ${viewerTotal}: ${next.title}`);
+    setSelectedItem(next);
+  };
+  // Always-current reference so the long-lived key handler never uses stale state.
+  const goToProjectRef = useRef(goToProject);
+  goToProjectRef.current = goToProject;
+
   const handleRequestQuote = (item: PortfolioItem) => {
     const details = `I am interested in a piece similar to the "${item.title}" from your portfolio.\n\nCategory: ${item.category}\nWood Species: ${item.woodSpecies || item.materials}\nFinish: ${item.woodFinish || item.materials}\nFinish Type: ${item.finishType || 'Standard'}\n\nAdditional requirements: `;
     setSelectedItem(null);
@@ -201,6 +223,9 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setSelectedItem(null);
+      } else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        goToProjectRef.current(e.key === 'ArrowRight' ? 1 : -1);
       }
     };
     if (selectedItem) {
@@ -248,16 +273,22 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
     return () => mm.revert();
   }, [activeCategory]);
 
-  // Modal entrance animation
+  // Modal entrance animation: plays only when the modal opens (not on every project change),
+  // and is skipped for visitors who prefer reduced motion.
   useEffect(() => {
-    if (selectedItem && modalRef.current) {
-      gsap.fromTo(
-        modalRef.current,
-        { scale: 0.95, opacity: 0, y: 20 },
-        { scale: 1, opacity: 1, y: 0, duration: 0.35, ease: 'power3.out' }
-      );
+    if (!isOpen) {
+      navDirRef.current = 0;
+      setAnnouncement('');
+      return;
     }
-  }, [selectedItem]);
+    if (!modalRef.current) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    gsap.fromTo(
+      modalRef.current,
+      { scale: 0.95, opacity: 0, y: 20 },
+      { scale: 1, opacity: 1, y: 0, duration: 0.35, ease: 'power3.out' }
+    );
+  }, [isOpen]);
 
   // Scroll-Triggered Parallax Effect using GSAP ScrollTrigger
   useEffect(() => {
@@ -534,6 +565,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
           aria-modal="true"
           aria-labelledby="modal-piece-title"
         >
+          <div className="sr-only" role="status" aria-live="polite">{announcement}</div>
           <div 
             ref={modalRef}
             id="portfolio-item-modal-card"
