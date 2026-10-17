@@ -185,6 +185,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
   const outgoingRef = useRef<HTMLDivElement>(null);
   const zoomRef = useRef<HTMLDivElement>(null);
   const specsRef = useRef<HTMLDivElement>(null);
+  const panelTextRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const glideRef = useRef<gsap.core.Timeline | null>(null);
   const preloadedRef = useRef<Map<string, HTMLImageElement>>(new Map());
@@ -283,6 +284,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
     tl.fromTo(incoming, { xPercent: dir * 100 }, { xPercent: 0, duration: 0.9 }, 0);
     if (out) tl.fromTo(out, { xPercent: 0 }, { xPercent: -dir * 100, duration: 0.9 }, 0);
     if (zoomRef.current) tl.fromTo(zoomRef.current, { xPercent: dir * 10 }, { xPercent: 0, duration: 1 }, 0);
+    if (panelTextRef.current) tl.fromTo(panelTextRef.current, { opacity: 0, x: dir * 18 }, { opacity: 1, x: 0, duration: 0.55, ease: 'power3.out' }, 0.08);
     if (specsRef.current) tl.fromTo(specsRef.current, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 0.1);
     glideRef.current = tl;
     return () => { tl.kill(); };
@@ -685,10 +687,42 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
                   </div>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-transparent to-transparent lg:hidden" />
-                <div className="absolute bottom-4 left-4 z-10">
-                  <span className="inline-block px-3 py-1 bg-[#c5a059] text-stone-950 text-[10px] font-bold uppercase tracking-[0.2em] rounded-xs shadow-sm">
-                    {selectedItem.category}
-                  </span>
+                {/* Glass information panel: a "faux frost" (translucent gradient, gold hairline, inner highlight)
+                    with no backdrop-filter, so it stays cheap on phones and low-powered devices. */}
+                <div className="absolute left-3 right-3 bottom-3 sm:left-4 sm:right-4 sm:bottom-4 z-10 rounded-sm border border-[#c5a059]/25 bg-gradient-to-br from-stone-950/85 via-stone-950/70 to-stone-900/60 shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_8px_24px_rgba(0,0,0,0.35)]">
+                  <div ref={panelTextRef} className="flex items-center justify-between gap-3 p-3">
+                    <div className="min-w-0">
+                      <span className="inline-block px-2.5 py-0.5 bg-[#c5a059] text-stone-950 text-[10px] font-bold uppercase tracking-[0.2em] rounded-xs">
+                        {selectedItem.category}
+                      </span>
+                      <p aria-hidden="true" className="mt-1.5 text-sm font-serif text-white truncate">{selectedItem.title}</p>
+                      {canNavigate && (
+                        <p aria-hidden="true" className="mt-0.5 text-[11px] tracking-[0.18em] text-stone-400 font-mono">
+                          {String(viewerIndex + 1).padStart(2, '0')} / {String(viewerTotal).padStart(2, '0')}
+                        </p>
+                      )}
+                    </div>
+                    {canNavigate && (
+                      <div className="flex gap-2 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => goToProject(-1)}
+                          aria-label="Previous project"
+                          className="w-11 h-11 flex items-center justify-center rounded-sm border border-[#c5a059]/40 bg-stone-950/60 text-[#c5a059] hover:bg-[#c5a059] hover:text-stone-950 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5a059]"
+                        >
+                          <ChevronLeft size={18} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => goToProject(1)}
+                          aria-label="Next project"
+                          className="w-11 h-11 flex items-center justify-center rounded-sm border border-[#c5a059]/40 bg-stone-950/60 text-[#c5a059] hover:bg-[#c5a059] hover:text-stone-950 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c5a059]"
+                        >
+                          <ChevronRight size={18} />
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
