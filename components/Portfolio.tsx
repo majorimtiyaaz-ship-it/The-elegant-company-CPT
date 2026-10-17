@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { PortfolioItem, View } from '../types';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -636,7 +637,9 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
       </div>
 
       {/* WOOD TYPES & FINISHES MODAL POPUP */}
-      {selectedItem && (
+      {/* Mounted on <body>: the section above keeps a CSS transform from the scroll-fade effect, which would
+          otherwise turn this `fixed` overlay into a section-relative one and push the dialog off-screen. */}
+      {selectedItem && createPortal(
         <div 
           id="portfolio-item-modal-backdrop"
           className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
@@ -796,7 +799,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </section>
   );
