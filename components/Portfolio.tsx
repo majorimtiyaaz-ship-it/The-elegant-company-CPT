@@ -263,6 +263,10 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
 
   // Swipe between projects (touch/pen only). The stage uses `touch-action: pan-y`, so vertical drags stay
   // native scrolling; we only react to a clearly horizontal gesture and never call preventDefault.
+  // Focus management: remember the viewed project so focus can return to its card on close.
+  const lastItemIdRef = useRef<number | null>(null);
+  const skipFocusReturnRef = useRef(false);
+  const wasOpenRef = useRef(false);
   const swipeRef = useRef<{ id: number; x: number; y: number; t: number; decided: boolean; horizontal: boolean } | null>(null);
   const handleStagePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.pointerType === 'mouse' || !canNavigate) return;
@@ -294,6 +298,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
 
   const handleRequestQuote = (item: PortfolioItem) => {
     const details = `I am interested in a piece similar to the "${item.title}" from your portfolio.\n\nCategory: ${item.category}\nWood Species: ${item.woodSpecies || item.materials}\nFinish: ${item.woodFinish || item.materials}\nFinish Type: ${item.finishType || 'Standard'}\n\nAdditional requirements: `;
+    skipFocusReturnRef.current = true; // the page is about to scroll to the contact form; don't pull focus back
     setSelectedItem(null);
     onNavigate(View.HOME, 'contact', { details });
   };
@@ -364,6 +369,26 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
     return () => { w.cancelIdleCallback ? w.cancelIdleCallback(handle) : window.clearTimeout(handle); };
   }, [selectedItem?.id]);
 
+  // Dialog focus: move focus into the dialog when it opens, and back to the project's card when it closes.
+  useEffect(() => {
+    if (selectedItem) lastItemIdRef.current = selectedItem.id;
+  }, [selectedItem?.id]);
+  useEffect(() => {
+    if (isOpen) {
+      wasOpenRef.current = true;
+      modalRef.current?.focus({ preventScroll: true });
+      return;
+    }
+    if (!wasOpenRef.current) return;
+    wasOpenRef.current = false;
+    if (skipFocusReturnRef.current) {
+      skipFocusReturnRef.current = false;
+      return;
+    }
+    const card = lastItemIdRef.current !== null ? document.getElementById(`portfolio-item-${lastItemIdRef.current}`) : null;
+    card?.focus({ preventScroll: true });
+  }, [isOpen]);
+
   // Close modal on Escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -372,6 +397,26 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
       } else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
         e.preventDefault();
         goToProjectRef.current(e.key === 'ArrowRight' ? 1 : -1);
+      } else if (e.key === 'Tab' && modalRef.current) {
+        // Keep keyboard focus inside the open dialog.
+        const focusable = Array.from<HTMLElement>(
+          modalRef.current.querySelectorAll<HTMLElement>('button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
+        ).filter(el => el.getClientRects().length > 0);
+        if (focusable.length === 0) {
+          e.preventDefault();
+          return;
+        }
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        const active = document.activeElement as HTMLElement | null;
+        const inside = !!active && modalRef.current.contains(active);
+        if (e.shiftKey && (!inside || active === first || active === modalRef.current)) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && (!inside || active === last)) {
+          e.preventDefault();
+          first.focus();
+        }
       }
     };
     if (selectedItem) {
@@ -718,7 +763,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
           <div 
             ref={modalRef}
             id="portfolio-item-modal-card"
-            className="relative w-full max-w-4xl bg-stone-950 text-white rounded-sm border border-stone-800 shadow-2xl overflow-hidden my-auto"
+            tabIndex={-1}
+            className="relative w-full max-w-4xl bg-stone-950 text-white rounded-sm border border-stone-800 shadow-2xl overflow-hidden my-auto outline-none"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
