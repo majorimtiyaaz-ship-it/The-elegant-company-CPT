@@ -748,12 +748,14 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
       </div>
 
       {/* WOOD TYPES & FINISHES MODAL POPUP */}
+      {/* Overlay blur is kept only for fine-pointer desktops; touch devices get a solid dark overlay because a
+          full-screen backdrop blur was the main frame-time cost during project glides in testing. */}
       {/* Mounted on <body>: the section above keeps a CSS transform from the scroll-fade effect, which would
           otherwise turn this `fixed` overlay into a section-relative one and push the dialog off-screen. */}
       {selectedItem && createPortal(
         <div 
           id="portfolio-item-modal-backdrop"
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
+          className="fixed inset-0 z-50 bg-black/90 [@media(hover:hover)_and_(pointer:fine)]:bg-black/80 [@media(hover:hover)_and_(pointer:fine)]:backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
           onClick={() => setSelectedItem(null)}
           role="dialog"
           aria-modal="true"
