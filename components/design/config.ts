@@ -1,5 +1,5 @@
 export type PieceType = 'dining' | 'coffee' | 'bench';
-export type WoodKey = 'walnut' | 'oak' | 'ebonised' | 'piano';
+export type WoodKey = 'walnut' | 'oak';
 
 export const PIECES: Array<{ key: PieceType; label: string; noun: string }> = [
   { key: 'dining', label: 'Dining table', noun: 'dining table' },
@@ -10,8 +10,6 @@ export const PIECES: Array<{ key: PieceType; label: string; noun: string }> = [
 export const WOOD_OPTIONS: Array<{ key: WoodKey; label: string; swatch: string }> = [
   { key: 'walnut', label: 'Walnut', swatch: '#5b3a22' },
   { key: 'oak', label: 'Oak', swatch: '#c9a06a' },
-  { key: 'ebonised', label: 'Ebonised Oak', swatch: '#26211c' },
-  { key: 'piano', label: 'Piano Black', swatch: '#0a0a0c' },
 ];
 
 // Slider limits and defaults in centimetres: [min, max, default]

@@ -32,8 +32,6 @@ interface WoodDef {
 export const WOODS: Record<WoodKey, WoodDef> = {
   walnut: { dark: '#472b18', light: '#855a34', tint: 0xffffff, rough: 0.62, coat: 0.1, coatRough: 0.55 },
   oak: { dark: '#a97c4a', light: '#d9b787', tint: 0xf2ece4, rough: 0.6, coat: 0.08, coatRough: 0.6 },
-  ebonised: { dark: '#171412', light: '#3b342d', tint: 0xffffff, rough: 0.5, coat: 0.15, coatRough: 0.5 },
-  piano: { dark: '#000000', light: '#000000', tint: 0xffffff, rough: 0.16, coat: 1, coatRough: 0.06, solid: 0x0a0a0c },
 };
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
