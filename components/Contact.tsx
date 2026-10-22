@@ -1,9 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Mail, Phone, MapPin, AlertCircle } from 'lucide-react';
 import { TextReveal } from './TextReveal';
 import { RevealOnScroll } from './RevealOnScroll';
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { whatsappUrl, track } from './BookCTA';
+import { getAttribution } from '../lib/attribution';
+
+// One unique ID per enquiry, so a retried submission can never create a duplicate lead.
+const newSubmissionId = () =>
+  typeof crypto !== 'undefined' && 'randomUUID' in crypto
+    ? crypto.randomUUID()
+    : `sub-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}-web`;
 
 // 16px text on phones stops iOS Safari zooming the page when a field is focused
 const fieldCls =
@@ -18,6 +25,7 @@ export const Contact: React.FC<ContactProps> = ({ prefillData }) => {
   const [details, setDetails] = useState('');
   const [status, setStatus] = useState<'idle' | 'submitting' | 'succeeded' | 'failed'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const submissionId = useRef<string>(newSubmissionId());
 
   useEffect(() => {
     if (prefillData?.details) {
@@ -39,6 +47,30 @@ export const Contact: React.FC<ContactProps> = ({ prefillData }) => {
       data[key] = value.toString();
     });
 
+    // 1) Save the enquiry in the CRM. If it is rejected as invalid or rate-limited, tell the visitor.
+    //    If the CRM is simply unreachable, carry on: the email below is still sent as a backup.
+    let crmSaved = false;
+    try {
+      const crmRes = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, submission_id: submissionId.current, attribution: getAttribution() }),
+      });
+      if (crmRes.ok) {
+        crmSaved = true;
+      } else if (crmRes.status === 400 || crmRes.status === 429) {
+        const result = await crmRes.json().catch(() => ({}));
+        setErrorMessage(result.error || 'Please check your details and try again.');
+        setStatus('failed');
+        return;
+      }
+    } catch (err) {
+      // network error: fall through to the email backup
+    }
+
+    // 2) Email notification (Formspree), kept exactly as before. It also flags a failed CRM save.
+    let emailSent = false;
+    let emailError = '';
     try {
       const response = await fetch('https://formspree.io/f/xeeweynw', {
         method: 'POST',
@@ -46,25 +78,29 @@ export const Contact: React.FC<ContactProps> = ({ prefillData }) => {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify({ ...data, crm_saved: crmSaved ? 'yes' : 'NO - not saved in the CRM, please add it manually' })
       });
-
       if (response.ok) {
-        track('form', 'lead_form_submit');
-        setStatus('succeeded');
-        form.reset();
-        setDetails('');
+        emailSent = true;
       } else {
-        const result = await response.json();
-        if (result.errors) {
-          setErrorMessage(result.errors.map((err: any) => err.message).join(', '));
-        } else {
-          setErrorMessage('Failed to send consultation request. Please try again.');
-        }
-        setStatus('failed');
+        const result = await response.json().catch(() => ({}));
+        emailError = result.errors
+          ? result.errors.map((err: any) => err.message).join(', ')
+          : 'Failed to send consultation request. Please try again.';
       }
     } catch (err) {
-      setErrorMessage('A network error occurred. Please check your connection.');
+      emailError = 'A network error occurred. Please check your connection.';
+    }
+
+    // Success is shown only if the enquiry genuinely reached the CRM or your inbox.
+    if (crmSaved || emailSent) {
+      track('form', 'lead_form_submit');
+      setStatus('succeeded');
+      form.reset();
+      setDetails('');
+      submissionId.current = newSubmissionId();
+    } else {
+      setErrorMessage(emailError || 'Failed to send consultation request. Please try again.');
       setStatus('failed');
     }
   };
@@ -298,6 +334,9 @@ export const Contact: React.FC<ContactProps> = ({ prefillData }) => {
                       <span>Request my quote &rarr;</span>
                     )}
                   </button>
+                  <p className="text-[11px] leading-relaxed text-stone-500 text-center">
+                    By sending this request you agree that The Elegant Company may contact you about your enquiry and keep these details for that purpose.
+                  </p>
                 </form>
               )}
             </RevealOnScroll>
