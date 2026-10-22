@@ -184,7 +184,7 @@ export const DesignYourPiece: React.FC = () => {
   const href = useMemo(
     () =>
       whatsappUrl(
-        `Hi, I'd like a quote for a custom ${pieceNoun}: ${dims.length} cm long, ${dims.width} cm wide, ${dims.height} cm high, in ${woodLabel}. (Designed on your website)`
+        `Hi, I'd like a quote for a custom ${pieceNoun}: ${dims.length} cm long, ${dims.width} cm wide, ${dims.height} cm high, in ${woodLabel}. Please send me a price. (Designed on your website)`
       ),
     [pieceNoun, dims, woodLabel]
   );
@@ -313,6 +313,10 @@ export const DesignYourPiece: React.FC = () => {
             </fieldset>
 
             <div>
+              <div className="mb-4 flex items-baseline justify-between border-t border-stone-300/70 pt-4">
+                <span className="text-sm text-stone-700">Price</span>
+                <span className="font-serif text-lg text-stone-900">Price on request</span>
+              </div>
               <a
                 href={href}
                 target="_blank"
@@ -324,7 +328,7 @@ export const DesignYourPiece: React.FC = () => {
                 Send my design on WhatsApp
               </a>
               <p className="mt-3 text-center text-xs text-stone-500">
-                Free quote from your design. A R550 call-out fee applies to site visits.
+                Every piece is made to order. We confirm your price after reviewing your design. A R550 call-out fee applies to site visits.
               </p>
             </div>
           </div>
