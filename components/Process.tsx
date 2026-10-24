@@ -45,7 +45,7 @@ const CUSTOM_FURNITURE_STEPS: ProcessStep[] = [
   {
     id: 2,
     num: "02",
-    title: "Eco-Sourced Material Selection",
+    title: "Material Selection",
     subtitle: "Choosing Solid Hardwoods",
     description: "Touch and select solid hardwoods such as Walnut, French Oak, Ash or Teak. We align continuous wood figure lines and match timber grains to suit your home's character.",
     icon: <Layers size={24} className="text-elegant-gold" />
