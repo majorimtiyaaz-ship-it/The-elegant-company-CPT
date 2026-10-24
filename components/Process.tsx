@@ -47,7 +47,7 @@ const CUSTOM_FURNITURE_STEPS: ProcessStep[] = [
     num: "02",
     title: "Eco-Sourced Material Selection",
     subtitle: "Choosing Solid Hardwoods",
-    description: "Touch and select native hardwoods from our certified sustainable inventory (Walnut, French Oak, Ash, or Teak). We align continuous wood figure lines and match unique timber grains to match your home's character.",
+    description: "Touch and select solid hardwoods such as Walnut, French Oak, Ash or Teak. We align continuous wood figure lines and match timber grains to suit your home's character.",
     icon: <Layers size={24} className="text-elegant-gold" />
   },
   {
@@ -106,7 +106,7 @@ const RESTORATION_STEPS: ProcessStep[] = [
     num: "04",
     title: "Structural Glue-ups & Timber Fixes",
     subtitle: "Period-Correct Reconstruction",
-    description: "We disassemble fractured peg joints, apply traditional animal-hide or premium timber glues, and patch damaged voids using matching vintage timber fibers.",
+    description: "We disassemble fractured peg joints, apply traditional animal-hide or timber glues, and patch damaged voids using matching vintage timber fibers.",
     icon: <Hammer size={24} className="text-elegant-gold" />
   },
   {
@@ -321,7 +321,7 @@ export const Process: React.FC = () => {
               THE BESPOKE EXPERIENCE
             </span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-stone-900 mb-5 leading-tight">
-              <TextReveal text="Our Bespoke Method" />
+              <TextReveal text="Our Method" />
             </h2>
             <div className="w-16 h-[1.5px] bg-[#c5a059]/40 mx-auto mb-5" />
             <StaggerText
