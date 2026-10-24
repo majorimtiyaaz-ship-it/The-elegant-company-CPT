@@ -14,7 +14,7 @@ const SERVICES = [
   {
     icon: ChefHat,
     title: 'Kitchen Installation',
-    text: 'Bespoke kitchens, measured on site and installed by our team in Cape Town.',
+    text: 'Custom kitchens, measured on site and installed by our team in Cape Town.',
     ask: 'a kitchen installation',
   },
   {

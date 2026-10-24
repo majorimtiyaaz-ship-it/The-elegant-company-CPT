@@ -33,7 +33,7 @@ export const Contact: React.FC<ContactProps> = ({ prefillData }) => {
               <div className="flex items-start gap-3.5 p-4 bg-amber-50/70 border border-amber-200/80 rounded-sm mb-8">
                 <AlertCircle className="text-[#8c6517] shrink-0 mt-0.5" size={18} />
                 <p className="text-xs sm:text-[13px] text-stone-700 leading-relaxed">
-                  <span className="font-bold text-stone-900">Please Note:</span> We specialize in bespoke commissions such as custom built-in cupboards, luxury kitchens, dining tables, cabinetry, beds, and <span className="font-bold">custom wooden benches</span>. We do not manufacture standalone chairs, metal frames, or upholstery.
+                  <span className="font-bold text-stone-900">Please Note:</span> We specialize in custom work such as built-in cupboards, luxury kitchens, dining tables, cabinetry, beds, and <span className="font-bold">custom wooden benches</span>. We do not manufacture standalone chairs, metal frames, or upholstery.
                 </p>
               </div>
 

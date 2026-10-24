@@ -51,7 +51,7 @@ export const Footer: React.FC = () => {
           </div>
           
           <p className="text-stone-400 leading-relaxed mb-6 font-light text-sm sm:text-base max-w-md">
-            Bespoke furniture and custom installations crafted with integrity in Cape Town, South Africa. Designed for architectural harmony and generations of use.
+            Custom furniture and installations crafted with integrity in Cape Town, South Africa. Designed for architectural harmony and generations of use.
           </p>
           <div className="flex gap-4">
             <a 
@@ -124,7 +124,7 @@ export const Footer: React.FC = () => {
       <div className="container mx-auto max-w-7xl mt-12 pt-6 border-t border-stone-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-stone-500 text-xs">
         <p>&copy; {new Date().getFullYear()} The Elegant Company. All rights reserved.</p>
         <p className="text-stone-500 font-light">
-          Bespoke Furniture & Kitchen Installations · Cape Town
+          Custom Furniture & Kitchen Installations · Cape Town
         </p>
       </div>
     </footer>

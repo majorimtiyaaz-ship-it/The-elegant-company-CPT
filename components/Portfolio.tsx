@@ -91,7 +91,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     woodFinish: "Raw Sanded Timber / Pre-Treatment Ready for Custom Staining",
     finishType: "Bare Untreated Heartwood (0% Sheen)",
     constructionDetails: "100% stripped of oxidized historic varnish, water-popped grain hydration, structural joint tightening.",
-    careGuide: "Ready for custom bespoke finish application (natural oil, smoked oak, ebonized black, or custom tints)."
+    careGuide: "Ready for custom finish application (natural oil, smoked oak, ebonized black, or custom tints)."
   },
   { 
     id: 7, 
@@ -108,7 +108,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
   },
   { 
     id: 8, 
-    title: "Bespoke Entryway Bench", 
+    title: "Entryway Bench", 
     category: "Living Room", 
     imageUrl: "/images/1771076250919~2.webp",
     materials: "Solid White Oak, Natural Matte Hardwax",
@@ -587,7 +587,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
         <div className="text-center mb-14 md:mb-16">
           <RevealOnScroll duration={0.8}>
             <span className="text-[#8c6517] font-semibold tracking-[0.24em] uppercase mb-3 text-xs md:text-sm block">
-              OUR BESPOKE COLLECTION
+              OUR COLLECTION
             </span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-stone-900 mb-5 leading-tight">
               <TextReveal text="Mastery in Wood" />
@@ -649,7 +649,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
                 <div className="w-full h-full absolute inset-0 overflow-hidden">
                   <ScrollZoomImage 
                     src={item.imageUrl} 
-                    alt={`${item.title} - Bespoke ${item.category} crafted by The Elegant Company`} 
+                    alt={`${item.title} - ${item.category} crafted by The Elegant Company`} 
                     parallax
                   />
                 </div>

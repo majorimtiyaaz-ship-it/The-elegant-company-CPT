@@ -318,7 +318,7 @@ export const Process: React.FC = () => {
         <RevealOnScroll duration={0.8}>
           <div className="text-center mb-14 md:mb-16">
             <span className="text-[#8c6517] font-semibold tracking-[0.24em] uppercase mb-3 text-xs md:text-sm block">
-              THE BESPOKE EXPERIENCE
+              HOW WE WORK
             </span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-stone-900 mb-5 leading-tight">
               <TextReveal text="Our Method" />
@@ -449,7 +449,7 @@ export const Process: React.FC = () => {
                 Transparent Operations & Clarity
               </h3>
               <p className="text-stone-300 font-light leading-relaxed text-sm sm:text-base">
-                We believe bespoke craftsmanship starts with total transparency. To keep our high-end studio dedicated and our material selection pristine, we operate with structured local guidelines.
+                We believe good craftsmanship starts with total transparency. To keep our studio focused and our materials well chosen, we operate with structured local guidelines.
               </p>
             </div>
 

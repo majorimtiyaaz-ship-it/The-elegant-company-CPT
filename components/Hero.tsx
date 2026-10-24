@@ -347,7 +347,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
               ref={eyebrowRef}
               className="text-[#d6b779] font-sans text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.26em] m-0 mb-4 sm:mb-5"
             >
-              CAPE TOWN · BESPOKE STUDIO
+              CAPE TOWN · WOODWORK STUDIO
             </div>
 
             {/* Restrained Luxury Editorial Serif Headline */}
@@ -365,7 +365,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
               ref={subheadingRef}
               className="text-stone-300 font-sans font-light text-[15px] sm:text-[16px] leading-[1.5] tracking-wide max-w-[460px] m-0 mb-7 sm:mb-8"
             >
-              Bespoke kitchens, custom cabinetry and considered interiors, handcrafted in Cape Town.
+              Custom kitchens, cabinetry and considered interiors, handcrafted in Cape Town.
             </p>
 
             {/* CTA Composition: free quote + one-tap WhatsApp, then a quiet text link */}

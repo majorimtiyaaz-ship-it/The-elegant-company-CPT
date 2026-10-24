@@ -267,15 +267,15 @@ function App() {
     switch (activeSection) {
       case 'portfolio':
         return {
-          title: "Bespoke Furniture Collection | The Elegant Company Cape Town",
+          title: "Custom Furniture Collection | The Elegant Company Cape Town",
           description: "Browse our showcase of premium custom built-in cupboards, luxury kitchens, bedroom cabinets, wardrobes, and handcrafted wood creations across Cape Town.",
-          keywords: "custom furniture collection Cape Town, bespoke kitchens portfolio, custom wardrobes Cape Town, built in cupboards Cape Town",
+          keywords: "custom furniture collection Cape Town, custom kitchens portfolio, custom wardrobes Cape Town, built in cupboards Cape Town",
           canonical: "/#portfolio"
         };
       case 'contact':
         return {
           title: "Contact Us & Get a Free Quotation | The Elegant Company Cape Town",
-          description: "Contact The Elegant Company, based in Mitchells Plain, Cape Town, for bespoke furniture design, luxury kitchen installations, or to get a free custom cupboards quotation today.",
+          description: "Contact The Elegant Company, based in Mitchells Plain, Cape Town, for custom furniture design, luxury kitchen installations, or to get a free custom cupboards quotation today.",
           keywords: "contact custom furniture Cape Town, kitchen installation quote Cape Town, built in cupboards quotation Cape Town, carpentry consultation Cape Town",
           canonical: "/#contact"
         };
@@ -284,7 +284,7 @@ function App() {
         return {
           title: "Custom Furniture & Kitchens Cape Town | The Elegant Company",
           description: "Handcrafted custom furniture, kitchen installations, bedroom and built-in cabinets, and furniture restoration. Based in Mitchells Plain, Cape Town. Free quotes on WhatsApp.",
-          keywords: "custom furniture Cape Town, kitchen installations Cape Town, built in cupboards Cape Town, bespoke furniture Cape Town, bedroom cupboards Cape Town, TV units Cape Town, wardrobes Cape Town, cabinet makers Cape Town, home improvement Cape Town, custom kitchens Cape Town, furniture restoration Cape Town",
+          keywords: "custom furniture Cape Town, kitchen installations Cape Town, built in cupboards Cape Town, solid wood furniture Cape Town, bedroom cupboards Cape Town, TV units Cape Town, wardrobes Cape Town, cabinet makers Cape Town, home improvement Cape Town, custom kitchens Cape Town, furniture restoration Cape Town",
           canonical: "/"
         };
     }
