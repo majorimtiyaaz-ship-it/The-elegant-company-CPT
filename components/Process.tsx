@@ -46,14 +46,14 @@ const CUSTOM_FURNITURE_STEPS: ProcessStep[] = [
     id: 2,
     num: "02",
     title: "Eco-Sourced Material Selection",
-    subtitle: "Sourcing Premium Hardwoods",
+    subtitle: "Choosing Solid Hardwoods",
     description: "Touch and select native hardwoods from our certified sustainable inventory (Walnut, French Oak, Ash, or Teak). We align continuous wood figure lines and match unique timber grains to match your home's character.",
     icon: <Layers size={24} className="text-elegant-gold" />
   },
   {
     id: 3,
     num: "03",
-    title: "Bespoke Master Crafting",
+    title: "Master Crafting",
     subtitle: "Traditional Heritage Woodwork",
     description: "Artisans shape your timber inside our Cape Town workshop. We utilize durable mortise-and-tenon and interlocking dovetail joinery. Every surface is sculpted with strict, sub-millimeter timber alignment.",
     icon: <Hammer size={24} className="text-elegant-gold" />
