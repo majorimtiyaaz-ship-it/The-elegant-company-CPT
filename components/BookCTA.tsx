@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Phone } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 
-const WHATSAPP_NUMBER = '27638980781';
+const WHATSAPP_NUMBER = '27734851573';
 
 export type Source = 'sticky' | 'gallery' | 'hero' | 'table' | 'services' | 'call' | 'form' | 'contact';
 

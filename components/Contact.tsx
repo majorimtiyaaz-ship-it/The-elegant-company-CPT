@@ -75,7 +75,7 @@ export const Contact: React.FC<ContactProps> = ({ prefillData }) => {
                       onClick={() => track('contact')}
                       className="text-stone-600 hover:text-[#8c6517] text-xs sm:text-sm mt-0.5 block transition-colors"
                     >
-                      063 898 0781
+                      073 485 1573
                     </a>
                   </div>
                 </div>
