@@ -113,7 +113,7 @@ export const Footer: React.FC = () => {
             Cape Town Studio
           </h4>
           <p className="text-stone-400 text-sm leading-relaxed mb-3">
-            Whitehall Close, Portland<br />Cape Town, 7785<br />Western Cape, South Africa
+            Whitehall Close, Portland<br />Mitchells Plain, Cape Town, 7785<br />Western Cape, South Africa
           </p>
           <p className="text-xs text-stone-500 font-mono mt-4">
             Mon – Fri: 08:00 – 17:00<br />Sat: By Site Appointment

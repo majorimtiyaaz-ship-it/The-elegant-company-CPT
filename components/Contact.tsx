@@ -26,7 +26,7 @@ export const Contact: React.FC<ContactProps> = ({ prefillData }) => {
               </h2>
               <div className="w-16 h-[1.5px] bg-[#c5a059]/40 mb-5" />
               <p className="text-stone-600 text-sm sm:text-base mb-8 leading-relaxed font-light">
-                Let us elevate your home. Contact us for a professional design consultation and a free, detailed quotation.
+                Based in Mitchells Plain, Cape Town. Contact us for a professional design consultation and a free, detailed quotation.
               </p>
 
               {/* Disclaimer */}
@@ -46,7 +46,7 @@ export const Contact: React.FC<ContactProps> = ({ prefillData }) => {
                     <h3 className="font-serif text-base text-stone-900 font-semibold">
                       Workshop & Office
                     </h3>
-                    <p className="text-stone-600 text-xs sm:text-sm mt-0.5">Whitehall Close, Portland, Cape Town</p>
+                    <p className="text-stone-600 text-xs sm:text-sm mt-0.5">Whitehall Close, Portland, Mitchells Plain, Cape Town</p>
                   </div>
                 </div>
 
