@@ -69,9 +69,9 @@ const CUSTOM_FURNITURE_STEPS: ProcessStep[] = [
   {
     id: 5,
     num: "05",
-    title: "White-Glove Private Delivery",
-    subtitle: "Pristine Showcase Installation",
-    description: "Our dedicated transport team wraps, carries, and installs your new heirloom. We handle perfect layout leveling and complete a final surface polish right inside your designated living space.",
+    title: "Installation or Delivery",
+    subtitle: "The Final Stage",
+    description: "Your finished piece is carefully wrapped, delivered and put in place. We check that it sits level and finish with a final polish in your home.",
     icon: <Truck size={24} className="text-elegant-gold" />
   }
 ];
