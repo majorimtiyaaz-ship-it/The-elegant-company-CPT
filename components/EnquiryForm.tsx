@@ -2,6 +2,13 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AlertCircle } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { whatsappUrl, track } from './BookCTA';
+import { getAttribution } from '../lib/attribution';
+
+// One ID per enquiry, so a retried send can never create a duplicate lead in the CRM.
+const newSubmissionId = () =>
+  typeof crypto !== 'undefined' && 'randomUUID' in crypto
+    ? crypto.randomUUID()
+    : `sub-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}-web`;
 
 // Same Formspree endpoint the previous contact form used.
 const FORMSPREE_URL = 'https://formspree.io/f/xeeweynw';
@@ -106,6 +113,7 @@ export const EnquiryForm: React.FC<{ prefillDetails?: string }> = ({ prefillDeta
   const started = useRef(false);
   const sending = useRef(false);
   const mounted = useRef(false);
+  const submissionId = useRef<string>(newSubmissionId());
 
   useEffect(() => {
     if (prefillDetails) setAnswers((a) => ({ ...a, notes: prefillDetails }));
@@ -203,22 +211,53 @@ export const EnquiryForm: React.FC<{ prefillDetails?: string }> = ({ prefillDeta
       consent: 'Agreed (POPIA)',
       _subject: 'New quote request - The Elegant Company website (guided form)',
     };
+    // 1) Save to the CRM first (the CRM is the main record).
+    //    Invalid input or rate limiting is shown to the visitor. If the CRM is simply unreachable,
+    //    carry on: the email below still goes out and is flagged so the lead can be added by hand.
+    let crmSaved = false;
+    try {
+      const crmRes = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...payload, _gotcha: '', submission_id: submissionId.current, attribution: getAttribution() }),
+      });
+      if (crmRes.ok) {
+        crmSaved = true;
+      } else if (crmRes.status === 400 || crmRes.status === 429) {
+        const result = await crmRes.json().catch(() => ({}));
+        setError(result.error || 'Please check your details and try again.');
+        setPhase('review');
+        sending.current = false;
+        return;
+      }
+    } catch {
+      // network error: fall through to the email backup
+    }
+
+    // 2) Email notification and backup (Formspree), as before.
+    let emailSent = false;
     try {
       const res = await fetch(FORMSPREE_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ ...payload, crm_saved: crmSaved ? 'yes' : 'NO - not saved in the CRM, please add it manually' }),
       });
-      if (!res.ok) throw new Error('failed');
-      track('form', 'lead_form_submit');
-      setPhase('done');
+      emailSent = res.ok;
     } catch {
+      emailSent = false;
+    }
+
+    // Success is shown only if the enquiry genuinely reached the CRM or the inbox.
+    if (crmSaved || emailSent) {
+      track('form', 'lead_form_submit');
+      submissionId.current = newSubmissionId();
+      setPhase('done');
+    } else {
       track('form', 'form_error');
       setError('We could not send your enquiry. Please check your connection and try again, or message us on WhatsApp.');
       setPhase('review');
-    } finally {
-      sending.current = false;
     }
+    sending.current = false;
   };
 
   const waMessage = () =>
