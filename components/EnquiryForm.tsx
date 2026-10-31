@@ -3,6 +3,14 @@ import { AlertCircle } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { whatsappUrl, track } from './BookCTA';
 import { getAttribution } from '../lib/attribution';
+import { ServiceArt, ART_CSS, ArtKind } from './ServiceArt';
+
+const ART_KIND: Record<string, ArtKind> = { restoration: 'restoration', custom: 'custom', kitchen: 'kitchen' };
+const SERVICE_SUB: Record<string, string> = {
+  restoration: 'Repair, refinish and renew',
+  custom: 'Made to order in solid wood',
+  kitchen: 'New, replacement or upgrade',
+};
 
 // One ID per enquiry, so a retried send can never create a duplicate lead in the CRM.
 const newSubmissionId = () =>
@@ -114,6 +122,7 @@ export const EnquiryForm: React.FC<{ prefillDetails?: string }> = ({ prefillDeta
   const sending = useRef(false);
   const mounted = useRef(false);
   const submissionId = useRef<string>(newSubmissionId());
+  const [play, setPlay] = useState<Record<string, number>>({});
 
   useEffect(() => {
     if (prefillDetails) setAnswers((a) => ({ ...a, notes: prefillDetails }));
@@ -178,7 +187,10 @@ export const EnquiryForm: React.FC<{ prefillDetails?: string }> = ({ prefillDeta
     begin();
     set(step.id, o.value ?? o.label);
     setError('');
-    window.setTimeout(() => go(Math.min(idx + 1, steps.length - 1)), 200);
+    const isService = step.id === 'service';
+    if (isService) setPlay((p) => ({ ...p, [o.value ?? o.label]: (p[o.value ?? o.label] || 0) + 1 }));
+    const reduced = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    window.setTimeout(() => go(Math.min(idx + 1, steps.length - 1)), isService && !reduced ? 1300 : 200);
   };
 
   const back = () => {
@@ -294,7 +306,7 @@ export const EnquiryForm: React.FC<{ prefillDetails?: string }> = ({ prefillDeta
 
   return (
     <div className="flex flex-col">
-      <style>{`@keyframes ecIn{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:none}}.ec-pane{animation:ecIn .25s ease}@media (prefers-reduced-motion:reduce){.ec-pane{animation:none}}`}</style>
+      <style>{ART_CSS + `@keyframes ecIn{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:none}}.ec-pane{animation:ecIn .25s ease}@media (prefers-reduced-motion:reduce){.ec-pane{animation:none}}`}</style>
       <div className="h-[2px] bg-stone-200" role="progressbar" aria-label="Enquiry progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct}>
         <div className="h-full bg-[#c5a059] transition-[width] duration-300" style={{ width: `${pct}%` }} />
       </div>
@@ -305,7 +317,33 @@ export const EnquiryForm: React.FC<{ prefillDetails?: string }> = ({ prefillDeta
           <h3 tabIndex={-1} ref={headingRef} className="text-2xl font-serif text-stone-900 mb-2 outline-none">{step.title}</h3>
           {step.hint && <p className="text-sm text-stone-500 mb-4">{step.hint}</p>}
 
-          {step.kind === 'cards' && (
+          {step.kind === 'cards' && step.id === 'service' && (
+            <div className="grid gap-3 mt-5" role="group" aria-label={step.title}>
+              {step.options!.map((o) => {
+                const val = o.value ?? o.label;
+                const on = answers[step.id] === val;
+                return (
+                  <button
+                    key={o.label}
+                    type="button"
+                    aria-pressed={on}
+                    onClick={() => choose(o)}
+                    className={`flex w-full items-center gap-4 rounded-sm border bg-white p-3 pr-5 text-left cursor-pointer transition-all duration-300 focus-visible:outline-2 focus-visible:outline-[#c5a059] ${on ? 'border-[#c5a059] shadow-[0_0_0_1px_#c5a059]' : 'border-stone-300 hover:border-[#c5a059]/70'}`}
+                  >
+                    <span className="block w-[42%] max-w-[150px] shrink-0">
+                      <ServiceArt kind={ART_KIND[val]} on={on} play={play[val] || 0} />
+                    </span>
+                    <span className="block">
+                      <span className="block font-serif text-lg text-stone-900 leading-snug">{o.label}</span>
+                      <span className="mt-1 block text-xs text-stone-500">{SERVICE_SUB[val]}</span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {step.kind === 'cards' && step.id !== 'service' && (
             <div className="grid gap-2.5 mt-5" role="group" aria-label={step.title}>
               {step.options!.map((o) => {
                 const on = answers[step.id] === (o.value ?? o.label);
