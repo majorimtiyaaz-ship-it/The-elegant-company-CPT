@@ -39,7 +39,7 @@ const CUSTOM_FURNITURE_STEPS: ProcessStep[] = [
     num: "01",
     title: "Initial Design Consultation",
     subtitle: "Translating Vision Into Blueprints",
-    description: "Your journey starts with a personal consultation. We discuss your aesthetic desires, spatial dimensions, and functional needs, translating your project ideas into elegant scale drawings and precise layout diagrams with zero obligation.",
+    description: "Your journey starts with a personal consultation. We discuss your aesthetic desires, spatial dimensions, and functional needs, translating your project ideas into elegant scale drawings and precise layout diagrams.",
     icon: <MessageSquare size={24} className="text-elegant-gold" />
   },
   {

@@ -26,7 +26,7 @@ const SERVICES = [
   {
     icon: Hammer,
     title: 'Furniture Restoration',
-    text: 'Scratched, stained or tired pieces brought back to life. Send photos for a free quote. Collection and return delivery: R600.',
+    text: 'Scratched, stained or tired pieces brought back to life. Send photos to get started. Collection and return delivery: R600.',
     ask: 'furniture restoration',
   },
 ];
@@ -82,7 +82,7 @@ export const Services: React.FC = () => (
           <WhatsAppIcon className="h-6 w-6 shrink-0" />
           Discuss your project
         </a>
-        <p className="mt-3 text-xs text-stone-500">Free quote. A R550 call-out fee applies to site visits.</p>
+        <p className="mt-3 text-xs text-stone-500">R550 site visit, then a written quote.</p>
       </div>
     </div>
   </section>

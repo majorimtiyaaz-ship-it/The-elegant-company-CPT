@@ -13,7 +13,7 @@ export function whatsappUrl(text: string) {
 }
 
 // The table section's button says "call-out", so its message does too. Everywhere else the
-// page promises a free quote, so the pre-filled message asks for one (not the paid call-out).
+// page offers a quote, so the pre-filled message asks for one (not the paid call-out).
 export function bookUrl(source: Source) {
   const text =
     source === 'table'
@@ -121,7 +121,7 @@ export const GalleryCTA: React.FC = () => (
         Like what you see? Let's build yours.
       </h2>
       <p className="mt-4 text-base text-white/70 md:text-lg">
-        Free quote, no obligation. R550 applies if we need to visit. We reply within 24 hours.
+        R550 site visit, then a written quote. We reply within 24 hours.
       </p>
       <a
         href={bookUrl('gallery')}
