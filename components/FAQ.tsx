@@ -19,7 +19,7 @@ const GROUPS: Group[] = [
       },
       {
         q: 'How much is a site visit, and when can you come?',
-        a: 'A site visit costs R550, the same in every area we serve. The R550 is separate from the final price and is not deducted if you go ahead. We visit on weekends, usually within the same week that you get in touch.',
+        a: 'A site visit costs R550, the same in every area we serve. If you go ahead with the job, the R550 is deducted from your final price. We visit on weekends, usually within the same week that you get in touch.',
       },
       { q: 'How quickly will you reply?', a: 'Within 24 hours.' },
       {

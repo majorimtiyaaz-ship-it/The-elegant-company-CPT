@@ -82,7 +82,7 @@ export const Services: React.FC = () => (
           <WhatsAppIcon className="h-6 w-6 shrink-0" />
           Discuss your project
         </a>
-        <p className="mt-3 text-xs text-stone-500">R550 site visit, then a written quote.</p>
+        <p className="mt-3 text-xs text-stone-500">R550 site visit, deducted from your final price if you proceed.</p>
       </div>
     </div>
   </section>

@@ -133,7 +133,7 @@ const INSTALLATION_STEPS: ProcessStep[] = [
     num: "01",
     title: "Cape Town Laser Mapping Visit",
     subtitle: "Site Audit & R550 Call-out Fee",
-    description: "Our fitting lead visits your Cape Town site to scan wall plumb-lines, skirting offsets, and utility pipelines. This essential onsite blueprint scan costs R550.",
+    description: "Our fitting lead visits your Cape Town site to scan wall plumb-lines, skirting offsets, and utility pipelines. This essential onsite blueprint scan costs R550, deducted from your final price if you proceed.",
     icon: <Ruler size={24} className="text-elegant-gold" />
   },
   {
@@ -466,7 +466,7 @@ export const Process: React.FC = () => {
                   Site Audit & Laser Scan
                 </h4>
                 <p className="text-xs text-stone-300 leading-relaxed font-light">
-                  A standard R550 fee applies for physical Cape Town site visits (laser-mapping spaces, wood patina matching, taking exact measurements).
+                  A standard R550 fee applies for physical Cape Town site visits (laser-mapping spaces, wood patina matching, taking exact measurements). It is deducted from your final price if you proceed.
                 </p>
               </div>
 
