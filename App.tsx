@@ -8,6 +8,7 @@ import { TableStory } from './components/TableStory';
 import { Portfolio } from './components/Portfolio';
 import { Process } from './components/Process';
 import { Testimonials } from './components/Testimonials';
+import { FAQ } from './components/FAQ';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { WhatsAppButton } from './components/WhatsAppButton';
@@ -253,6 +254,9 @@ function App() {
             <TableStory />
             <div id="testimonials" className="scroll-mt-20">
               <Testimonials />
+            </div>
+            <div id="faq" className="scroll-mt-20">
+              <FAQ />
             </div>
             <div id="contact" className="scroll-mt-20">
               <Contact prefillData={contactPrefill} />
