@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View } from './types';
 import { Hero } from './components/Hero';
 import { StatsCounter } from './components/StatsCounter';
@@ -28,6 +28,15 @@ if (typeof window !== 'undefined') {
 // Eleanor (VoiceAssistant) removed
 
 function App() {
+  // The hero text entrance waits for the loading screen. Repeat visits skip the intro, so start ready.
+  const [introDone, setIntroDone] = useState<boolean>(() => {
+    try {
+      return sessionStorage.getItem('ec_intro_seen') === '1';
+    } catch {
+      return false;
+    }
+  });
+  const handleIntroComplete = useCallback(() => setIntroDone(true), []);
   const [currentView, setCurrentView] = useState<View>(View.HOME);
   const [contactPrefill, setContactPrefill] = useState<{ details?: string }>({});
   const lenisRef = useRef<any>(null);
@@ -239,7 +248,7 @@ function App() {
         return (
           <>
             <div id="home" className="scroll-mt-0">
-              <Hero onNavigate={handleNavigate} />
+              <Hero onNavigate={handleNavigate} introReady={introDone} />
             </div>
             <Services />
             <StatsCounter />
@@ -298,7 +307,7 @@ function App() {
     <div className="min-h-screen flex flex-col font-sans relative bg-white">
       <SEO {...getSEOProps()} />
       {/* Refined Branded Cinematic Loading & Entrance Overlay */}
-      <CinematicLoader />
+      <CinematicLoader onComplete={handleIntroComplete} />
       {/* Dynamic Scroll Progress Bar */}
       <div
         ref={progressBarRef}

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { View } from '../types';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -9,9 +9,11 @@ import { bookUrl, track } from './BookCTA';
 
 interface HeroProps {
   onNavigate: (view: View, sectionId?: string) => void;
+  /** True once the loading screen has finished. The text entrance waits for it. */
+  introReady?: boolean;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
+export const Hero: React.FC<HeroProps> = ({ onNavigate, introReady = true }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const bgImageRef = useRef<HTMLImageElement>(null);
   const eyebrowRef = useRef<HTMLDivElement>(null);
@@ -86,67 +88,62 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
     return () => mm.revert();
   }, []);
 
-  // 2. Subtle Cinematic GSAP Entrance Timeline (No ScrollTrigger)
+  // 2. Text entrance. The text is hidden before first paint, then rises 18px into place
+  // once the loading screen has finished (opacity + transform only, plays once).
+  const [forceReady, setForceReady] = useState(false);
+  const textRefs = [eyebrowRef, headlineRef, subheadingRef, buttonsRef];
+
+  useLayoutEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    textRefs.forEach((r, i) => {
+      if (r.current) gsap.set(r.current, { opacity: 0, y: i === 0 ? 10 : 18 });
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Safety net: if the loader never reports completion, reveal the text anyway.
   useEffect(() => {
+    if (introReady) return;
+    const t = window.setTimeout(() => setForceReady(true), 4500);
+    return () => window.clearTimeout(t);
+  }, [introReady]);
+
+  const ready = introReady || forceReady;
+
+  useEffect(() => {
+    if (!ready) return;
     const ctx = gsap.context(() => {
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       if (prefersReducedMotion) {
         if (bgImageRef.current) gsap.set(bgImageRef.current, { opacity: 1, scale: 1 });
-        if (eyebrowRef.current) gsap.set(eyebrowRef.current, { opacity: 1, y: 0 });
-        if (headlineRef.current) gsap.set(headlineRef.current, { opacity: 1, y: 0 });
-        if (subheadingRef.current) gsap.set(subheadingRef.current, { opacity: 1, y: 0 });
-        if (buttonsRef.current) gsap.set(buttonsRef.current, { opacity: 1, y: 0 });
+        textRefs.forEach((r) => r.current && gsap.set(r.current, { opacity: 1, y: 0 }));
         return;
       }
 
-      // Restrained sequenced entrance
-      const tl = gsap.timeline({
-        defaults: { ease: "power2.out" }
-      });
+      const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
 
       if (bgImageRef.current) {
-        tl.fromTo(bgImageRef.current,
-          { opacity: 0.96, scale: 1.015 },
-          { opacity: 1, scale: 1, duration: 1.8, ease: "power2.out" }
-        );
+        tl.fromTo(bgImageRef.current, { opacity: 0.96, scale: 1.015 }, { opacity: 1, scale: 1, duration: 1.8 }, 0);
       }
 
-      if (eyebrowRef.current) {
-        tl.fromTo(eyebrowRef.current,
-          { opacity: 0, y: 10 },
-          { opacity: 1, y: 0, duration: 0.7 },
-          "-=1.4"
-        );
-      }
-
-      if (headlineRef.current) {
-        tl.fromTo(headlineRef.current,
-          { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, duration: 0.85 },
-          "-=0.55"
-        );
-      }
-
-      if (subheadingRef.current) {
-        tl.fromTo(subheadingRef.current,
-          { opacity: 0, y: 10 },
-          { opacity: 1, y: 0, duration: 0.75 },
-          "-=0.6"
-        );
-      }
-
-      if (buttonsRef.current) {
-        tl.fromTo(buttonsRef.current,
-          { opacity: 0, y: 8 },
-          { opacity: 1, y: 0, duration: 0.75 },
-          "-=0.6"
-        );
-      }
+      // Stagger of 0.12s between elements, each 0.7 to 0.75s long.
+      const steps: Array<[React.RefObject<HTMLElement>, number, number]> = [
+        [eyebrowRef, 10, 0.7],
+        [headlineRef, 18, 0.75],
+        [subheadingRef, 18, 0.7],
+        [buttonsRef, 18, 0.7],
+      ];
+      steps.forEach(([ref, y, duration], i) => {
+        if (ref.current) {
+          tl.fromTo(ref.current, { opacity: 0, y }, { opacity: 1, y: 0, duration, clearProps: 'transform' }, i * 0.12);
+        }
+      });
     }, containerRef);
 
     return () => ctx.revert();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready]);
 
   const handleNavClick = (sectionId: string) => {
     setMobileMenuOpen(false);
