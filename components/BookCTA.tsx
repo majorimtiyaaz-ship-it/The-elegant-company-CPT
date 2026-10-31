@@ -121,7 +121,7 @@ export const GalleryCTA: React.FC = () => (
         Like what you see? Let's build yours.
       </h2>
       <p className="mt-4 text-base text-white/70 md:text-lg">
-        Free quote, no obligation. We reply within 24 hours.
+        Free quote, no obligation. R550 applies if we need to visit. We reply within 24 hours.
       </p>
       <a
         href={bookUrl('gallery')}

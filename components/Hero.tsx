@@ -399,7 +399,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
               </div>
 
               <p className="m-0 text-[12px] sm:text-[13px] tracking-wide text-stone-300 font-light">
-                Free quote, no obligation. We reply within 24 hours.
+                Free quote, no obligation. R550 applies if we need to visit. We reply within 24 hours.
               </p>
 
               <button

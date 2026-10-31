@@ -26,7 +26,7 @@ export const Contact: React.FC<ContactProps> = ({ prefillData }) => {
               </h2>
               <div className="w-16 h-[1.5px] bg-[#c5a059]/40 mb-5" />
               <p className="text-stone-600 text-sm sm:text-base mb-8 leading-relaxed font-light">
-                Based in Mitchells Plain, Cape Town. Contact us for a professional design consultation and a free, detailed quotation.
+                Based in Mitchells Plain, Cape Town. Contact us for a professional design consultation and a detailed quotation. A R550 site visit fee applies if we need to visit you.
               </p>
 
               {/* Disclaimer */}
