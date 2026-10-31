@@ -96,7 +96,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, introReady = true }) => 
   useLayoutEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     textRefs.forEach((r, i) => {
-      if (r.current) gsap.set(r.current, { opacity: 0, y: i === 0 ? 10 : 18 });
+      if (r.current) gsap.set(r.current, { opacity: 0, y: i === 0 ? 12 : 20 });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -121,22 +121,22 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, introReady = true }) => 
         return;
       }
 
-      const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
       if (bgImageRef.current) {
         tl.fromTo(bgImageRef.current, { opacity: 0.96, scale: 1.015 }, { opacity: 1, scale: 1, duration: 1.8 }, 0);
       }
 
-      // Stagger of 0.12s between elements, each 0.7 to 0.75s long.
+      // Slower, softer entrance: 0.22s stagger between elements, each about 1.1s long.
       const steps: Array<[React.RefObject<HTMLElement>, number, number]> = [
-        [eyebrowRef, 10, 0.7],
-        [headlineRef, 18, 0.75],
-        [subheadingRef, 18, 0.7],
-        [buttonsRef, 18, 0.7],
+        [eyebrowRef, 12, 0.9],
+        [headlineRef, 20, 1.2],
+        [subheadingRef, 20, 1.1],
+        [buttonsRef, 20, 1.1],
       ];
       steps.forEach(([ref, y, duration], i) => {
         if (ref.current) {
-          tl.fromTo(ref.current, { opacity: 0, y }, { opacity: 1, y: 0, duration, clearProps: 'transform' }, i * 0.12);
+          tl.fromTo(ref.current, { opacity: 0, y }, { opacity: 1, y: 0, duration, clearProps: 'transform' }, i * 0.22);
         }
       });
     }, containerRef);
