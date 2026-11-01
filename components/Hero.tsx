@@ -311,7 +311,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, introReady = true }) => 
           <img 
             ref={bgImageRef}
             src="/images/hero-kitchen.webp"
-            alt="The Elegant Company Luxury Interior Kitchen and Cabinetry in Cape Town"
+            alt="Custom kitchen and cabinetry by The Elegant Company in Cape Town"
             fetchPriority="high"
             loading="eager"
             decoding="async"

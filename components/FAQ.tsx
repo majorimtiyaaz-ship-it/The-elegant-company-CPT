@@ -11,7 +11,7 @@ const GROUPS: Group[] = [
     items: [
       {
         q: 'Where do you work?',
-        a: 'We work across Cape Town, including Mitchells Plain, Durbanville, Bellville, Brackenfell, Century City, Sea Point, Green Point, Camps Bay, Hout Bay, Tokai and Steenberg, and we also take jobs in Stellenbosch and Paarl. There is no extra travel charge.',
+        a: 'We work across Cape Town, including Mitchells Plain, Durbanville, Bellville, Brackenfell, Century City, Sea Point, Green Point, Camps Bay, Hout Bay, Tokai and Steenberg, and we also take jobs in Stellenbosch and Paarl. Site visits in Stellenbosch and Paarl cost more than in Cape Town.',
       },
       {
         q: 'How does it work from first message to finished job?',
@@ -19,7 +19,7 @@ const GROUPS: Group[] = [
       },
       {
         q: 'How much is a site visit, and when can you come?',
-        a: 'A site visit costs R550, the same in every area we serve. If you go ahead with the job, the R550 is deducted from your final price. We visit on weekends, usually within the same week that you get in touch.',
+        a: 'A site visit costs R550 in Cape Town. In Stellenbosch and Paarl it costs more because of the distance, so ask us for the exact fee. If you go ahead with the job, the R550 is deducted from your final price. We visit on weekends, usually within the same week that you get in touch.',
       },
       { q: 'How quickly will you reply?', a: 'Within 24 hours.' },
       {
