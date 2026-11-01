@@ -255,12 +255,12 @@ export const CinematicLoader: React.FC<CinematicLoaderProps> = ({
         className="flex flex-col items-center justify-center text-center max-w-[480px] w-full"
       >
         {/* Brand Wordmark */}
-        <h1
+        <div
           ref={wordmarkRef}
           className="text-2xl sm:text-3xl md:text-4xl font-serif font-normal text-[#f8f7f5] uppercase tracking-[0.22em] sm:tracking-[0.26em] m-0 leading-tight"
         >
           THE ELEGANT COMPANY
-        </h1>
+        </div>
 
         {/* Origin / Studio Location */}
         <p
