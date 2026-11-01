@@ -152,7 +152,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     imageUrl: "/images/Lumii_20260110_183951986.webp",
     materials: "Red Oak, Hand-Rubbed Poly",
     description: "Low-angled profile showcasing the hand-sanded ergonomic curves and remarkable structural stability.",
-    woodSpecies: "Sustainably Harvested Red Oak",
+    woodSpecies: "Red Oak",
     woodFinish: "Hand-Rubbed Poly-Wax Protective Coating",
     finishType: "Smooth Satin Touch (15% Sheen)",
     constructionDetails: "Ergonomically contoured seat transitions, pegged bridal joints with chamfered feet and acoustic felt pads.",
