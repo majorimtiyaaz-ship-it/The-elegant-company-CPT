@@ -396,7 +396,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, introReady = true }) => 
               </div>
 
               <p className="m-0 text-[12px] sm:text-[13px] tracking-wide text-stone-300 font-light">
-                R550 site visit, deducted from your final price if you proceed. We reply within 24 hours.
+                R550 site visit (R700 in Stellenbosch and Paarl), deducted from your final price if you proceed. We reply within 24 hours.
               </p>
 
               <button

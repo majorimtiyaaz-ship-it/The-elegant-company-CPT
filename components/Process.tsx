@@ -466,7 +466,7 @@ export const Process: React.FC = () => {
                   Site Audit & Laser Scan
                 </h4>
                 <p className="text-xs text-stone-300 leading-relaxed font-light">
-                  A standard R550 fee applies for physical Cape Town site visits (laser-mapping spaces, wood patina matching, taking exact measurements). It is deducted from your final price if you proceed.
+                  A standard R550 fee applies for physical Cape Town site visits (R700 in Stellenbosch and Paarl) (laser-mapping spaces, wood patina matching, taking exact measurements). It is deducted from your final price if you proceed.
                 </p>
               </div>
 
