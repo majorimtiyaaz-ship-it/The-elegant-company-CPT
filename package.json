@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && vite build --ssr prerender.tsx --outDir .ssr --emptyOutDir && node scripts/prerender.mjs",
     "preview": "vite preview",
     "lint": "tsc --noEmit"
   },

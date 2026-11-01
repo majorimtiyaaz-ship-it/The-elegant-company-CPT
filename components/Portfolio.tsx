@@ -60,7 +60,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     category: "Storage", 
     imageUrl: "/images/1770732675622~2.webp",
     materials: "Restored Vintage Timber, High Gloss Mirror Lacquer",
-    description: "A restored classic finished in a deep, reflective black lacquer for a striking luxurious bedroom focal point.",
+    description: "A restored classic finished in a deep, reflective black lacquer for a striking bedroom focal point.",
     woodSpecies: "Restored Solid Hardwood & Stabilized Core",
     woodFinish: "Multi-Layer Piano Mirror Gloss Lacquer (12 Hand-Polished Coats)",
     finishType: "Ultra-High Gloss Mirror Reflection (90%+ Sheen)",
@@ -126,7 +126,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     imageUrl: "/images/1771076167909~2.webp",
     materials: "Solid American Walnut & White Oak Inlays",
     description: "Close-up perspective exhibiting the perfection of our seamless modern joinery join detail and grain harmony.",
-    woodSpecies: "Premium Black Walnut (Juglans nigra) & White Oak Inlays",
+    woodSpecies: "Black Walnut (Juglans nigra) & White Oak Inlays",
     woodFinish: "Cold-Pressed Organic Linseed & Tung Oil Emulsion",
     finishType: "Deep-Penetrating Natural Oil (Satin Sheen)",
     constructionDetails: "Hand-cut sliding dovetail joint with contrasting grain lock detail and flush micro-radius easing.",
@@ -138,7 +138,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     category: "Office", 
     imageUrl: "/images/Lumii_20260110_183904669.webp",
     materials: "Fiddleback Oak & Hot-Rolled Steel",
-    description: "A customized luxury study desk engineered with traditional cabinetmaking methods and integrated wire management.",
+    description: "A custom study desk engineered with traditional cabinetmaking methods and integrated wire management.",
     woodSpecies: "Fiddleback English Oak & Hot-Rolled Architectural Steel",
     woodFinish: "Micro-Beaded Fine Matte Protective Polyurethane",
     finishType: "Industrial Grade Anti-Scratch Matte (10% Sheen)",
@@ -152,7 +152,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     imageUrl: "/images/Lumii_20260110_183951986.webp",
     materials: "Sustainably Harvested Red Oak, Hand-Rubbed Poly",
     description: "Low-angled profile showcasing the hand-sanded ergonomic curves and remarkable structural stability.",
-    woodSpecies: "Sustainably Harvested Premium Red Oak",
+    woodSpecies: "Sustainably Harvested Red Oak",
     woodFinish: "Hand-Rubbed Poly-Wax Protective Coating",
     finishType: "Smooth Satin Touch (15% Sheen)",
     constructionDetails: "Ergonomically contoured seat transitions, pegged bridal joints with chamfered feet and acoustic felt pads.",
@@ -595,7 +595,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
             <div className="w-16 h-[1.5px] bg-[#c5a059]/40 mx-auto mb-5" />
             <StaggerText
               className="text-stone-600 max-w-2xl mx-auto font-sans font-light text-sm sm:text-base leading-relaxed"
-              text="Every piece is meticulously constructed from premium grade hardwoods, designed to blend architectural form and ultimate utility."
+              text="Every piece is meticulously constructed from solid timber, designed to blend architectural form and ultimate utility."
             />
           </RevealOnScroll>
           

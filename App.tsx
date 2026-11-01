@@ -281,14 +281,14 @@ function App() {
       case 'portfolio':
         return {
           title: "Custom Furniture Collection | The Elegant Company Cape Town",
-          description: "Browse our showcase of premium custom built-in cupboards, luxury kitchens, bedroom cabinets, wardrobes, and handcrafted wood creations across Cape Town.",
+          description: "Browse our showcase of custom built-in cupboards, kitchens, bedroom cabinets, wardrobes, and handcrafted wood creations across Cape Town.",
           keywords: "custom furniture collection Cape Town, custom kitchens portfolio, custom wardrobes Cape Town, built in cupboards Cape Town",
           canonical: "/"
         };
       case 'contact':
         return {
           title: "Contact Us & Get a Quotation | The Elegant Company Cape Town",
-          description: "Contact The Elegant Company, based in Mitchells Plain, Cape Town, for custom furniture design, luxury kitchen installations, or to get a custom cupboards quotation today.",
+          description: "Contact The Elegant Company, based in Mitchells Plain, Cape Town, for custom furniture design, kitchen installations, or to get a custom cupboards quotation today.",
           keywords: "contact custom furniture Cape Town, kitchen installation quote Cape Town, built in cupboards quotation Cape Town, carpentry consultation Cape Town",
           canonical: "/"
         };

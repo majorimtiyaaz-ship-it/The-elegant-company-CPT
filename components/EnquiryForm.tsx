@@ -110,9 +110,9 @@ const primaryBtn =
 const ghostBtn =
   'min-h-[50px] px-6 uppercase tracking-[0.18em] text-xs font-bold rounded-sm border border-stone-300 text-stone-700 hover:text-stone-900 hover:border-stone-900 transition-colors cursor-pointer disabled:opacity-60';
 
-export const EnquiryForm: React.FC<{ prefillDetails?: string }> = ({ prefillDetails }) => {
-  const [answers, setAnswers] = useState<Answers>({});
-  const [idx, setIdx] = useState(0);
+export const EnquiryForm: React.FC<{ prefillDetails?: string; initialService?: string }> = ({ prefillDetails, initialService }) => {
+  const [answers, setAnswers] = useState<Answers>(initialService ? { service: initialService } : {});
+  const [idx, setIdx] = useState(initialService ? 1 : 0);
   const [error, setError] = useState('');
   const [consent, setConsent] = useState(false);
   const [phase, setPhase] = useState<'form' | 'review' | 'sending' | 'done'>('form');

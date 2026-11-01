@@ -86,14 +86,14 @@ export const Footer: React.FC = () => {
               </span>
             </li>
             <li className="footer-animate-item">
-              <span className="hover:text-white transition-colors">
+              <a href="/kitchen-installation-cape-town/" className="hover:text-white transition-colors">
                 Custom Kitchens
-              </span>
+              </a>
             </li>
             <li className="footer-animate-item">
-              <span className="hover:text-white transition-colors">
+              <a href="/custom-furniture-cape-town/" className="hover:text-white transition-colors">
                 Solid Dining Tables
-              </span>
+              </a>
             </li>
             <li className="footer-animate-item">
               <span className="hover:text-white transition-colors">
@@ -101,9 +101,9 @@ export const Footer: React.FC = () => {
               </span>
             </li>
             <li className="footer-animate-item">
-              <span className="hover:text-white transition-colors">
+              <a href="/furniture-restoration-cape-town/" className="hover:text-white transition-colors">
                 Heritage Wood Restoration
-              </span>
+              </a>
             </li>
           </ul>
         </div>
@@ -116,7 +116,7 @@ export const Footer: React.FC = () => {
             Whitehall Close, Portland<br />Mitchells Plain, Cape Town, 7785<br />Western Cape, South Africa
           </p>
           <p className="text-xs text-stone-500 font-mono mt-4">
-            Mon – Fri: 08:00 – 17:00<br />Sat: By Site Appointment
+            Sat – Sun: 08:00 – 20:00<br />Site Visits By Appointment
           </p>
         </div>
 

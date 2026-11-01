@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
-export default defineConfig(() => {
+export default defineConfig(({ isSsrBuild }) => {
     return {
       server: {
         port: 3000,
@@ -22,7 +22,8 @@ export default defineConfig(() => {
       build: {
         rollupOptions: {
           output: {
-            manualChunks: {
+            // Chunk splitting applies to the browser build only (the build-time SSR bundle has no chunks).
+            manualChunks: isSsrBuild ? undefined : {
               'vendor-react': ['react', 'react-dom', 'react-helmet-async'],
               'vendor-animation': ['gsap', 'lenis'],
             }
