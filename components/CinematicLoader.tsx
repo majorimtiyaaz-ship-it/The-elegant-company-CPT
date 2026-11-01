@@ -181,6 +181,8 @@ export const CinematicLoader: React.FC<CinematicLoaderProps> = ({
         },
         '-=0.2'
       );
+      // Phones: same sequence, played about 1.5x faster so the first screen appears sooner.
+      if (window.matchMedia('(max-width: 767px)').matches) entranceTl.timeScale(1.5);
     }, containerRef);
 
     const triggerExitSequence = () => {
@@ -196,6 +198,8 @@ export const CinematicLoader: React.FC<CinematicLoaderProps> = ({
           }
         },
       });
+
+      if (window.matchMedia('(max-width: 767px)').matches) exitTl.timeScale(1.5);
 
       // 1. Complete progress bar swiftly to 100%
       exitTl.to(progressBarRef.current, {

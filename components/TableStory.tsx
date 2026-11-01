@@ -140,15 +140,21 @@ export const TableStory: React.FC = () => {
       updateUI(target);
     };
 
-    // Start loading in the background once the page has settled, so the table is
-    // already built long before anyone scrolls to it. Safety net: also load when
-    // the section is within three screens.
+    // Start loading in the background after the visitor first scrolls or touches the page
+    // (or after 15s as a fallback), so the 3D scene never competes with the first load. The
+    // observer below still loads it whenever the section is within three screens.
     const idle = (window as any).requestIdleCallback as undefined | ((cb: () => void, o?: { timeout: number }) => number);
-    const startPreload = () => (idle ? idle(() => loadScene(), { timeout: 3000 }) : window.setTimeout(loadScene, 1500));
     let preloadTimer: number | undefined;
-    const onReady = () => { preloadTimer = startPreload() as number; };
-    if (document.readyState === 'complete') onReady();
-    else window.addEventListener('load', onReady, { once: true });
+    let fallbackTimer: number | undefined;
+    const interactionEvents = ['scroll', 'wheel', 'touchstart', 'pointerdown', 'keydown'] as const;
+    const stopListening = () => interactionEvents.forEach((e) => window.removeEventListener(e, onFirstInteraction));
+    const onFirstInteraction = () => {
+      stopListening();
+      window.clearTimeout(fallbackTimer);
+      preloadTimer = (idle ? idle(() => loadScene(), { timeout: 3000 }) : window.setTimeout(loadScene, 300)) as number;
+    };
+    interactionEvents.forEach((e) => window.addEventListener(e, onFirstInteraction, { passive: true }));
+    fallbackTimer = window.setTimeout(onFirstInteraction, 15000);
 
     const io = new IntersectionObserver(
       ([entry]) => {
@@ -179,7 +185,8 @@ export const TableStory: React.FC = () => {
     return () => {
       disposed = true;
       gsap.ticker.remove(tick);
-      window.removeEventListener('load', onReady);
+      stopListening();
+      window.clearTimeout(fallbackTimer);
       if (preloadTimer !== undefined) {
         const cancel = (window as any).cancelIdleCallback as undefined | ((id: number) => void);
         if (cancel) cancel(preloadTimer);
