@@ -166,6 +166,15 @@ interface PortfolioProps {
   onNavigate: (view: View, sectionId?: string, prefillData?: { details?: string }) => void;
 }
 
+// Smaller copies of the heaviest portfolio pictures. Phones pick the 800px copy for the cards;
+// the full-size file is still used for the large popup view and on high-density screens.
+const CARD_SRCSET: Record<string, string> = {
+  "/images/coffee-table-raw.webp": "/images/coffee-table-raw-800.webp 800w, /images/coffee-table-raw.webp 1600w",
+  "/images/coffee-table-after.webp": "/images/coffee-table-after-800.webp 800w, /images/coffee-table-after.webp 1200w",
+  "/images/coffee-table-after-2.webp": "/images/coffee-table-after-2-800.webp 800w, /images/coffee-table-after-2.webp 1200w",
+  "/images/coffee-table-after-3.webp": "/images/coffee-table-after-3-800.webp 800w, /images/coffee-table-after-3.webp 1200w",
+};
+
 export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
@@ -564,7 +573,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
       <div className="absolute inset-0 w-full h-[135%] -top-[18%] pointer-events-none overflow-hidden select-none z-0">
         <img
           ref={bgParallaxImgRef}
-          src="/images/coffee-table-raw.webp"
+          src="/images/coffee-table-raw-bg.webp"
           loading="lazy"
           alt=""
           role="presentation"
@@ -649,6 +658,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({ onNavigate }) => {
                 <div className="w-full h-full absolute inset-0 overflow-hidden">
                   <ScrollZoomImage 
                     src={item.imageUrl} 
+                    srcSet={CARD_SRCSET[item.imageUrl]}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     alt={`${item.title} - ${item.category} crafted by The Elegant Company`} 
                     parallax
                   />

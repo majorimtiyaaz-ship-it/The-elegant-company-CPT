@@ -428,7 +428,7 @@ export const Process: React.FC = () => {
             <div className="absolute inset-0 w-full h-[140%] -top-[20%] pointer-events-none overflow-hidden select-none z-0">
               <img
                 ref={bannerBgRef}
-                src="/images/coffee-table-after-2.webp"
+                src="/images/coffee-table-after-2-bg.webp"
           loading="lazy"
                 alt=""
                 role="presentation"

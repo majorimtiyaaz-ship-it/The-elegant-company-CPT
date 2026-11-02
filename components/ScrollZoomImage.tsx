@@ -12,13 +12,18 @@ interface ScrollZoomImageProps {
   className?: string;
   /** Gentle scroll parallax inside the frame. true = 5%, or pass a percentage (keep it under 6). */
   parallax?: boolean | number;
+  /** Optional smaller copies of the same picture, so phones download less. */
+  srcSet?: string;
+  sizes?: string;
 }
 
 export const ScrollZoomImage: React.FC<ScrollZoomImageProps> = ({ 
   src, 
   alt, 
   className = "",
-  parallax = false
+  parallax = false,
+  srcSet,
+  sizes
 }) => {
   const [imgSrc, setImgSrc] = useState(src);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -64,6 +69,8 @@ export const ScrollZoomImage: React.FC<ScrollZoomImageProps> = ({
       <img
         ref={imgRef}
         src={imgSrc}
+        srcSet={srcSet}
+        sizes={sizes}
         alt={alt}
         loading="lazy"
         decoding="async"
