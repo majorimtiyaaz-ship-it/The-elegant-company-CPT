@@ -307,7 +307,7 @@ function App() {
     <div className="min-h-screen flex flex-col font-sans relative bg-white">
       <SEO {...getSEOProps()} />
       {/* Refined Branded Cinematic Loading & Entrance Overlay */}
-      <CinematicLoader onComplete={handleIntroComplete} />
+      <CinematicLoader onComplete={handleIntroComplete} onReveal={handleIntroComplete} />
       {/* Dynamic Scroll Progress Bar */}
       <div
         ref={progressBarRef}

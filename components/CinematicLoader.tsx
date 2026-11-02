@@ -3,11 +3,14 @@ import { gsap } from 'gsap';
 
 interface CinematicLoaderProps {
   onComplete?: () => void;
+  /** Called when the curtain starts to fade away, so the hero text can start rising underneath it. */
+  onReveal?: () => void;
   heroImageUrl?: string;
 }
 
 export const CinematicLoader: React.FC<CinematicLoaderProps> = ({
   onComplete,
+  onReveal,
   heroImageUrl = '/images/hero-kitchen.webp',
 }) => {
   // Show the cinematic intro once per session; repeat views load instantly.
@@ -80,12 +83,13 @@ export const CinematicLoader: React.FC<CinematicLoaderProps> = ({
       };
     }
 
-    // Absolute failsafe timeout (1.6s maximum) so loader NEVER gets stuck
+    // Absolute failsafe timeout so the loader NEVER gets stuck (1.0s on phones, 1.6s elsewhere)
+    const failsafeMs = window.matchMedia('(max-width: 767px)').matches ? 1000 : 1600;
     const failsafeTimer = setTimeout(() => {
       heroImageReady = true;
       fontsReady = true;
       checkAndTriggerExit(true);
-    }, 1600);
+    }, failsafeMs);
 
     const checkAndTriggerExit = (force = false) => {
       if (!isMounted || exitTriggered) return;
@@ -221,7 +225,9 @@ export const CinematicLoader: React.FC<CinematicLoaderProps> = ({
         '+=0.04'
       );
 
-      // 3. Cinematic overlay curtain fades away smoothly (600-800ms ease)
+      // 3. Cinematic overlay curtain fades away smoothly (600-800ms ease).
+      // The hero text starts rising at the same moment, underneath the fading curtain.
+      exitTl.call(() => { if (isMounted && onReveal) onReveal(); }, [], '-=0.15');
       exitTl.to(
         containerRef.current,
         {
@@ -238,7 +244,7 @@ export const CinematicLoader: React.FC<CinematicLoaderProps> = ({
       clearTimeout(failsafeTimer);
       ctx.revert();
     };
-  }, [heroImageUrl, onComplete]);
+  }, [heroImageUrl, onComplete, onReveal]);
 
   if (isDismissed) {
     return null;
