@@ -6,8 +6,8 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// One small texture (about 10 KB). Loaded only when the section is near the screen.
-const GRAIN_URL = '/images/walnut-grain.webp';
+// Real ash grain photo, loaded only when the section is near the screen.
+const GRAIN_URL = '/images/ash-grain.webp';
 
 // Planks start spread apart in soft 3D, then slide together into one solid panel.
 // Only transform and opacity are animated, so it stays on the GPU and is cheap on phones.
@@ -126,10 +126,11 @@ export const WoodPanel: React.FC = () => {
   const grain = grainOn ? `url(${GRAIN_URL})` : 'none';
 
   const plankEls = Array.from({ length: planks }, (_, i) => {
-    // One continuous grain across the whole panel; each plank shows its own slice
-    const posX = planks === 1 ? 0 : (i / (planks - 1)) * 100;
-    // Slight tone change per plank so the joins read as separate boards
-    const tone = [0.0, 0.1, 0.04, 0.14, 0.02, 0.09][i % 6];
+    // Each plank shows a different strip of the ash photo, so the boards read as separate pieces
+    const fx = [0.05, 0.62, 0.3, 0.85, 0.48, 0.18][i % 6];
+    const fy = [0.4, 0.1, 0.8, 0.25, 0.65, 0.95][i % 6];
+    // Very slight tone change per plank
+    const tone = [0.0, 0.07, 0.03, 0.1, 0.015, 0.06][i % 6];
     return (
       <div
         key={i}
@@ -138,10 +139,11 @@ export const WoodPanel: React.FC = () => {
         }}
         className="relative h-full flex-1"
         style={{
-          backgroundColor: '#3a2416',
-          backgroundImage: `linear-gradient(rgba(0,0,0,${tone}), rgba(0,0,0,${tone})), ${grain}`,
-          backgroundSize: `100% 100%, ${planks * 100}% 100%`,
-          backgroundPosition: `0 0, ${posX}% 0`,
+          backgroundColor: '#c9ae84',
+          backgroundImage: `linear-gradient(rgba(40,24,10,${tone}), rgba(40,24,10,${tone})), ${grain}`,
+          backgroundSize: '100% 100%, var(--S) var(--S)',
+          backgroundPosition: `0 0, calc(-1 * ${fx} * (var(--S) - var(--pw) / ${planks})) calc(-1 * ${fy} * (var(--S) - var(--ph)))`,
+          backgroundRepeat: 'no-repeat',
           backfaceVisibility: 'hidden',
         }}
       >
@@ -153,7 +155,7 @@ export const WoodPanel: React.FC = () => {
           style={{
             opacity: reduced ? 0.35 : 1,
             background:
-              'linear-gradient(90deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 14%, rgba(0,0,0,0) 86%, rgba(0,0,0,0.6) 100%)',
+              'linear-gradient(90deg, rgba(20,10,0,0.55) 0%, rgba(20,10,0,0) 14%, rgba(20,10,0,0) 86%, rgba(20,10,0,0.55) 100%)',
           }}
         />
       </div>
@@ -173,7 +175,18 @@ export const WoodPanel: React.FC = () => {
   );
 
   const panel = (
-    <div className="relative" style={{ width: 'min(88vw, 720px)', height: 'min(46svh, 420px)' }}>
+    <div
+      className="relative"
+      style={
+        {
+          width: 'min(88vw, 720px)',
+          height: 'min(46svh, 420px)',
+          '--pw': 'min(88vw, 720px)',
+          '--ph': 'min(46svh, 420px)',
+          '--S': 'calc(max(var(--pw), var(--ph)) * 1.25)',
+        } as React.CSSProperties
+      }
+    >
       <div className="absolute inset-0 flex" style={{ perspective: '1100px' }}>
         {plankEls}
       </div>
