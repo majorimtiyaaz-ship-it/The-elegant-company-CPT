@@ -5,6 +5,7 @@ import { StatsCounter } from './components/StatsCounter';
 import { Awards } from './components/Awards';
 import { Services } from './components/Services';
 import { TableStory } from './components/TableStory';
+import { WoodPanel } from './components/WoodPanel';
 import { Portfolio } from './components/Portfolio';
 import { Process } from './components/Process';
 import { Testimonials } from './components/Testimonials';
@@ -253,6 +254,7 @@ function App() {
             <Services />
             <StatsCounter />
             <Awards />
+            <WoodPanel />
             <div id="portfolio" className="scroll-mt-20">
               <Portfolio onNavigate={handleNavigate} />
             </div>
