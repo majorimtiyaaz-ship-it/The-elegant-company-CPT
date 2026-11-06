@@ -165,11 +165,11 @@ export const WoodPanel: React.FC = () => {
   const caption = (
     <div ref={textRef} className="mt-8 px-6 text-center md:mt-10" style={{ opacity: reduced ? 1 : 0 }}>
       <span className="mb-3 block text-xs font-semibold uppercase tracking-[0.24em] text-[#c5a059] md:text-sm">
-        Solid wood
+        Solid ash
       </span>
-      <h2 className="font-serif text-3xl leading-tight text-white sm:text-4xl">Plank by plank</h2>
+      <h2 className="font-serif text-3xl leading-tight text-white sm:text-4xl">Where every piece begins</h2>
       <p className="mx-auto mt-3 max-w-md text-sm font-light leading-relaxed text-white/70 sm:text-base">
-        Shaped and joined into one piece.
+        Real timber, shaped by hand in Cape Town.
       </p>
     </div>
   );
@@ -211,7 +211,7 @@ export const WoodPanel: React.FC = () => {
       <section
         id="wood-panel"
         ref={outerRef}
-        aria-label="Solid wood craftsmanship"
+        aria-label="Solid ash craftsmanship"
         className="relative flex w-full flex-col items-center bg-[#0d0c0b] px-0 py-20 md:py-28"
       >
         {panel}
@@ -224,7 +224,7 @@ export const WoodPanel: React.FC = () => {
     <section
       id="wood-panel"
       ref={outerRef}
-      aria-label="Solid wood craftsmanship"
+      aria-label="Solid ash craftsmanship"
       className="relative w-full bg-[#0d0c0b] h-[190vh] md:h-[230vh]"
     >
       <div className="sticky top-0 flex h-[100svh] w-full flex-col items-center justify-center overflow-hidden">
