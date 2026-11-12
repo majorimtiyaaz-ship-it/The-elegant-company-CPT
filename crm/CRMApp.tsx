@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { CalendarClock, Copy, Download, LayoutDashboard, LogOut, Plus, Settings as SettingsIcon, Users } from 'lucide-react';
 import { api } from './api';
+import { PricingSettingsCard } from './QuoteTools';
 import { AddLeadSheet, FollowUpsView, LeadSheet, LeadsView } from './LeadViews';
 import { OPEN_STAGES, SOURCES, computeMetrics, formatZAR, groupFollowUps, todayZA } from './shared';
 import type { Lead } from './shared';
@@ -175,6 +176,8 @@ const SettingsView: React.FC<{ leads: Lead[]; onLogout: () => void }> = ({ leads
   return (
     <div className="space-y-6">
       <h1 className="font-serif text-2xl text-white">Settings</h1>
+
+      <PricingSettingsCard />
 
       <section className={`${card} p-4 space-y-3`}>
         <h2 className="font-serif text-lg">Campaign link builder</h2>

@@ -5,6 +5,7 @@ import {
   SERVICE_LABELS, SOURCES, STAGES, addDays, followUpMessage, formatZAR, groupFollowUps, suggestNextFollowUp, todayZA, whatsappLink,
 } from './shared';
 import type { Activity, Lead, Source, Stage } from './shared';
+import { QuoteBuilder } from './QuoteTools';
 import { Notice, Sheet, SourceChip, StageChip, btnDark, btnGold, btnLight, card, fmtDate, fmtDateTime, fmtDay, input, label } from './ui';
 
 const LOST_REASONS = ['Price too high', 'Chose another supplier', 'No response', 'Project cancelled', 'Other'];
@@ -187,6 +188,8 @@ export const LeadSheet: React.FC<{ id: string; onClose: () => void; onChanged: (
         )}
         {lead.details && <div className="text-sm border-t border-stone-200 pt-3"><div className="text-stone-500 text-xs mb-1">Customer’s message</div><p className="whitespace-pre-wrap">{lead.details}</p></div>}
       </div>
+
+      <QuoteBuilder lead={lead} onChanged={async () => { await load(); onChanged(); }} />
 
       <div className={`${card} p-4 space-y-4`}>
         <h3 className="font-serif text-base">Stage &amp; follow-up</h3>

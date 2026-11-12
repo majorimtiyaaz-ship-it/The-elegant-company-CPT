@@ -4,7 +4,24 @@ import {
   pickSource, pickStage, rateLimit, readBody, sameOrigin, send, sessionCookie, validateLead,
 } from './_lib/core.js';
 import type { LeadInput } from './_lib/core.js';
+import { computeQuote, mergePricing } from '../crm/pricing.js';
+import type { FurnitureSize, JobType, PricingSettings, QuoteInputs } from '../crm/pricing.js';
 import { QUOTE_FIRST_FOLLOW_UP_DAYS, SERVICE_LABELS, STAGES, addDays, todayZA } from '../crm/shared.js';
+
+
+async function loadPricing(sql: any): Promise<PricingSettings> {
+  const rows = await sql.query("select value from app_settings where key = 'pricing'");
+  return mergePricing(rows[0]?.value);
+}
+
+function cleanQuoteInputs(b: any): QuoteInputs | null {
+  const jobType = b?.jobType as JobType;
+  if (!['kitchen', 'furniture', 'restoration'].includes(jobType)) return null;
+  const size: FurnitureSize = ['small', 'medium', 'large'].includes(b?.size) ? b.size : 'medium';
+  const num = (v: unknown) => { const x = Number(v); return Number.isFinite(x) && x >= 0 && x <= 1e8 ? x : 0; };
+  const override = b?.takeOverride === null || b?.takeOverride === undefined || b?.takeOverride === '' ? null : num(b.takeOverride);
+  return { jobType, size, materials: num(b.materials), ownerDays: num(b.ownerDays), helperDays: num(b.helperDays), transport: num(b.transport), takeOverride: override };
+}
 
 const YMD = /^\d{4}-\d{2}-\d{2}$/;
 const ID = /^[0-9a-f-]{36}$/;
@@ -180,6 +197,43 @@ export default async function handler(req: any, res: any) {
       if (!ID.test(id)) return send(res, 400, { ok: false });
       await sql.query('delete from leads where id = $1', [id]);
       return send(res, 200, { ok: true });
+    }
+
+
+    // ---- pricing settings and quotes ----
+    if (action === 'settings' && req.method === 'GET') {
+      return send(res, 200, { ok: true, pricing: await loadPricing(sql) });
+    }
+    if (action === 'settings_save' && req.method === 'POST') {
+      const merged = mergePricing(body.pricing);
+      await sql.query(
+        `insert into app_settings (key, value) values ('pricing', $1::jsonb)
+         on conflict (key) do update set value = excluded.value, updated_at = now()`,
+        [JSON.stringify(merged)],
+      );
+      return send(res, 200, { ok: true, pricing: merged });
+    }
+    if (action === 'quotes' && req.method === 'GET') {
+      if (!ID.test(id)) return send(res, 400, { ok: false });
+      const rows = await sql.query(
+        `select id::text as id, to_char(created_at at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as created_at,
+                job_type, inputs, result, total::float8 as total
+         from quotes where lead_id = $1 order by created_at desc limit 5`, [id]);
+      return send(res, 200, { ok: true, quotes: rows });
+    }
+    if (action === 'quote_save' && req.method === 'POST') {
+      if (!ID.test(id)) return send(res, 400, { ok: false });
+      const inputs = cleanQuoteInputs(body.inputs);
+      if (!inputs) return send(res, 400, { ok: false, error: 'Choose a job type.' });
+      const exists = await sql.query('select 1 from leads where id = $1', [id]);
+      if (!exists.length) return send(res, 404, { ok: false });
+      // The server prices the quote itself from your saved settings; it never trusts a total sent from the browser.
+      const result = computeQuote(inputs, await loadPricing(sql));
+      await sql.query('insert into quotes (lead_id, job_type, inputs, result, total) values ($1,$2,$3::jsonb,$4::jsonb,$5)',
+        [id, inputs.jobType, JSON.stringify(inputs), JSON.stringify(result), result.total]);
+      await sql.query('update leads set quote_amount = $2, updated_at = now() where id = $1', [id, result.total]);
+      await addActivity(id, 'quote_built', `Quote built: R ${Math.round(result.total).toLocaleString('en-ZA')} (your take R ${Math.round(result.take).toLocaleString('en-ZA')}).`);
+      return send(res, 200, { ok: true, result });
     }
 
     return send(res, 404, { ok: false, error: 'Unknown action' });

@@ -50,6 +50,21 @@ export async function ensureSchema(): Promise<void> {
     text text not null
   )`);
   await sql.query('alter table leads add column if not exists quote_sent_on date');
+  await sql.query(`create table if not exists app_settings (
+    key text primary key,
+    value jsonb not null,
+    updated_at timestamptz not null default now()
+  )`);
+  await sql.query(`create table if not exists quotes (
+    id bigserial primary key,
+    lead_id uuid not null references leads(id) on delete cascade,
+    created_at timestamptz not null default now(),
+    job_type text not null,
+    inputs jsonb not null,
+    result jsonb not null,
+    total numeric(12,2) not null
+  )`);
+  await sql.query('create index if not exists quotes_lead_idx on quotes(lead_id, created_at desc)');
   await sql.query('create index if not exists activities_lead_idx on activities(lead_id, at)');
   await sql.query(`create table if not exists rate_events (
     key text not null,
