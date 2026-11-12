@@ -57,6 +57,7 @@ export interface Lead {
   lost_reason: string | null;
   next_follow_up: string | null; // YYYY-MM-DD
   last_contact: string | null; // YYYY-MM-DD
+  quote_sent_on: string | null; // YYYY-MM-DD, set when the lead first reaches Quote Sent
 }
 
 export interface Activity {
@@ -177,4 +178,49 @@ export function groupFollowUps(leads: Lead[], today: string): FollowUpGroups {
     upcoming: open.filter((l) => l.next_follow_up && l.next_follow_up > today).sort(byDate),
     none: open.filter((l) => !l.next_follow_up),
   };
+}
+
+
+// ---------- quote follow-up cadence ----------
+
+export function daysBetween(fromYmd: string, toYmd: string): number {
+  const [y1, m1, d1] = fromYmd.split('-').map(Number);
+  const [y2, m2, d2] = toYmd.split('-').map(Number);
+  return Math.round((Date.UTC(y2, m2 - 1, d2) - Date.UTC(y1, m1 - 1, d1)) / 86400000);
+}
+
+/** First follow-up is 2 days after the quote goes out. */
+export const QUOTE_FIRST_FOLLOW_UP_DAYS = 2;
+
+/**
+ * After you confirm a follow-up on a lead with a quote out, when should the next one be?
+ * Cadence: day 2, day 5, day 10. After day 10 the CRM suggests no further automatic follow-up.
+ */
+export function suggestNextFollowUp(lead: Lead, today: string): string | null {
+  if (!QUOTE_OUT_STAGES.includes(lead.stage) || !lead.quote_sent_on) return addDays(today, 3);
+  const age = daysBetween(lead.quote_sent_on, today);
+  if (age < 5) return addDays(lead.quote_sent_on, 5);
+  if (age < 10) return addDays(lead.quote_sent_on, 10);
+  return null;
+}
+
+/** A ready-to-edit WhatsApp message. Nothing is sent: it only pre-fills WhatsApp for you to review. */
+export function followUpMessage(lead: Lead, today: string): string {
+  const first = (lead.name || '').trim().split(/\s+/)[0] || 'there';
+  const item = lead.service ? lead.service.toLowerCase() : 'project';
+  if (QUOTE_OUT_STAGES.includes(lead.stage)) {
+    // Leads already at Quote Sent before this feature have no sent-date: treat them as freshly quoted.
+    const age = lead.quote_sent_on ? daysBetween(lead.quote_sent_on, today) : 0;
+    if (age < 5) {
+      return `Hi ${first}, it's Imtiyaaz from The Elegant Company. I wanted to check that you received the quote for your ${item}. Please let me know if anything needs explaining or adjusting.`;
+    }
+    if (age < 10) {
+      return `Hi ${first}, Imtiyaaz from The Elegant Company again. Have you had a chance to look over the quote for your ${item}? I'm happy to go through it with you or tweak it to suit your budget.`;
+    }
+    return `Hi ${first}, Imtiyaaz from The Elegant Company. I'm planning my workshop schedule and wanted to check whether you'd still like to go ahead with your ${item}. No pressure either way.`;
+  }
+  if (lead.stage === 'Site Visit Booked') {
+    return `Hi ${first}, it's Imtiyaaz from The Elegant Company. Just confirming our site visit for your ${item}. Please let me know if the time still suits you.`;
+  }
+  return `Hi ${first}, it's Imtiyaaz from The Elegant Company. Thank you for your enquiry about your ${item}. When would be a good time to chat or arrange a site visit?`;
 }

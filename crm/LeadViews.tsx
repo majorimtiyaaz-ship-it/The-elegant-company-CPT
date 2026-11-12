@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Check, Copy, Mail, MessageCircle, Phone, Plus, Search, Trash2 } from 'lucide-react';
 import { api } from './api';
 import {
-  SERVICE_LABELS, SOURCES, STAGES, addDays, formatZAR, groupFollowUps, todayZA, whatsappLink,
+  SERVICE_LABELS, SOURCES, STAGES, addDays, followUpMessage, formatZAR, groupFollowUps, suggestNextFollowUp, todayZA, whatsappLink,
 } from './shared';
 import type { Activity, Lead, Source, Stage } from './shared';
 import { Notice, Sheet, SourceChip, StageChip, btnDark, btnGold, btnLight, card, fmtDate, fmtDateTime, fmtDay, input, label } from './ui';
@@ -309,7 +309,7 @@ export const FollowUpsView: React.FC<{ leads: Lead[]; onOpen: (id: string) => vo
   };
 
   const renderRow = (l: Lead) => {
-    const wa = whatsappLink(l.phone);
+    const wa = whatsappLink(l.phone, followUpMessage(l, today));
     return (
       <div key={l.id} className={`${card} p-4 space-y-3`}>
         <button className="w-full text-left" onClick={() => onOpen(l.id)}>
@@ -326,7 +326,7 @@ export const FollowUpsView: React.FC<{ leads: Lead[]; onOpen: (id: string) => vo
         ) : (
           <div className="flex gap-2">
             {wa && <a href={wa} target="_blank" rel="noopener noreferrer" className={`${btnLight} flex-1`}><MessageCircle size={16} /> WhatsApp</a>}
-            <button className={`${btnDark} flex-1`} onClick={() => { setDoneFor(l.id); setNext(addDays(today, 3)); }}><Check size={16} /> Done</button>
+            <button className={`${btnDark} flex-1`} onClick={() => { setDoneFor(l.id); setNext(suggestNextFollowUp(l, today) || ''); }}><Check size={16} /> Done</button>
           </div>
         )}
       </div>
@@ -350,7 +350,7 @@ export const FollowUpsView: React.FC<{ leads: Lead[]; onOpen: (id: string) => vo
       {renderGroup('Due today', g.today)}
       {renderGroup('Upcoming', g.upcoming, 'text-stone-300')}
       {renderGroup('No follow-up date set', g.none, 'text-stone-400')}
-      <p className="text-xs text-stone-500">These are on-screen reminders only. The CRM does not send you or your customers any messages.</p>
+      <p className="text-xs text-stone-500">These are on-screen reminders only. The WhatsApp button opens a message for you to read and edit; nothing is sent until you press send. Quotes follow up on day 2, 5 and 10.</p>
     </div>
   );
 };

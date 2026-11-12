@@ -4,7 +4,7 @@ import {
   pickSource, pickStage, rateLimit, readBody, sameOrigin, send, sessionCookie, validateLead,
 } from './_lib/core.js';
 import type { LeadInput } from './_lib/core.js';
-import { SERVICE_LABELS, STAGES, todayZA } from '../crm/shared.js';
+import { QUOTE_FIRST_FOLLOW_UP_DAYS, SERVICE_LABELS, STAGES, addDays, todayZA } from '../crm/shared.js';
 
 const YMD = /^\d{4}-\d{2}-\d{2}$/;
 const ID = /^[0-9a-f-]{36}$/;
@@ -92,6 +92,16 @@ export default async function handler(req: any, res: any) {
         const s = pickStage(body.stage);
         if (!s) return send(res, 400, { ok: false, error: 'Invalid stage.' });
         if (s !== cur.stage) { set('stage', s); log.push(['stage_change', `Stage changed from ${cur.stage} to ${s}.`]); }
+        // Quote goes out: stamp the date and schedule the first follow-up (day 2) unless you chose a date yourself.
+        if (s === 'Quote Sent' && s !== cur.stage) {
+          const today = todayZA();
+          if (!cur.quote_sent_on) set('quote_sent_on', today);
+          if (!('next_follow_up' in body)) {
+            const fu = addDays(today, QUOTE_FIRST_FOLLOW_UP_DAYS);
+            set('next_follow_up', fu);
+            log.push(['follow_up_set', `Quote sent. First follow-up scheduled for ${fu}.`]);
+          }
+        }
       }
       if ('source' in body) {
         const s = pickSource(body.source);

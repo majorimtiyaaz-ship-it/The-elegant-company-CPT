@@ -49,6 +49,7 @@ export async function ensureSchema(): Promise<void> {
     kind text not null,
     text text not null
   )`);
+  await sql.query('alter table leads add column if not exists quote_sent_on date');
   await sql.query('create index if not exists activities_lead_idx on activities(lead_id, at)');
   await sql.query(`create table if not exists rate_events (
     key text not null,
@@ -65,7 +66,8 @@ export const LEAD_COLS = `id::text as id,
   source_first, source_first_detail, source_last, source_last_detail,
   stage, quote_amount::float8 as quote_amount, lost_reason,
   to_char(next_follow_up, 'YYYY-MM-DD') as next_follow_up,
-  to_char(last_contact, 'YYYY-MM-DD') as last_contact`;
+  to_char(last_contact, 'YYYY-MM-DD') as last_contact,
+  to_char(quote_sent_on, 'YYYY-MM-DD') as quote_sent_on`;
 
 export async function addActivity(leadId: string, kind: string, text: string) {
   await db().query('insert into activities (lead_id, kind, text) values ($1, $2, $3)', [leadId, kind, text]);
