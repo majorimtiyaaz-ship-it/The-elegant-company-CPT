@@ -339,13 +339,13 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, introReady = true }) => 
         />
 
         {/* Uninterrupted Photography Stage: Content positioned at Lower Left (7vw, 10vh) with Deliberate Vertical Rhythm */}
-        <div ref={contentRef} className="absolute inset-0 z-10 flex flex-col justify-end pointer-events-none pb-[9vh] sm:pb-[11vh] pl-[6vw] sm:pl-[7vw] pr-6 md:pr-12">
+        <div ref={contentRef} className="absolute inset-0 z-10 flex flex-col justify-end pointer-events-none pb-[5vh] sm:pb-[11vh] pl-[6vw] sm:pl-[7vw] pr-6 md:pr-12">
           <div className="pointer-events-auto max-w-[620px] w-full flex flex-col items-start">
             
             {/* Eyebrow */}
             <div 
               ref={eyebrowRef}
-              className="text-[#d6b779] font-sans text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.26em] m-0 mb-4 sm:mb-5"
+              className="text-[#d6b779] font-sans text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.26em] m-0 mb-3 sm:mb-5"
             >
               CAPE TOWN · WOODWORK STUDIO
             </div>
@@ -354,7 +354,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, introReady = true }) => 
             <h1 
               id="hero-main-heading"
               ref={headlineRef}
-              className="text-[clamp(44px,4.7vw,68px)] font-serif font-normal text-white leading-[0.94] tracking-tight m-0 mb-5 sm:mb-6 max-w-[600px]"
+              className="text-[clamp(36px,10vw,44px)] sm:text-[clamp(44px,4.7vw,68px)] font-serif font-normal text-white leading-[0.94] tracking-tight m-0 mb-4 sm:mb-6 max-w-[600px]"
             >
               Crafted Without<br />Compromise
             </h1>
@@ -363,7 +363,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, introReady = true }) => 
             <p 
               id="hero-main-subheading"
               ref={subheadingRef}
-              className="text-stone-300 font-sans font-light text-[15px] sm:text-[16px] leading-[1.5] tracking-wide max-w-[460px] m-0 mb-7 sm:mb-8"
+              className="hidden sm:block text-stone-300 font-sans font-light text-[15px] sm:text-[16px] leading-[1.5] tracking-wide max-w-[460px] m-0 mb-7 sm:mb-8"
             >
               Custom kitchens, cabinetry and considered interiors, handcrafted in Cape Town.
             </p>
