@@ -308,15 +308,18 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, introReady = true }) => 
       >
         {/* Dominant Full-Screen Photography (Focal positioning on architectural cabinetry) */}
         <div ref={bgWrapRef} className="absolute inset-0 w-full h-full overflow-hidden will-change-transform">
-          <img 
-            ref={bgImageRef}
-            src="/images/hero-kitchen.webp"
-            alt="Custom kitchen and cabinetry by The Elegant Company in Cape Town"
-            fetchPriority="high"
-            loading="eager"
-            decoding="async"
-            className="w-full h-full object-cover object-[55%_50%] sm:object-[58%_48%] pointer-events-none transform origin-center"
-          />
+          <picture>
+            <source media="(max-width: 639px)" srcSet="/images/hero-bookshelf-cape-town-mobile.webp" type="image/webp" />
+            <img 
+              ref={bgImageRef}
+              src="/images/hero-bookshelf-cape-town.webp"
+              alt="Handcrafted dark solid wood bookshelf with brass legs, made by The Elegant Company in Cape Town"
+              fetchPriority="high"
+              loading="eager"
+              decoding="async"
+              className="w-full h-full object-cover object-[50%_50%] pointer-events-none transform origin-center"
+            />
+          </picture>
         </div>
 
         {/* Soft Header Vignette */}
