@@ -207,6 +207,8 @@ export const PrivacyPage: React.FC = () => (
           <a href={`tel:${PHONE_TEL}`} className="text-stone-300">{PHONE_DISPLAY}</a>
           {' · '}
           <a href="/" className="text-stone-300">Home</a>
+          {' · '}
+          <a href="/terms-and-conditions/" className="text-stone-300">Terms</a>
         </p>
       </div>
     </footer>
