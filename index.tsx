@@ -8,6 +8,7 @@ import App from './App';
 import { captureAttribution } from './lib/attribution';
 import { findServicePage } from './lib/servicePages';
 import { ServicePage } from './components/ServicePage';
+import { PrivacyPage } from './components/PrivacyPage';
 
 // Register GSAP plugins globally once on application initialization
 gsap.registerPlugin(ScrollTrigger);
@@ -30,6 +31,8 @@ if (isCrm) {
       </React.StrictMode>
     );
   });
+} else if (window.location.pathname.replace(/\/+$/, '') === '/privacy-policy') {
+  root.render(<PrivacyPage />);
 } else if (findServicePage(window.location.pathname)) {
   // Service pages are pre-rendered to static HTML at build time; this takes over in the browser.
   captureAttribution();
