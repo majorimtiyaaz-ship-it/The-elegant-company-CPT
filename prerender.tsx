@@ -3,6 +3,7 @@ import React from 'react';
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import { ServicePage } from './components/ServicePage';
 import { PrivacyPage } from './components/PrivacyPage';
+import { NotFoundPage, NOT_FOUND_META } from './components/NotFoundPage';
 import { GROUPS } from './components/FAQ';
 import { SERVICE_PAGES, SITE_URL } from './lib/servicePages';
 
@@ -15,6 +16,12 @@ export const PRIVACY_PAGE = {
   seoDescription:
     'How The Elegant Company collects, uses and protects your personal information under POPIA, and how to exercise your rights.',
 };
+
+export { NOT_FOUND_META };
+
+export function renderNotFound(): string {
+  return renderToString(<NotFoundPage />);
+}
 
 export function renderPrivacy(): string {
   return renderToString(<PrivacyPage />);
