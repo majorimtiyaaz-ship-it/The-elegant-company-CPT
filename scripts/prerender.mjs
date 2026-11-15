@@ -6,12 +6,12 @@ import { pathToFileURL } from 'node:url';
 
 const dist = path.resolve('dist');
 const mod = await import(pathToFileURL(path.resolve('.ssr/prerender.js')).href);
-const { SERVICE_PAGES, SITE_URL, renderService, renderHomeSnapshot } = mod;
+const { SERVICE_PAGES, SITE_URL, renderService, renderHomeSnapshot, PRIVACY_PAGE, renderPrivacy } = mod;
 
 const template = fs.readFileSync(path.join(dist, 'index.html'), 'utf8');
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
-function setHead(html, page) {
+function setHead(html, page, withSchema = true) {
   const url = `${SITE_URL}/${page.slug}/`;
   const swap = (re, to) => {
     if (!re.test(html)) throw new Error(`prerender: pattern not found ${re}`);
@@ -26,6 +26,7 @@ function setHead(html, page) {
   swap(/<meta name="twitter:title" content="[^"]*">/, `<meta name="twitter:title" content="${esc(page.seoTitle)}">`);
   swap(/<meta name="twitter:description" content="[^"]*">/, `<meta name="twitter:description" content="${esc(page.seoDescription)}">`);
   swap(/<meta name="twitter:url" content="[^"]*">/, `<meta name="twitter:url" content="${url}">`);
+  if (!withSchema) return html;
   const ld = {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -48,6 +49,18 @@ for (const page of SERVICE_PAGES) {
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, 'index.html'), html);
   console.log('prerendered', `/${page.slug}/`, `${html.length} bytes`);
+}
+
+// Privacy policy page (static content, no service schema).
+{
+  let html = setHead(template, PRIVACY_PAGE, false);
+  html = html.replace('<div id="root"></div>', `<div id="root">${renderPrivacy()}</div>`);
+  if (!html.includes('<h1')) throw new Error('prerender failed for privacy page');
+  html = html.replace(/<noscript>[\s\S]*?<\/noscript>/g, (m) => (m.includes('<main') ? '' : m));
+  const dir = path.join(dist, PRIVACY_PAGE.slug);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, 'index.html'), html);
+  console.log('prerendered', `/${PRIVACY_PAGE.slug}/`, `${html.length} bytes`);
 }
 
 // Home page: keep the app untouched; enrich the existing fallback block with services, links and FAQ.
