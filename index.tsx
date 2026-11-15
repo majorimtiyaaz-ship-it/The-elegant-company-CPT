@@ -9,6 +9,7 @@ import { captureAttribution } from './lib/attribution';
 import { findServicePage } from './lib/servicePages';
 import { ServicePage } from './components/ServicePage';
 import { PrivacyPage } from './components/PrivacyPage';
+import { TermsPage } from './components/TermsPage';
 import { NotFoundPage } from './components/NotFoundPage';
 
 // Register GSAP plugins globally once on application initialization
@@ -34,6 +35,8 @@ if (isCrm) {
   });
 } else if (window.location.pathname.replace(/\/+$/, '') === '/privacy-policy') {
   root.render(<PrivacyPage />);
+} else if (window.location.pathname.replace(/\/+$/, '') === '/terms-and-conditions') {
+  root.render(<TermsPage />);
 } else if (findServicePage(window.location.pathname)) {
   // Service pages are pre-rendered to static HTML at build time; this takes over in the browser.
   captureAttribution();
