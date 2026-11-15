@@ -389,7 +389,7 @@ export const EnquiryForm: React.FC<{ prefillDetails?: string; initialService?: s
               </div>
               <label className="flex items-start gap-3 text-xs text-stone-600 leading-relaxed cursor-pointer">
                 <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 accent-[#c5a059]" />
-                <span>I agree that The Elegant Company may use these details to respond to my enquiry and keep them for that purpose, in line with POPIA.</span>
+                <span>I agree that The Elegant Company may use these details to respond to my enquiry and keep them for that purpose, in line with POPIA. <a href="/privacy-policy/" target="_blank" rel="noopener" className="underline">Read our Privacy Policy</a>.</span>
               </label>
             </div>
           )}
