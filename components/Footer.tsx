@@ -126,6 +126,8 @@ export const Footer: React.FC = () => {
         <p className="text-stone-500 font-light">
           <a href="/privacy-policy/" className="hover:text-white transition-colors">Privacy Policy</a>
           {' · '}
+          <a href="/terms-and-conditions/" className="hover:text-white transition-colors">Terms</a>
+          {' · '}
           Custom Furniture & Kitchen Installations · Cape Town
         </p>
       </div>
