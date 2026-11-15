@@ -6,7 +6,7 @@ import { pathToFileURL } from 'node:url';
 
 const dist = path.resolve('dist');
 const mod = await import(pathToFileURL(path.resolve('.ssr/prerender.js')).href);
-const { SERVICE_PAGES, SITE_URL, renderService, renderHomeSnapshot, PRIVACY_PAGE, renderPrivacy } = mod;
+const { SERVICE_PAGES, SITE_URL, renderService, renderHomeSnapshot, PRIVACY_PAGE, renderPrivacy, NOT_FOUND_META, renderNotFound } = mod;
 
 const template = fs.readFileSync(path.join(dist, 'index.html'), 'utf8');
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
@@ -61,6 +61,24 @@ for (const page of SERVICE_PAGES) {
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, 'index.html'), html);
   console.log('prerendered', `/${PRIVACY_PAGE.slug}/`, `${html.length} bytes`);
+}
+
+// Custom 404 page: Vercel serves dist/404.html with a 404 status for unknown addresses.
+{
+  let html = template;
+  const rep = (re, to) => {
+    if (!re.test(html)) throw new Error(`prerender 404: pattern not found ${re}`);
+    html = html.replace(re, to);
+  };
+  rep(/<title>[^<]*<\/title>/, `<title>${esc(NOT_FOUND_META.seoTitle)}</title>`);
+  rep(/<meta name="description" content="[^"]*">/, `<meta name="description" content="${esc(NOT_FOUND_META.seoDescription)}">`);
+  rep(/<meta name="robots" content="[^"]*"\s*\/?>/, '<meta name="robots" content="noindex, follow">');
+  rep(/<link rel="canonical" href="[^"]*">/, '');
+  html = html.replace('<div id="root"></div>', `<div id="root">${renderNotFound()}</div>`);
+  if (!html.includes('<h1')) throw new Error('prerender failed for 404 page');
+  html = html.replace(/<noscript>[\s\S]*?<\/noscript>/g, (x) => (x.includes('<main') ? '' : x));
+  fs.writeFileSync(path.join(dist, '404.html'), html);
+  console.log('prerendered 404.html', `${html.length} bytes`);
 }
 
 // Home page: keep the app untouched; enrich the existing fallback block with services, links and FAQ.
