@@ -9,6 +9,7 @@ import { captureAttribution } from './lib/attribution';
 import { findServicePage } from './lib/servicePages';
 import { ServicePage } from './components/ServicePage';
 import { PrivacyPage } from './components/PrivacyPage';
+import { NotFoundPage } from './components/NotFoundPage';
 
 // Register GSAP plugins globally once on application initialization
 gsap.registerPlugin(ScrollTrigger);
@@ -37,6 +38,9 @@ if (isCrm) {
   // Service pages are pre-rendered to static HTML at build time; this takes over in the browser.
   captureAttribution();
   root.render(<ServicePage page={findServicePage(window.location.pathname)!} />);
+} else if (!['', '/index.html'].includes(window.location.pathname.replace(/\/+$/, ''))) {
+  // Any address that is not the home page, a service page, the privacy page or the CRM.
+  root.render(<NotFoundPage />);
 } else {
   captureAttribution();
   root.render(
