@@ -124,6 +124,8 @@ export const Footer: React.FC = () => {
       <div className="container mx-auto max-w-7xl mt-12 pt-6 border-t border-stone-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-stone-500 text-xs">
         <p>&copy; {new Date().getFullYear()} The Elegant Company. All rights reserved.</p>
         <p className="text-stone-500 font-light">
+          <a href="/privacy-policy/" className="hover:text-white transition-colors">Privacy Policy</a>
+          {' · '}
           Custom Furniture & Kitchen Installations · Cape Town
         </p>
       </div>
