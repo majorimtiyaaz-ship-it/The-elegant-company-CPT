@@ -105,6 +105,8 @@ export const ServicePage: React.FC<{ page: ServicePageData }> = ({ page }) => {
             ))}
             {' · '}
             <a href="/" className="text-stone-300">Home</a>
+            {' · '}
+            <a href="/privacy-policy/" className="text-stone-300">Privacy Policy</a>
           </p>
         </div>
       </footer>
