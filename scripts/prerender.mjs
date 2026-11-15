@@ -6,7 +6,7 @@ import { pathToFileURL } from 'node:url';
 
 const dist = path.resolve('dist');
 const mod = await import(pathToFileURL(path.resolve('.ssr/prerender.js')).href);
-const { SERVICE_PAGES, SITE_URL, renderService, renderHomeSnapshot, PRIVACY_PAGE, renderPrivacy, NOT_FOUND_META, renderNotFound } = mod;
+const { SERVICE_PAGES, SITE_URL, renderService, renderHomeSnapshot, PRIVACY_PAGE, renderPrivacy, NOT_FOUND_META, renderNotFound, TERMS_PAGE, renderTerms } = mod;
 
 const template = fs.readFileSync(path.join(dist, 'index.html'), 'utf8');
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
@@ -61,6 +61,18 @@ for (const page of SERVICE_PAGES) {
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, 'index.html'), html);
   console.log('prerendered', `/${PRIVACY_PAGE.slug}/`, `${html.length} bytes`);
+}
+
+// Terms and conditions page (static content, no service schema).
+{
+  let html = setHead(template, TERMS_PAGE, false);
+  html = html.replace('<div id="root"></div>', `<div id="root">${renderTerms()}</div>`);
+  if (!html.includes('<h1')) throw new Error('prerender failed for terms page');
+  html = html.replace(/<noscript>[\s\S]*?<\/noscript>/g, (m) => (m.includes('<main') ? '' : m));
+  const dir = path.join(dist, TERMS_PAGE.slug);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, 'index.html'), html);
+  console.log('prerendered', `/${TERMS_PAGE.slug}/`, `${html.length} bytes`);
 }
 
 // Custom 404 page: Vercel serves dist/404.html with a 404 status for unknown addresses.
