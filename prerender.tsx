@@ -3,6 +3,7 @@ import React from 'react';
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import { ServicePage } from './components/ServicePage';
 import { PrivacyPage } from './components/PrivacyPage';
+import { TermsPage } from './components/TermsPage';
 import { NotFoundPage, NOT_FOUND_META } from './components/NotFoundPage';
 import { GROUPS } from './components/FAQ';
 import { SERVICE_PAGES, SITE_URL } from './lib/servicePages';
@@ -21,6 +22,18 @@ export { NOT_FOUND_META };
 
 export function renderNotFound(): string {
   return renderToString(<NotFoundPage />);
+}
+
+export const TERMS_PAGE = {
+  slug: 'terms-and-conditions',
+  h1: 'Terms and Conditions',
+  seoTitle: 'Terms and Conditions | The Elegant Company, Cape Town',
+  seoDescription:
+    'Quotes, deposits, payment, timelines and our 3-month workmanship promise for custom furniture, kitchen installation and furniture restoration in Cape Town.',
+};
+
+export function renderTerms(): string {
+  return renderToString(<TermsPage />);
 }
 
 export function renderPrivacy(): string {
