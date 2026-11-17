@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Hallway console preview | The Elegant Company</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Karla:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3eee6;--ink:#2b241c;--mute:#6f6455;--line:#d9cfbf;--card:#fbf8f3;--accent:#8a5a2b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1914;--ink:#efe6d8;--mute:#a39784;--line:#3a3329;--card:#26211a;--accent:#d3a066}}
+:root[data-theme="dark"]{--bg:#1d1914;--ink:#efe6d8;--mute:#a39784;--line:#3a3329;--card:#26211a;--accent:#d3a066}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Karla,system-ui,sans-serif}
+header{padding:20px 20px 4px;max-width:720px;margin:0 auto}
+header p{margin:0;color:var(--mute);font-size:14px}
+h1{font:600 34px/1.1 "Cormorant Garamond",Georgia,serif;margin:2px 0 6px}
+#stage{height:50vh;min-height:300px;max-height:520px;max-width:720px;margin:0 auto;position:relative;touch-action:none;cursor:grab}
+#stage canvas{display:block;width:100%;height:100%}
+#hint{position:absolute;left:0;right:0;bottom:6px;text-align:center;font-size:13px;color:var(--mute);pointer-events:none}
+.panel{max-width:720px;margin:0 auto;padding:8px 20px 28px}
+.woods{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 14px}
+.woods button{background:var(--card);color:var(--ink);border:1.5px solid var(--line);border-radius:10px;padding:10px 8px;font:inherit;text-align:left;cursor:pointer}
+.woods button[aria-checked="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.woods button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sw{display:block;height:26px;border-radius:6px;margin-bottom:8px;border:1px solid rgba(0,0,0,.12)}
+.woods b{display:block;font-weight:600}
+.woods span.n{display:block;font-size:12.5px;color:var(--mute);line-height:1.3}
+.row{display:grid;grid-template-columns:70px 1fr 64px;align-items:center;gap:10px;margin:6px 0}
+.row output{text-align:right;color:var(--mute);font-size:14px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+label.chk{display:flex;gap:10px;align-items:center;margin:12px 0 4px}
+.size{font:600 20px "Cormorant Garamond",Georgia,serif;margin:12px 0 2px}
+.fine{font-size:13px;color:var(--mute);margin:10px 0 0}
+</style>
+</head>
+<body>
+<header>
+  <p>The Elegant Company</p>
+  <h1>Hallway console</h1>
+  <p>Fluted front, open underneath. Drag to turn it, pinch to zoom.</p>
+</header>
+<div id="stage"><div id="hint">Drag to rotate</div></div>
+<div class="panel">
+  <div class="woods" role="radiogroup" aria-label="Wood"></div>
+  <div class="row"><label for="w">Width</label><input id="w" type="range" min="800" max="1600" step="50" value="1200"><output id="wo"></output></div>
+  <div class="row"><label for="d">Depth</label><input id="d" type="range" min="250" max="400" step="10" value="320"><output id="do"></output></div>
+  <div class="row"><label for="h">Height</label><input id="h" type="range" min="750" max="950" step="10" value="850"><output id="ho"></output></div>
+  <div class="size" id="size"></div>
+  <p class="fine">Indicative preview. It shows the design and proportions; real grain and colour are confirmed with physical samples. The starting size is a placeholder until the hallway is measured.</p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const WOODS={
+ oak:{n:'Oak',note:'Closest to the inspiration photo',base:'#c79a60',grain:'#9a6f3a',lines:260,wob:3,knots:0},
+ ash:{n:'Ash',note:'Lighter, similar grain',base:'#dcc293',grain:'#b99a63',lines:200,wob:2,knots:0},
+ pine:{n:'Pine',note:'Budget choice, softer wood',base:'#e2b86f',grain:'#c08a3c',lines:140,wob:6,knots:3}
+};
+const s={wood:'oak',w:1200,d:320,h:850};
+const stage=document.getElementById('stage');
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+renderer.outputEncoding=THREE.sRGBEncoding;
+renderer.shadowMap.enabled=true;
+stage.appendChild(renderer.domElement);
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(35,1,.1,50);
+scene.add(new THREE.HemisphereLight(0xffffff,0xb09a7a,.75));
+const sun=new THREE.DirectionalLight(0xfff1dc,.85);
+sun.position.set(2,3,2.5);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);
+Object.assign(sun.shadow.camera,{left:-1.5,right:1.5,top:1.5,bottom:-1.5});
+scene.add(sun);
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(10,10),new THREE.ShadowMaterial({opacity:.22}));
+floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;scene.add(floor);
+
+function makeTex(w){
+ const c=document.createElement('canvas');c.width=c.height=512;const g=c.getContext('2d');
+ g.fillStyle=w.base;g.fillRect(0,0,512,512);
+ let seed=7;const r=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
+ for(let i=0;i<w.lines;i++){
+  const y=r()*512,a=r()*w.wob,f=.01+r()*.02;
+  g.strokeStyle=w.grain;g.globalAlpha=.08+r()*.25;g.lineWidth=.5+r()*1.8;g.beginPath();g.moveTo(0,y);
+  for(let x=0;x<=512;x+=16)g.lineTo(x,y+Math.sin(x*f+i)*a*2);
+  g.stroke();
+ }
+ for(let k=0;k<w.knots;k++){
+  const x=60+r()*390,y=60+r()*390;
+  for(let j=6;j>0;j--){g.globalAlpha=.2;g.strokeStyle=w.grain;g.lineWidth=2;g.beginPath();g.ellipse(x,y,j*7,j*3,0,0,6.283);g.stroke()}
+  g.globalAlpha=.45;g.fillStyle=w.grain;g.beginPath();g.ellipse(x,y,6,3,0,0,6.283);g.fill();
+ }
+ const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.wrapS=t.wrapT=THREE.RepeatWrapping;return t;
+}
+const mats={};
+for(const k in WOODS){
+ const th=makeTex(WOODS[k]);
+ const tv=th.clone();tv.center.set(.5,.5);tv.rotation=Math.PI/2;tv.needsUpdate=true;
+ mats[k]={h:new THREE.MeshStandardMaterial({map:th,roughness:.62}),v:new THREE.MeshStandardMaterial({map:tv,roughness:.62})};
+}
+const wicker=new THREE.MeshStandardMaterial({color:0x9b7b4f,roughness:.9});
+const grp=new THREE.Group();scene.add(grp);
+
+function build(){
+ while(grp.children.length){const o=grp.children.pop();o.geometry.dispose()}
+ const W=s.w/1000,D=s.d/1000,H=s.h/1000,t=.032,M=mats[s.wood],iw=W-2*t;
+ const add=(geo,x,y,z,m)=>{const me=new THREE.Mesh(geo,m);me.position.set(x,y,z);me.castShadow=me.receiveShadow=true;grp.add(me)};
+ const bx=(w,h,d,x,y,z,m)=>add(new THREE.BoxGeometry(w,h,d),x,y,z,m);
+ const zoneY=H*.62,ph=H-t-zoneY;
+ bx(W,t,D,0,H-t/2,0,M.h);
+ bx(t,H-t,D,-W/2+t/2,(H-t)/2,0,M.v);
+ bx(t,H-t,D,W/2-t/2,(H-t)/2,0,M.v);
+ const bh=H-t-.06;bx(iw,bh,.012,0,.06+bh/2,-D/2+.006,M.h);
+ bx(iw,.03,D-.03,0,zoneY-.015,-.005,M.h);
+ bx(iw,ph,.018,0,zoneY+ph/2,D/2-.03,M.h);
+ const n=Math.floor(iw/.026),sp=iw/n;
+ for(let i=0;i<n;i++)add(new THREE.CylinderGeometry(sp*.45,sp*.45,ph,12),-iw/2+sp*(i+.5),zoneY+ph/2,D/2-.018,M.v);
+ grp.position.y=0;
+ cam.t.set(0,H*.45,0);
+ document.getElementById('size').textContent=s.w+' × '+s.d+' × '+s.h+' mm ('+WOODS[s.wood].n+')';
+ draw();
+}
+
+const cam={az:.55,pol:1.3,dist:2.3,t:new THREE.Vector3(0,.38,0)};
+function place(){
+ const sp=Math.sin(cam.pol);
+ camera.position.set(cam.t.x+cam.dist*sp*Math.sin(cam.az),cam.t.y+cam.dist*Math.cos(cam.pol),cam.t.z+cam.dist*sp*Math.cos(cam.az));
+ camera.lookAt(cam.t);
+}
+let queued=false;
+function draw(){if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;place();renderer.render(scene,camera)})}
+function resize(){const r=stage.getBoundingClientRect();renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();draw()}
+new ResizeObserver(resize).observe(stage);
+
+const ptrs=new Map();let pd=0;
+stage.addEventListener('pointerdown',e=>{stage.setPointerCapture(e.pointerId);ptrs.set(e.pointerId,[e.clientX,e.clientY]);document.getElementById('hint').style.display='none';
+ if(ptrs.size===2){const [a,b]=[...ptrs.values()];pd=Math.hypot(a[0]-b[0],a[1]-b[1])}});
+stage.addEventListener('pointermove',e=>{
+ if(!ptrs.has(e.pointerId))return;
+ const p=ptrs.get(e.pointerId);
+ if(ptrs.size===1){cam.az-=(e.clientX-p[0])*.008;cam.pol=Math.min(1.5,Math.max(.6,cam.pol-(e.clientY-p[1])*.006))}
+ ptrs.set(e.pointerId,[e.clientX,e.clientY]);
+ if(ptrs.size===2){const [a,b]=[...ptrs.values()];const d=Math.hypot(a[0]-b[0],a[1]-b[1]);cam.dist=Math.min(4,Math.max(1.2,cam.dist*pd/d));pd=d}
+ draw();
+});
+const up=e=>ptrs.delete(e.pointerId);
+stage.addEventListener('pointerup',up);stage.addEventListener('pointercancel',up);
+stage.addEventListener('wheel',e=>{e.preventDefault();cam.dist=Math.min(4,Math.max(1.2,cam.dist*(1+e.deltaY*.001)));draw()},{passive:false});
+
+const box=document.querySelector('.woods');
+for(const k in WOODS){
+ const b=document.createElement('button');b.type='button';b.setAttribute('role','radio');b.setAttribute('aria-checked',k===s.wood);b.dataset.k=k;
+ b.innerHTML='<i class="sw" style="background:'+WOODS[k].base+'"></i><b>'+WOODS[k].n+'</b><span class="n">'+WOODS[k].note+'</span>';
+ b.onclick=()=>{s.wood=k;box.querySelectorAll('button').forEach(x=>x.setAttribute('aria-checked',x.dataset.k===k));build()};
+ box.appendChild(b);
+}
+[['w','wo'],['d','do'],['h','ho']].forEach(([id,o])=>{
+ const el=document.getElementById(id),out=document.getElementById(o);
+ const f=()=>{s[id]=+el.value;out.textContent=el.value+' mm';build()};
+ el.addEventListener('input',f);out.textContent=el.value+' mm';
+});
+build();resize();
+</script>
+</body>
+</html>
